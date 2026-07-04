@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book Study | Medici House</title>
+  <meta name="description" content="Book study records and visual learning dashboards from Medici House.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <style>
+    :root {
+      --book-ink: #26323f;
+      --book-muted: #6b7a89;
+      --book-line: #dce3eb;
+      --book-panel: #ffffff;
+      --book-paper: #f7f8fa;
+      --book-blue: #2563eb;
+      --book-teal: #0f766e;
+    }
+    body { background: var(--book-paper); }
+    .book-study-page {
+      width: min(1040px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 64px;
+      color: var(--book-ink);
+    }
+    .book-study-hero {
+      border: 1px solid var(--book-line);
+      border-radius: 10px;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f5fb 100%);
+      padding: 30px;
+      box-shadow: 0 14px 36px rgba(38, 50, 63, 0.08);
+    }
+    .book-study-eyebrow {
+      margin: 0 0 10px;
+      color: var(--book-teal);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .book-study-hero h1 {
+      margin: 0;
+      font-size: 2.3rem;
+      line-height: 1.1;
+    }
+    .book-study-hero p {
+      margin: 14px 0 0;
+      max-width: 720px;
+      color: var(--book-muted);
+      font-size: 1rem;
+    }
+    .book-study-nav {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 20px 0 0;
+    }
+    .book-study-nav a,
+    .book-card a.book-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      background: var(--book-blue);
+      border-radius: 999px;
+      padding: 9px 14px;
+      text-decoration: none;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .book-study-nav a.secondary {
+      background: #eef3f8;
+      color: var(--book-ink);
+      border: 1px solid var(--book-line);
+    }
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+    .book-card {
+      border: 1px solid var(--book-line);
+      border-radius: 10px;
+      background: var(--book-panel);
+      padding: 22px;
+      box-shadow: 0 10px 24px rgba(38, 50, 63, 0.06);
+    }
+    .book-card h2 {
+      margin: 0 0 10px;
+      font-size: 1.25rem;
+    }
+    .book-card p {
+      margin: 0 0 18px;
+      color: var(--book-muted);
+    }
+    .book-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .book-meta span {
+      border: 1px solid var(--book-line);
+      border-radius: 999px;
+      padding: 4px 10px;
+      color: var(--book-muted);
+      font-size: 0.82rem;
+      background: #fafbfd;
+    }
+    @media (max-width: 760px) {
+      .book-grid { grid-template-columns: 1fr; }
+      .book-study-hero { padding: 24px; }
+      .book-study-hero h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="book-study-page">
+    <section class="book-study-hero">
+      <p class="book-study-eyebrow">Separate study sector</p>
+      <h1>Book Study</h1>
+      <p>Visual study records, book dashboards, and concept notes. This section is separate from the regular blog posts so longer learning artifacts can live in their own quiet room.</p>
+      <nav class="book-study-nav" aria-label="Book study navigation">
+        <a href="/">Home</a>
+        <a class="secondary" href="/archives/">Archives</a>
+      </nav>
+    </section>
+
+    <section class="book-grid" aria-label="Book study records">
+      <article class="book-card">
+        <div class="book-meta"><span>Linear algebra</span><span>Learning dashboard</span></div>
+        <h2>Linear Algebra and Learning from Data</h2>
+        <p>A visual learning log for Gilbert Strang's book, tracking Taylor expansion, gradient descent, SVD, and later neural-network material.</p>
+        <a class="book-card-link" href="/book-study/linear-algebra-and-learning-from-data.html">Open record</a>
+      </article>
+
+      <article class="book-card">
+        <div class="book-meta"><span>Taylor expansion</span><span>2026-07-04</span></div>
+        <h2>Taylor Expansion: Expansion Point</h2>
+        <p>A focused study update about why Taylor's expansion point is written as a general center, then becomes the current point in gradient descent.</p>
+        <a class="book-card-link" href="/book-study/2026-07-04-taylor-expansion-expansion-point.html">Open record</a>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
