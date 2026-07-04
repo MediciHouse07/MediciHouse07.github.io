@@ -7,42 +7,37 @@ The public section lives at:
 - Blog index: `book-study/index.html`
 - Public URL: `https://medicihouse07.github.io/book-study/`
 
-The current design is subject-first:
+The design is subject-first:
 
 1. A subject block, such as `Linear Algebra`, is visible on the Book Study index.
 2. The subject block shows coverage before expansion: covered pages, total pages, percentage, and a progress bar.
 3. Opening the subject reveals individual HTML note cards.
-4. Each note card links to a blog-side viewer page under `book-study/`.
+4. Each note card links to a standalone HTML note under `book-study/`.
 
 ## Source Of Truth
 
-Use `MediciHouse07/Learning_Records` as the source of truth for generated study HTML files when possible.
+From now on, the blog repo is the source of truth for Book Study HTML pages.
 
-Recommended source path:
-
-```text
-MediciHouse07/Learning_Records/book-study/<note-slug>.html
-```
-
-The blog repo should usually store a lightweight viewer page that loads the source HTML from jsDelivr:
+Store new generated HTML notes directly in this repository:
 
 ```text
-https://cdn.jsdelivr.net/gh/MediciHouse07/Learning_Records@main/book-study/<note-slug>.html
+MediciHouse07/MediciHouse07.github.io/book-study/<note-slug>.html
 ```
 
-This keeps the learning repo as the archive and lets the blog present the note inside the Book Study sector.
+Do not create a second copy in `Learning_Records` unless the user explicitly asks for that. Avoid the older wrapper/CDN pattern for new notes; it was useful for the first import, but direct storage in this repo is cleaner and avoids redundancy.
+
+Existing older pages may still be wrappers that load from `Learning_Records`. Future pages should be standalone HTML files committed directly to `book-study/`.
 
 ## Add A New Note To An Existing Subject
 
-1. Create or confirm the source HTML in `MediciHouse07/Learning_Records/book-study/`.
-2. Create a viewer page in this blog repo:
+1. Create the standalone HTML note directly in this blog repo:
 
 ```text
 book-study/<note-slug>.html
 ```
 
-3. In `book-study/index.html`, find the relevant subject block.
-4. Update its metadata:
+2. In `book-study/index.html`, find the relevant subject block.
+3. Update the subject metadata:
 
 ```html
 <span>3 notes</span>
@@ -50,16 +45,16 @@ book-study/<note-slug>.html
 <span>415 main pages total</span>
 ```
 
-5. Update its progress bar width and text:
+4. Update the progress bar width and visible text:
 
 ```html
 <span class="progress-bar" style="width: 12%;"></span>
 <strong>50 / 415 pages, 12.0%</strong>
 ```
 
-If the existing CSS class sets a fixed width, add an inline `style="width: ...%;"` on the subject's `.progress-bar` for that subject.
+If the CSS class sets a fixed width, use an inline `style="width: ...%;"` on that subject's `.progress-bar`.
 
-6. Add a new note card inside that subject's `.note-grid`:
+5. Add a note card inside that subject's `.note-grid`:
 
 ```html
 <article class="note-card">
@@ -116,16 +111,11 @@ Use this pattern:
 </details>
 ```
 
-## Viewer Page Template
+## Standalone Note Requirements
 
-Create one viewer page per source HTML file.
+Each new note should be a complete HTML document. It should not depend on another repo for its core content.
 
-Replace:
-
-- `<note-title>`
-- `<note-slug>`
-- `<source-github-url>`
-- `<source-cdn-url>`
+Recommended minimum structure:
 
 ```html
 <!doctype html>
@@ -133,16 +123,17 @@ Replace:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><note-title> | Book Study</title>
+  <title>Note Title | Book Study</title>
   <meta name="description" content="Book study record.">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: #f7f8fa;
+      background: #fbfaf7;
       color: #26323f;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
     }
     .topbar {
       position: sticky;
@@ -169,58 +160,30 @@ Replace:
       background: #fff;
     }
     .links a.primary { color: #fff; background: #2563eb; border-color: #2563eb; }
-    #status {
-      width: min(760px, calc(100% - 32px));
-      margin: 36px auto;
-      padding: 18px;
-      border: 1px solid #dce3eb;
-      border-radius: 10px;
-      background: #fff;
-      color: #607286;
-    }
-    iframe {
-      width: 100%;
-      min-height: calc(100vh - 58px);
-      border: 0;
-      display: block;
-      background: #fbfaf7;
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
     }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <strong>Book Study: <note-title></strong>
+    <strong>Book Study: Note Title</strong>
     <nav class="links" aria-label="Book study navigation">
       <a class="primary" href="/book-study/">Book Study</a>
       <a href="/">Home</a>
-      <a href="<source-github-url>" rel="noopener" target="_blank">Source</a>
     </nav>
   </header>
-  <div id="status">Loading study record from Learning_Records...</div>
-  <iframe id="record" title="<note-title> study record" hidden></iframe>
-  <script>
-    const sourceUrl = '<source-cdn-url>';
-    const iframe = document.getElementById('record');
-    const statusBox = document.getElementById('status');
 
-    fetch(sourceUrl)
-      .then(response => {
-        if (!response.ok) throw new Error('HTTP ' + response.status);
-        return response.text();
-      })
-      .then(html => {
-        iframe.srcdoc = html;
-        iframe.hidden = false;
-        statusBox.hidden = true;
-      })
-      .catch(error => {
-        statusBox.innerHTML = 'Could not load the embedded study record. <a href="<source-github-url>" target="_blank" rel="noopener">Open the source file on GitHub</a>.';
-        console.error(error);
-      });
-  </script>
+  <main class="page">
+    <!-- Put the generated study note content here. -->
+  </main>
 </body>
 </html>
 ```
+
+A generated note can use its own richer CSS and layout, but it should keep a visible path back to `/book-study/` and `/`.
 
 ## Progress Calculation
 
@@ -245,7 +208,7 @@ Example:
 
 ## Naming Rules
 
-Use lowercase, hyphen-separated slugs for new blog viewer pages:
+Use lowercase, hyphen-separated slugs for new HTML notes:
 
 ```text
 book-study/2026-07-05-example-note-title.html
@@ -262,8 +225,9 @@ book-study/2026-07-04-taylor-expansion-expansion-point.html
 
 ## Checklist Before Commit
 
-- The source HTML exists in `MediciHouse07/Learning_Records/book-study/` or the note is intentionally stored directly in the blog repo.
-- The blog viewer page exists under `book-study/`.
+- The new standalone HTML note exists directly under `book-study/` in this blog repo.
+- The note is a complete HTML document and does not require a duplicate source file in another repo.
+- The note has navigation back to `/book-study/` and `/`.
 - The subject block in `book-study/index.html` has updated note count, page count, percent text, and progress width.
 - The note card appears under the correct subject.
 - Existing blog navigation does not need page-by-page edits; `js/next-boot.js` already injects the `Book Study` menu item.
