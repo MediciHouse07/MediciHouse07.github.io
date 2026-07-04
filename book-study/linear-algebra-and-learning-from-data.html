@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Linear Algebra and Learning from Data | Book Study</title>
+  <meta name="description" content="Book study record for Linear Algebra and Learning from Data.">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f7f8fa;
+      color: #26323f;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 18px;
+      border-bottom: 1px solid #dce3eb;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+    }
+    .topbar strong { font-size: 0.95rem; }
+    .links { display: flex; gap: 10px; flex-wrap: wrap; }
+    .links a {
+      color: #26323f;
+      text-decoration: none;
+      border: 1px solid #dce3eb;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 0.86rem;
+      background: #fff;
+    }
+    .links a.primary { color: #fff; background: #2563eb; border-color: #2563eb; }
+    #status {
+      width: min(760px, calc(100% - 32px));
+      margin: 36px auto;
+      padding: 18px;
+      border: 1px solid #dce3eb;
+      border-radius: 10px;
+      background: #fff;
+      color: #607286;
+    }
+    iframe {
+      width: 100%;
+      min-height: calc(100vh - 58px);
+      border: 0;
+      display: block;
+      background: #fbfaf7;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <strong>Book Study: Linear Algebra and Learning from Data</strong>
+    <nav class="links" aria-label="Book study navigation">
+      <a class="primary" href="/book-study/">Book Study</a>
+      <a href="/">Home</a>
+      <a href="https://github.com/MediciHouse07/Learning_Records/blob/main/book-study/linear-algebra-and-learning-from-data.html" rel="noopener" target="_blank">Source</a>
+    </nav>
+  </header>
+  <div id="status">Loading study record from Learning_Records...</div>
+  <iframe id="record" title="Linear Algebra and Learning from Data study record" hidden></iframe>
+  <script>
+    const sourceUrl = 'https://raw.githubusercontent.com/MediciHouse07/Learning_Records/main/book-study/linear-algebra-and-learning-from-data.html';
+    const iframe = document.getElementById('record');
+    const statusBox = document.getElementById('status');
+
+    fetch(sourceUrl)
+      .then(response => {
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        return response.text();
+      })
+      .then(html => {
+        iframe.srcdoc = html;
+        iframe.hidden = false;
+        statusBox.hidden = true;
+      })
+      .catch(error => {
+        statusBox.innerHTML = 'Could not load the embedded study record. <a href="https://github.com/MediciHouse07/Learning_Records/blob/main/book-study/linear-algebra-and-learning-from-data.html" target="_blank" rel="noopener">Open the source file on GitHub</a>.';
+        console.error(error);
+      });
+  </script>
+</body>
+</html>
