@@ -2,264 +2,83 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
   <title>Book Study | Medici House</title>
-  <meta name="description" content="Book study records and visual learning dashboards from Medici House.">
+  <meta name="description" content="Book study records grouped by subject.">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
   <style>
-    :root {
-      --book-ink: #26323f;
-      --book-muted: #6b7a89;
-      --book-line: #dce3eb;
-      --book-panel: #ffffff;
-      --book-paper: #f7f8fa;
-      --book-blue: #2563eb;
-      --book-teal: #0f766e;
-      --book-gold: #b7791f;
-    }
-    body { background: var(--book-paper); }
-    .book-study-page {
-      width: min(1040px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 34px 0 64px;
-      color: var(--book-ink);
-    }
-    .book-study-hero {
-      border: 1px solid var(--book-line);
-      border-radius: 10px;
-      background: linear-gradient(135deg, #ffffff 0%, #f0f5fb 100%);
-      padding: 30px;
-      box-shadow: 0 14px 36px rgba(38, 50, 63, 0.08);
-    }
-    .book-study-eyebrow {
-      margin: 0 0 10px;
-      color: var(--book-teal);
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .book-study-hero h1 {
-      margin: 0;
-      font-size: 2.3rem;
-      line-height: 1.1;
-    }
-    .book-study-hero p {
-      margin: 14px 0 0;
-      max-width: 720px;
-      color: var(--book-muted);
-      font-size: 1rem;
-    }
-    .book-study-nav {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin: 20px 0 0;
-    }
-    .book-study-nav a,
-    .note-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: #fff;
-      background: var(--book-blue);
-      border-radius: 999px;
-      padding: 9px 14px;
-      text-decoration: none;
-      font-weight: 700;
-      line-height: 1;
-    }
-    .book-study-nav a.secondary {
-      background: #eef3f8;
-      color: var(--book-ink);
-      border: 1px solid var(--book-line);
-    }
-    .subject-list {
-      display: grid;
-      gap: 18px;
-      margin-top: 24px;
-    }
-    .subject-block {
-      border: 1px solid var(--book-line);
-      border-radius: 12px;
-      background: var(--book-panel);
-      box-shadow: 0 10px 24px rgba(38, 50, 63, 0.06);
-      overflow: hidden;
-    }
-    .subject-block summary {
-      display: block;
-      cursor: pointer;
-      padding: 22px;
-      list-style: none;
-    }
+    .book-study-shell .post-body { font-size: 1rem; }
+    .subject-list { display: grid; gap: 18px; margin-top: 18px; }
+    .subject-block { border: 1px solid #ddd; border-radius: 8px; background: #fff; overflow: hidden; }
+    .subject-block summary { cursor: pointer; display: block; padding: 18px; list-style: none; }
     .subject-block summary::-webkit-details-marker { display: none; }
-    .subject-header {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 18px;
-      align-items: start;
-    }
-    .subject-title h2 {
-      margin: 0;
-      font-size: 1.38rem;
-    }
-    .subject-title p {
-      margin: 8px 0 0;
-      color: var(--book-muted);
-    }
-    .subject-toggle {
-      border: 1px solid var(--book-line);
-      border-radius: 999px;
-      padding: 7px 12px;
-      background: #f6f9fc;
-      color: var(--book-muted);
-      font-size: 0.86rem;
-      font-weight: 700;
-      white-space: nowrap;
-    }
+    .subject-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: start; }
+    .subject-header h2 { margin: 0 0 8px; font-size: 1.28rem; }
+    .subject-header p { margin: 0; color: #666; }
+    .subject-toggle { border: 1px solid #ddd; border-radius: 999px; padding: 7px 12px; background: #f5f5f5; color: #666; font-weight: 700; white-space: nowrap; }
     .subject-block[open] .subject-toggle::after { content: " collapse"; }
     .subject-block:not([open]) .subject-toggle::after { content: " expand"; }
-    .book-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-    }
-    .book-meta span {
-      border: 1px solid var(--book-line);
-      border-radius: 999px;
-      padding: 4px 10px;
-      color: var(--book-muted);
-      font-size: 0.82rem;
-      background: #fafbfd;
-    }
-    .coverage {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 12px;
-      align-items: center;
-    }
-    .progress-track {
-      height: 16px;
-      border-radius: 999px;
-      background: #e8edf3;
-      border: 1px solid #d2dce7;
-      overflow: hidden;
-    }
-    .progress-bar {
-      display: block;
-      height: 100%;
-      width: 7.2%;
-      background: linear-gradient(90deg, var(--book-teal), var(--book-blue));
-      border-radius: inherit;
-    }
-    .coverage strong {
-      color: var(--book-ink);
-      font-size: 0.92rem;
-      white-space: nowrap;
-    }
-    .coverage-caption {
-      grid-column: 1 / -1;
-      margin: 0;
-      color: var(--book-muted);
-      font-size: 0.9rem;
-    }
-    .note-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      padding: 0 22px 22px;
-    }
-    .note-card {
-      border: 1px solid var(--book-line);
-      border-radius: 10px;
-      background: #fcfdff;
-      padding: 18px;
-    }
-    .note-card h3 {
-      margin: 0 0 10px;
-      font-size: 1.08rem;
-    }
-    .note-card p {
-      margin: 0 0 16px;
-      color: var(--book-muted);
-    }
-    .note-card .note-date {
-      color: var(--book-gold);
-      font-size: 0.82rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    @media (max-width: 760px) {
-      .book-study-hero { padding: 24px; }
-      .book-study-hero h1 { font-size: 2rem; }
-      .subject-header,
-      .coverage,
-      .note-grid { grid-template-columns: 1fr; }
-      .subject-toggle { justify-self: start; }
-    }
+    .book-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .book-meta span { border: 1px solid #ddd; border-radius: 999px; padding: 4px 10px; color: #666; background: #fafafa; font-size: .86rem; }
+    .coverage { margin-top: 16px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+    .progress-track { height: 16px; border: 1px solid #ddd; border-radius: 999px; background: #eee; overflow: hidden; }
+    .progress-bar { display: block; width: 7.2%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
+    .coverage-caption { grid-column: 1 / -1; margin: 0; color: #888; font-size: .9rem; }
+    .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 0 18px 18px; }
+    .note-card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; background: #fcfcfc; }
+    .note-card h3 { margin: 0 0 8px; font-size: 1.05rem; }
+    .note-card p { color: #666; margin: 0 0 14px; }
+    .note-date { color: #888; font-size: .82rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 8px; }
+    .note-link, .subject-link { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1; }
+    .subject-link { margin-top: 16px; }
+    @media (max-width: 760px) { .subject-header, .coverage, .note-grid { grid-template-columns: 1fr; } .subject-toggle { justify-self: start; } }
   </style>
 </head>
-<body>
-  <main class="book-study-page">
-    <section class="book-study-hero">
-      <p class="book-study-eyebrow">Separate study sector</p>
-      <h1>Book Study</h1>
-      <p>Visual study records grouped by subject. Each subject shows book-page coverage first, then expands into the individual HTML notes.</p>
-      <nav class="book-study-nav" aria-label="Book study navigation">
-        <a href="/">Home</a>
-        <a class="secondary" href="/archives/">Archives</a>
-      </nav>
-    </section>
-
-    <section class="subject-list" aria-label="Book study subjects">
-      <details class="subject-block">
-        <summary>
-          <div class="subject-header">
-            <div class="subject-title">
-              <h2>Linear Algebra</h2>
-              <p>Notes from <em>Linear Algebra and Learning from Data</em>, currently focused on Taylor expansion, gradient descent, and SVD.</p>
-            </div>
-            <span class="subject-toggle">Tap to</span>
-          </div>
-
-          <div class="book-meta" aria-label="Subject metadata">
-            <span>2 notes</span>
-            <span>1 book tracked</span>
-            <span>30 pages covered</span>
-            <span>415 main pages total</span>
-          </div>
-
-          <div class="coverage" aria-label="Linear algebra book coverage">
-            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
-            <strong>30 / 415 pages, 7.2%</strong>
-            <p class="coverage-caption">Coverage uses the main chapter count from the current dashboard. The full physical book count remains 432 pages.</p>
-          </div>
-        </summary>
-
-        <div class="note-grid" aria-label="Linear algebra notes">
-          <article class="note-card">
-            <div class="note-date">Dashboard</div>
-            <h3>Linear Algebra and Learning from Data</h3>
-            <p>A visual learning log tracking Taylor expansion, gradient descent, SVD, and later neural-network material.</p>
-            <a class="note-link" href="/book-study/linear-algebra-and-learning-from-data.html">Open note</a>
-          </article>
-
-          <article class="note-card">
-            <div class="note-date">2026-07-04</div>
-            <h3>Taylor Expansion: Expansion Point</h3>
-            <p>A focused update about why Taylor's expansion point is a general center, then becomes the current point in gradient descent.</p>
-            <a class="note-link" href="/book-study/2026-07-04-taylor-expansion-expansion-point.html">Open note</a>
-          </article>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+        <div class="site-meta">
+          <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+          <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
         </div>
-      </details>
-    </section>
-  </main>
+      </div>
+      <nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block" itemscope itemtype="http://schema.org/Article">
+      <header class="post-header"><h1 class="post-title" itemprop="name headline">Book Study</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-book fa-fw"></i> Study notes grouped by subject</span></div></header>
+      <div class="post-body" itemprop="articleBody">
+        <p>Visual study records grouped by subject. Each subject shows book-page coverage first, then expands into individual HTML notes.</p>
+        <section class="subject-list" aria-label="Book study subjects">
+          <details class="subject-block">
+            <summary>
+              <div class="subject-header">
+                <div>
+                  <h2>Linear Algebra</h2>
+                  <p>Notes from <em>Linear Algebra and Learning from Data</em>, currently focused on Taylor expansion, gradient descent, and SVD.</p>
+                  <a class="subject-link" href="/book-study/linear-algebra/">Open subject shelf</a>
+                </div>
+                <span class="subject-toggle">Tap to</span>
+              </div>
+              <div class="book-meta" aria-label="Linear algebra metadata"><span>2 notes</span><span>1 book tracked</span><span>30 pages covered</span><span>415 main pages total</span></div>
+              <div class="coverage" aria-label="Linear algebra book coverage"><div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div><strong>30 / 415 pages, 7.2%</strong><p class="coverage-caption">Coverage uses the main chapter count from the current dashboard. Full physical book count remains 432 pages.</p></div>
+            </summary>
+            <div class="note-grid" aria-label="Linear algebra notes">
+              <article class="note-card"><div class="note-date">Dashboard</div><h3>Linear Algebra and Learning from Data</h3><p>A visual learning log tracking Taylor expansion, gradient descent, SVD, and later neural-network material.</p><a class="note-link" href="/book-study/linear-algebra/linear-algebra-and-learning-from-data.html">Open note</a></article>
+              <article class="note-card"><div class="note-date">2026-07-04</div><h3>Taylor Expansion: Expansion Point</h3><p>A focused update about why Taylor's expansion point is a general center, then becomes the current point in gradient descent.</p><a class="note-link" href="/book-study/linear-algebra/2026-07-04-taylor-expansion-expansion-point.html">Open note</a></article>
+            </div>
+          </details>
+        </section>
+      </div>
+    </article></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
 </body>
 </html>
