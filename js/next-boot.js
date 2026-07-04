@@ -2,8 +2,19 @@
 
 NexT.boot = {};
 
+NexT.boot.addBookStudyMenu = function() {
+  var menu = document.querySelector('#menu');
+  if (!menu || menu.querySelector('.menu-item-book-study')) return;
+
+  var item = document.createElement('li');
+  item.className = 'menu-item menu-item-book-study';
+  item.innerHTML = '\n\n    <a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a>\n\n  ';
+  menu.appendChild(item);
+};
+
 NexT.boot.registerEvents = function() {
 
+  NexT.boot.addBookStudyMenu();
   NexT.utils.registerScrollPercent();
   NexT.utils.registerCanIUseTag();
 
