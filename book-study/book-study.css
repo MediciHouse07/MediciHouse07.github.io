@@ -28,8 +28,21 @@ body {
 .book-study-shell .panel,
 .book-study-shell .mini-panel,
 .book-study-shell .meta-tile,
-.book-study-shell .study-frame {
+.book-study-shell .study-frame,
+.book-study-shell .math-display {
   max-width: 100%;
+}
+
+.book-study-shell .post-body,
+.book-study-shell .post-body h1,
+.book-study-shell .post-body h2,
+.book-study-shell .post-body h3,
+.book-study-shell .post-body h4,
+.book-study-shell .post-body p,
+.book-study-shell .post-body li,
+.book-study-shell .post-body td,
+.book-study-shell .post-body th {
+  text-align: left;
 }
 
 .book-study-shell .post-body,
@@ -53,6 +66,13 @@ body {
   max-width: 100%;
 }
 
+.book-study-shell img,
+.book-study-shell svg,
+.book-study-shell canvas,
+.book-study-shell video {
+  height: auto;
+}
+
 .book-study-shell .two-col,
 .book-study-shell .three-col,
 .book-study-shell .meta-grid,
@@ -63,7 +83,8 @@ body {
 .book-study-shell .progress-wrap,
 .book-study-shell .visual-grid,
 .book-study-shell .cards,
-.book-study-shell .hero-grid {
+.book-study-shell .hero-grid,
+.book-study-shell .math-display {
   min-width: 0;
 }
 
@@ -83,13 +104,50 @@ body {
 
 .book-study-shell pre,
 .book-study-shell code,
-.book-study-shell .formula,
-.book-study-shell .code-block,
-.book-study-shell .math-block {
+.book-study-shell .code-block {
   max-width: 100%;
   overflow-x: auto;
   white-space: pre;
   -webkit-overflow-scrolling: touch;
+}
+
+.book-study-shell .formula,
+.book-study-shell .math-block {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  -webkit-overflow-scrolling: touch;
+}
+
+.book-study-shell .math-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fbfaf7;
+  margin: 10px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.book-study-shell .math-display math {
+  max-width: 100%;
+  font-size: 1.05rem;
+}
+
+.book-study-shell .math-inline math {
+  max-width: 100%;
+  font-size: 1em;
+  vertical-align: -0.1em;
+}
+
+.book-study-shell .axis-svg,
+.book-study-shell .responsive-svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 .book-study-shell table {
@@ -211,6 +269,14 @@ body {
   .book-study-shell .math-block {
     font-size: .85rem !important;
     line-height: 1.5;
+  }
+
+  .book-study-shell .math-display {
+    padding: 10px !important;
+  }
+
+  .book-study-shell .math-display math {
+    font-size: 1rem;
   }
 
   .book-study-shell .book-study-actions a,
