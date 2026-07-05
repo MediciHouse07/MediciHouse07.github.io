@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">MCMC study card</title>
+  <desc id="desc">An infographic showing how MCMC samples from a hard distribution by walking through candidate states, accepting better moves, sometimes accepting worse moves, and building a long-run histogram.</desc>
+  <defs>
+    <style>
+      .bg{fill:#fbfaf7}.card{fill:#fff;stroke:#d9d6cc;stroke-width:3}.ink{fill:#242424}.muted{fill:#666}.accent{fill:#276ef1}.warm{fill:#f4b740}.good{fill:#2f9e44}.bad{fill:#d9480f}.line{fill:none;stroke:#242424;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.thin{fill:none;stroke:#777;stroke-width:3;stroke-linecap:round}.curve{fill:none;stroke:#276ef1;stroke-width:7;stroke-linecap:round}.dash{fill:none;stroke:#999;stroke-width:3;stroke-dasharray:9 9}.small{font:500 24px system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}.body{font:600 30px system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}.head{font:800 48px system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}.mono{font:700 28px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.tiny{font:500 18px system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="900"/>
+  <text class="head ink" x="70" y="82">MCMC: sampling when direct sampling is hard</text>
+  <text class="small muted" x="74" y="122">Stat 110 / Introduction to Probability, Ch. 12 - Socratic wrap-up</text>
+
+  <rect class="card" x="62" y="160" width="500" height="285" rx="22"/>
+  <text class="body ink" x="92" y="205">Hard target distribution</text>
+  <text class="mono muted" x="92" y="245">p(x) = g(x) / C</text>
+  <path class="thin" d="M100 390 H520"/>
+  <path class="thin" d="M120 385 V270"/>
+  <path class="curve" d="M125 374 C178 365 194 285 250 295 C305 307 316 380 370 365 C421 350 437 278 502 288"/>
+  <text class="tiny muted" x="134" y="418">We can evaluate g(x), but C is hard.</text>
+  <circle cx="252" cy="296" r="9" class="warm"/>
+  <circle cx="502" cy="288" r="9" class="warm"/>
+
+  <rect class="card" x="625" y="160" width="510" height="285" rx="22"/>
+  <text class="body ink" x="655" y="205">Metropolis idea</text>
+  <text class="small ink" x="655" y="248">1. Stand at current place x</text>
+  <text class="small ink" x="655" y="285">2. Propose a nearby/random y</text>
+  <text class="small ink" x="655" y="322">3. Accept with ratio</text>
+  <text class="mono accent" x="655" y="367">min(1, g(y)/g(x))</text>
+  <text class="tiny muted" x="655" y="407">The unknown C cancels, so local comparisons are enough.</text>
+
+  <rect class="card" x="62" y="485" width="1073" height="290" rx="22"/>
+  <text class="body ink" x="92" y="530">A walk over 10,000,000 possible places</text>
+  <circle cx="140" cy="625" r="28" class="accent"/><text class="tiny" x="128" y="633" fill="#fff">1</text>
+  <text class="small muted" x="92" y="682">treasure 10</text>
+  <path class="line" d="M180 625 C238 575 295 574 350 623"/>
+  <polygon points="350,623 326,612 331,640" class="ink"/>
+  <circle cx="390" cy="625" r="34" class="good"/><text class="tiny" x="369" y="633" fill="#fff">100</text>
+  <text class="small muted" x="327" y="682">treasure 30</text>
+  <text class="small good" x="277" y="570">accept for sure</text>
+  <path class="line" d="M440 625 C510 575 565 575 630 623"/>
+  <polygon points="630,623 606,611 611,640" class="ink"/>
+  <circle cx="675" cy="625" r="32" class="warm"/><text class="tiny" x="651" y="633" fill="#222">204</text>
+  <text class="small muted" x="612" y="682">treasure 15</text>
+  <text class="small bad" x="487" y="570">accept with 15/30</text>
+  <path class="dash" d="M725 625 H820"/>
+  <text class="small muted" x="840" y="588">Repeat many times.</text>
+  <text class="small muted" x="840" y="626">Long-run visits</text>
+  <text class="small muted" x="840" y="664">look like the target.</text>
+
+  <g transform="translate(92 735)">
+    <rect x="0" y="0" width="72" height="24" class="accent"/><rect x="82" y="-28" width="72" height="52" class="accent"/><rect x="164" y="-90" width="72" height="114" class="accent"/><rect x="246" y="-45" width="72" height="69" class="accent"/><rect x="328" y="-72" width="72" height="96" class="accent"/>
+    <text class="tiny muted" x="420" y="10">histogram from the chain</text>
+  </g>
+
+  <rect x="70" y="815" width="1060" height="44" rx="22" fill="#f0eee8"/>
+  <text class="small ink" x="92" y="846">Markov helps because each step only needs the current state, a proposed state, and a ratio.</text>
+</svg>
