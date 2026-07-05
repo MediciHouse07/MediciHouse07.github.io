@@ -1,123 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Laplace Transform – Socratic Wrap-Up</title>
-
-<link rel="stylesheet" href="/css/main.css">
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-<link rel="stylesheet" href="/book-study/book-study.css">
-
-<style>
-/* REQUIRED VISIBILITY GUARD (GUIDELINE) */
-.book-study-shell .brand,
-.book-study-shell .menu-item,
-.book-study-shell .post-block,
-.book-study-shell .post-header,
-.book-study-shell .post-body,
-.book-study-shell .site-title,
-.book-study-shell .site-subtitle {
-  opacity: 1 !important;
-  top: auto !important;
-  transform: none !important;
-}
-
-html, body {
-  max-width: 100%;
-  overflow-x: hidden;
-  font-family: Arial, sans-serif;
-  margin: 0;
-}
-
-.book-study-shell {
-  width: min(100%, 1100px);
-  margin: 0 auto;
-  padding: 16px;
-}
-
-.box {
-  background: #fff;
-  border-left: 4px solid #3498db;
-  padding: 12px 14px;
-  margin: 12px 0;
-}
-
-.math-display {
-  max-width: 100%;
-  overflow-x: auto;
-  padding: 10px;
-  background: #f6f6f6;
-}
-
-@media (max-width: 768px) {
-  .book-study-shell { padding: 12px; }
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Laplace Transform: Socratic Wrap-Up | Book Study | Medici House</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    .book-study-shell .post-body { font-size: 1rem; }
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle { opacity: 1 !important; top: auto !important; transform: none !important; }
+    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px; }
+    .book-study-actions a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1.2; }
+    .book-study-actions a.secondary { background: #f5f5f5; color: #555; border: 1px solid #ddd; }
+    .study-hero, .note-section { border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: #fff; margin: 18px 0; }
+    .study-hero { background: linear-gradient(135deg, #fff, #f7f7f7); }
+    .study-hero p { color: #666; margin-bottom: 0; }
+    .meta-grid, .two-col, .flow { display: grid; gap: 14px; }
+    .meta-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 18px; }
+    .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .flow { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 14px; }
+    .meta-tile, .panel, .flow-step { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fcfcfc; min-width: 0; }
+    .meta-tile strong { display: block; color: #222; font-size: 1.08rem; }
+    .meta-tile span, .caption { color: #777; font-size: .9rem; }
+    .panel.blue { background: #f0f5ff; border-color: #cddcff; }
+    .panel.green { background: #edf8f5; border-color: #c8e8df; }
+    .panel.gold { background: #fff8e8; border-color: #ead6a6; }
+    .panel.rose { background: #fff2f4; border-color: #efc5cd; }
+    .flow-step { min-height: 78px; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; }
+    .callout { border-left: 4px solid #222; padding: 12px 14px; background: #f7f7f7; margin: 14px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: .94rem; display: block; overflow-x: auto; }
+    th, td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f5f5f5; color: #555; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+    .progress-track { height: 16px; border: 1px solid #ddd; border-radius: 999px; background: #eee; overflow: hidden; margin: 10px 0 6px; }
+    .progress-bar { display: block; height: 100%; width: 2.5%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
+    @media (max-width: 900px) { .meta-grid, .two-col, .flow { grid-template-columns: 1fr; } }
+  </style>
 </head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div></header>
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block" itemscope itemtype="http://schema.org/Article">
+      <header class="post-header"><h1 class="post-title" itemprop="name headline">Laplace Transform: Socratic Wrap-Up</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Differential Equations</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> 2026-07-05</span></div></header>
+      <div class="post-body" itemprop="articleBody">
+        <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/differential-equations/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
 
-<body class="book-study-shell">
+        <section class="study-hero">
+          <h2>What This Note Captures</h2>
+          <p>This wraps the first Laplace-transform study thread: why the transform exists, how derivatives become algebraic terms, why initial values appear, and how inverse tables return the time-domain solution.</p>
+          <div class="meta-grid" aria-label="Study metadata"><div class="meta-tile"><strong>2026-07-05</strong><span>study date</span></div><div class="meta-tile"><strong>3 pages</strong><span>coverage counted</span></div><div class="meta-tile"><strong>10 checkpoints</strong><span>Socratic wrap-up</span></div><div class="meta-tile"><strong>3 / 120</strong><span>main-page coverage</span></div></div>
+        </section>
 
-<header>
-  <h1>Laplace Transform – Socratic Wrap-Up</h1>
-  <p>Boyce & DiPrima – Differential Equations</p>
-</header>
+        <section class="note-section"><h2>1. Core Problem</h2><div class="two-col"><div class="panel rose"><h3>Original difficulty</h3><p>Differential equations mix a function with its derivatives. That makes direct algebraic solving hard.</p><div class="math-display"><math display="block"><msup><mi>y</mi><mo>&#x2032;</mo></msup><mo>(</mo><mi>t</mi><mo>)</mo><mo>+</mo><mn>2</mn><mi>y</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mn>0</mn></math></div></div><div class="panel green"><h3>Transform strategy</h3><p>Laplace transform moves the equation into an algebraic space where derivative terms become expressions in <span class="math-inline"><math><mi>s</mi></math></span> and <span class="math-inline"><math><mi>Y</mi><mo>(</mo><mi>s</mi><mo>)</mo></math></span>.</p><div class="math-display"><math display="block"><mtext>differential equation</mtext><mo>&#x2192;</mo><mtext>algebra</mtext><mo>&#x2192;</mo><mtext>inverse transform</mtext></math></div></div></div></section>
 
-<main>
+        <section class="note-section"><h2>2. Definition</h2><p>The transform views <span class="math-inline"><math><mi>y</mi><mo>(</mo><mi>t</mi><mo>)</mo></math></span> through an exponential discount lens.</p><div class="math-display"><math display="block"><mi>L</mi><mo>{</mo><mi>y</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>}</mo><mo>=</mo><msubsup><mo>&#x222B;</mo><mn>0</mn><mo>&#x221E;</mo></msubsup><msup><mi>e</mi><mrow><mo>-</mo><mi>s</mi><mi>t</mi></mrow></msup><mi>y</mi><mo>(</mo><mi>t</mi><mo>)</mo><mi>d</mi><mi>t</mi><mo>=</mo><mi>Y</mi><mo>(</mo><mi>s</mi><mo>)</mo></math></div><div class="two-col"><div class="panel blue"><h3>Small s</h3><p>A smaller <span class="math-inline"><math><mi>s</mi></math></span> discounts the future less, so it keeps more long-term behavior.</p></div><div class="panel gold"><h3>Large s</h3><p>A larger <span class="math-inline"><math><mi>s</mi></math></span> discounts the future more, so it emphasizes early-time behavior.</p></div></div></section>
 
-<h2>1. Core Problem</h2>
-<div class="box">
-Differential equations mix y(t), y'(t), y''(t), making algebraic solving impossible.
-</div>
+        <section class="note-section"><h2>3. Why Exponentials Help</h2><p>Exponentials are useful because differentiating them returns the same exponential multiplied by a simple factor.</p><div class="math-display"><math display="block"><mfrac><mi>d</mi><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><msup><mi>e</mi><mrow><mo>-</mo><mi>s</mi><mi>t</mi></mrow></msup><mo>=</mo><mo>-</mo><mi>s</mi><msup><mi>e</mi><mrow><mo>-</mo><mi>s</mi><mi>t</mi></mrow></msup></math></div><div class="callout"><strong>Memory rule:</strong> the transform is designed so differentiation can be traded for multiplication by <span class="math-inline"><math><mi>s</mi></math></span>, plus initial-value terms.</div></section>
 
-<h2>2. Why Transform Exists</h2>
-<div class="box">
-Convert derivatives into algebra so equations become solvable.
-</div>
+        <section class="note-section"><h2>4. Derivatives Become Algebra</h2><table aria-label="Laplace derivative rules"><thead><tr><th>Time-domain term</th><th>Laplace-domain term</th><th>What appears</th></tr></thead><tbody><tr><td><span class="math-inline"><math><msup><mi>y</mi><mo>&#x2032;</mo></msup></math></span></td><td><span class="math-inline"><math><mi>s</mi><mi>Y</mi><mo>(</mo><mi>s</mi><mo>)</mo><mo>-</mo><mi>y</mi><mo>(</mo><mn>0</mn><mo>)</mo></math></span></td><td>the initial value of y</td></tr><tr><td><span class="math-inline"><math><msup><mi>y</mi><mo>&#x2033;</mo></msup></math></span></td><td><span class="math-inline"><math><msup><mi>s</mi><mn>2</mn></msup><mi>Y</mi><mo>(</mo><mi>s</mi><mo>)</mo><mo>-</mo><mi>s</mi><mi>y</mi><mo>(</mo><mn>0</mn><mo>)</mo><mo>-</mo><msup><mi>y</mi><mo>&#x2032;</mo></msup><mo>(</mo><mn>0</mn><mo>)</mo></math></span></td><td>y(0) and y'(0)</td></tr><tr><td><span class="math-inline"><math><msup><mi>y</mi><mo>&#x2034;</mo></msup></math></span></td><td><span class="math-inline"><math><msup><mi>s</mi><mn>3</mn></msup><mi>Y</mi><mo>(</mo><mi>s</mi><mo>)</mo><mo>-</mo><msup><mi>s</mi><mn>2</mn></msup><mi>y</mi><mo>(</mo><mn>0</mn><mo>)</mo><mo>-</mo><mi>s</mi><msup><mi>y</mi><mo>&#x2032;</mo></msup><mo>(</mo><mn>0</mn><mo>)</mo><mo>-</mo><msup><mi>y</mi><mo>&#x2033;</mo></msup><mo>(</mo><mn>0</mn><mo>)</mo></math></span></td><td>nested initial conditions</td></tr></tbody></table><div class="callout"><strong>Key point:</strong> higher derivatives pull in the initial status of lower derivatives all the way back to <span class="math-inline"><math><mi>y</mi><mo>(</mo><mn>0</mn><mo>)</mo></math></span>.</div></section>
 
-<h2>3. Definition</h2>
-<div class="math-display">
-<code>L{y(t)} = ∫₀^∞ e^{-st} y(t) dt = Y(s)</code>
-</div>
+        <section class="note-section"><h2>5. Example Worked Thread</h2><p>For the initial-value problem:</p><div class="math-display"><math display="block"><msup><mi>y</mi><mo>&#x2032;</mo></msup><mo>+</mo><mn>2</mn><mi>y</mi><mo>=</mo><mn>0</mn><mo>,</mo><mspace width="0.5em"/><mi>y</mi><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mn>3</mn></math></div><p>Transform both sides and substitute the initial condition.</p><div class="math-display"><math display="block"><mo>(</mo><mi>s</mi><mi>Y</mi><mo>-</mo><mn>3</mn><mo>)</mo><mo>+</mo><mn>2</mn><mi>Y</mi><mo>=</mo><mn>0</mn></math></div><div class="math-display"><math display="block"><mi>Y</mi><mo>(</mo><mi>s</mi><mo>)</mo><mo>=</mo><mfrac><mn>3</mn><mrow><mi>s</mi><mo>+</mo><mn>2</mn></mrow></mfrac></math></div><p>The inverse table maps this back to:</p><div class="math-display"><math display="block"><mi>y</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mn>3</mn><msup><mi>e</mi><mrow><mo>-</mo><mn>2</mn><mi>t</mi></mrow></msup></math></div></section>
 
-<h2>4. Lens Idea</h2>
-<div class="box">
-Small s = long-term view<br>
-Large s = short-term view
-</div>
+        <section class="note-section"><h2>6. Inverse Transform Idea</h2><div class="two-col"><div class="panel blue"><h3>Forward</h3><p>Move from a time function to an algebraic expression.</p><div class="math-display"><math display="block"><mi>y</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>&#x2192;</mo><mi>Y</mi><mo>(</mo><mi>s</mi><mo>)</mo></math></div></div><div class="panel green"><h3>Backward</h3><p>Use a transform table or algebraic matching to recover the time function.</p><div class="math-display"><math display="block"><mi>Y</mi><mo>(</mo><mi>s</mi><mo>)</mo><mo>&#x2192;</mo><mi>y</mi><mo>(</mo><mi>t</mi><mo>)</mo></math></div></div></div></section>
 
-<h2>5. Why Exponentials</h2>
-<div class="box">
-d/dt (e^{-st}) = -s e^{-st}
-</div>
+        <section class="note-section"><h2>7. Big Picture</h2><div class="flow" aria-label="Laplace transform workflow"><div class="flow-step">Start with an IVP</div><div class="flow-step">Apply Laplace rules</div><div class="flow-step">Solve algebraically for Y(s)</div><div class="flow-step">Invert back to y(t)</div></div><div class="callout"><strong>One-sentence memory hook:</strong> Laplace transform turns a differential-equation problem into an algebra problem while preserving the initial status of the system.</div></section>
 
-<h2>6. Integration by Parts Result</h2>
-<div class="math-display">
-<code>L{y'} = sY(s) - y(0)</code>
-</div>
-
-<h2>7. Higher Derivatives</h2>
-<div class="math-display">
-<code>L{y''} = s²Y - s y(0) - y'(0)</code><br>
-<code>L{y'''} = s³Y - s² y(0) - s y'(0) - y''(0)</code>
-</div>
-
-<h2>8. Example</h2>
-<div class="box">
-y' + 2y = 0, y(0)=3 → Y = 3/(s+2)
-</div>
-
-<h2>9. Inverse Idea</h2>
-<div class="box">
-Use transform table to map Y(s) back to y(t)
-</div>
-
-<h2>10. Big Insight</h2>
-<div class="box">
-Differential equation → algebra → inverse transform → solution
-</div>
-
-</main>
-
+        <section class="note-section"><h2>Source Pages and Coverage</h2><div class="two-col"><div class="panel"><h3>Book</h3><p>Boyce &amp; DiPrima, <em>Elementary Differential Equations and Boundary Value Problems</em>.</p><p class="caption">The current count records the first Laplace transform pages discussed in this thread.</p></div><div class="panel"><h3>Coverage</h3><div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div><p><strong>3 / 120 pages, 2.5%</strong></p><p class="caption">Coverage is intentionally conservative and can be adjusted as later sessions add more page ranges.</p></div></div></section>
+      </div>
+    </article></div></div></div></main>
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
 </body>
 </html>
