@@ -37,7 +37,7 @@
     .book-meta span { border: 1px solid #ddd; border-radius: 999px; padding: 4px 10px; color: #666; background: #fafafa; font-size: .86rem; }
     .coverage { margin-top: 16px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
     .progress-track { height: 16px; border: 1px solid #ddd; border-radius: 999px; background: #eee; overflow: hidden; }
-    .progress-bar { display: block; width: 7.2%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
+    .progress-bar { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
     .coverage-caption { grid-column: 1 / -1; margin: 0; color: #888; font-size: .9rem; }
     .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 0 18px 18px; }
     .note-card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; background: #fcfcfc; }
@@ -56,35 +56,29 @@
       <div class="header-inner"><div class="site-brand-container">
         <div class="site-meta">
           <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
-          <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+          <p class="site-subtitle">Knowledge matters, while people don't value it for real</p>
         </div>
       </div>
-      <nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+      <nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/">Home</a></li><li class="menu-item"><a href="/book-study/">Book Study</a></li></ul></nav></div>
     </header>
 
-    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block" itemscope itemtype="http://schema.org/Article">
-      <header class="post-header"><h1 class="post-title" itemprop="name headline">Book Study</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-book fa-fw"></i> Study notes grouped by subject</span></div></header>
-      <div class="post-body" itemprop="articleBody">
-        <p>Visual study records grouped by subject. Each subject shows book-page coverage first, then expands into individual HTML notes.</p>
-        <section class="subject-list" aria-label="Book study subjects">
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block">
+      <header class="post-header"><h1 class="post-title">Book Study</h1></header>
+      <div class="post-body">
+        <section class="subject-list">
+
           <details class="subject-block">
             <summary>
               <div class="subject-header">
                 <div>
                   <h2>Linear Algebra</h2>
-                  <p>Notes from <em>Linear Algebra and Learning from Data</em>, currently focused on Taylor expansion, gradient descent, and SVD.</p>
+                  <p>Notes from Linear Algebra and Learning from Data.</p>
                   <a class="subject-link" href="/book-study/linear-algebra/">Open subject shelf</a>
                 </div>
-                <span class="subject-toggle">Tap to</span>
               </div>
-              <div class="book-meta" aria-label="Linear algebra metadata"><span>3 notes</span><span>1 book tracked</span><span>30 pages covered</span><span>415 main pages total</span></div>
-              <div class="coverage" aria-label="Linear algebra book coverage"><div class="progress-track" aria-hidden="true"><span class="progress-bar" style="width: 7.2%;"></span></div><strong>30 / 415 pages, 7.2%</strong><p class="coverage-caption">Coverage uses the main chapter count from the current dashboard. Full physical book count remains 432 pages.</p></div>
+              <div class="book-meta"><span>3 notes</span><span>1 book tracked</span><span>30 pages covered</span><span>415 main pages total</span></div>
+              <div class="coverage"><div class="progress-track"><span class="progress-bar" style="width: 7.2%;"></span></div><strong>30 / 415 pages</strong></div>
             </summary>
-            <div class="note-grid" aria-label="Linear algebra notes">
-              <article class="note-card"><div class="note-date">Dashboard</div><h3>Linear Algebra and Learning from Data</h3><p>A visual learning log tracking Taylor expansion, gradient descent, SVD, and later neural-network material.</p><a class="note-link" href="/book-study/linear-algebra/linear-algebra-and-learning-from-data.html">Open note</a></article>
-              <article class="note-card"><div class="note-date">2026-07-04</div><h3>Taylor Expansion: Expansion Point</h3><p>A focused update about why Taylor's expansion point is a general center, then becomes the current point in gradient descent.</p><a class="note-link" href="/book-study/linear-algebra/2026-07-04-taylor-expansion-expansion-point.html">Open note</a></article>
-              <article class="note-card"><div class="note-date">2026-07-05</div><h3>Taylor Series: Setup, Accuracy, and Curvature</h3><p>A quiz-based note on choosing the right function, choosing the expansion point, and using curvature to judge tangent-line error.</p><a class="note-link" href="/book-study/linear-algebra/2026-07-05-taylor-series-setup-curvature.html">Open note</a></article>
-            </div>
           </details>
 
           <details class="subject-block">
@@ -92,23 +86,33 @@
               <div class="subject-header">
                 <div>
                   <h2>Calculus</h2>
-                  <p>Notes from George F. Simmons's <em>Calculus with Analytic Geometry</em>, currently focused on multivariable calculus ideas: Jacobians, partial derivatives, and the Hessian viewpoint.</p>
+                  <p>Notes from Simmons Calculus.</p>
                   <a class="subject-link" href="/book-study/calculus/">Open subject shelf</a>
                 </div>
-                <span class="subject-toggle">Tap to</span>
               </div>
-              <div class="book-meta" aria-label="Calculus metadata"><span>1 note</span><span>1 book tracked</span><span>12 pages covered</span><span>697 main pages total</span></div>
-              <div class="coverage" aria-label="Calculus book coverage"><div class="progress-track" aria-hidden="true"><span class="progress-bar" style="width: 1.7%;"></span></div><strong>12 / 697 pages, 1.7%</strong><p class="coverage-caption">Coverage counts main chapter printed pages in Simmons, Chapters 1-21; appendices and front matter are not included.</p></div>
+              <div class="book-meta"><span>1 note</span><span>1 book tracked</span><span>12 pages covered</span><span>697 main pages total</span></div>
+              <div class="coverage"><div class="progress-track"><span class="progress-bar" style="width: 1.7%;"></span></div><strong>12 / 697 pages</strong></div>
             </summary>
-            <div class="note-grid" aria-label="Calculus notes">
-              <article class="note-card"><div class="note-date">2026-07-05</div><h3>Jacobian, Hessian, and Radians</h3><p>A Socratic wrap-up connecting radians, polar area, Jacobians as local stretching, and Hessians as curvature matrices.</p><a class="note-link" href="/book-study/calculus/2026-07-05-jacobian-hessian-radians.html">Open note</a></article>
-            </div>
           </details>
+
+          <details class="subject-block">
+            <summary>
+              <div class="subject-header">
+                <div>
+                  <h2>Differential Equations</h2>
+                  <p>Notes from Boyce & DiPrima, focusing on Laplace transforms and IVPs.</p>
+                  <a class="subject-link" href="/book-study/differential-equations/">Open subject shelf</a>
+                </div>
+              </div>
+              <div class="book-meta"><span>1 note</span><span>1 book tracked</span><span>0 pages covered</span><span>0 main pages total</span></div>
+              <div class="coverage"><div class="progress-track"><span class="progress-bar" style="width: 0%;"></span></div><strong>0 / 0 pages</strong></div>
+            </summary>
+          </details>
+
         </section>
       </div>
     </article></div></div></div></main>
 
-    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
   </div>
 </body>
 </html>
