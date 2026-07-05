@@ -19,13 +19,31 @@
     .book-study-shell .post-body,
     .book-study-shell .site-title,
     .book-study-shell .site-subtitle { opacity: 1 !important; top: auto !important; transform: none !important; }
-    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 18px; }
+    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px; }
     .book-study-actions a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1.2; }
     .book-study-actions a.secondary { background: #f5f5f5; color: #555; border: 1px solid #ddd; }
-    .study-frame { width: 100%; max-width: 100%; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fbfaf7; }
-    .study-frame iframe { width: 100%; max-width: 100%; min-height: calc(100vh - 240px); border: 0; display: block; background: #fbfaf7; }
-    .frame-note { color: #888; font-size: .9rem; margin: 12px 0 0; }
-    .load-fallback { padding: 18px; color: #666; }
+    .study-hero, .note-section { border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: #fff; margin: 18px 0; }
+    .study-hero { background: linear-gradient(135deg, #fff, #f7f7f7); }
+    .study-hero p { color: #666; margin-bottom: 0; }
+    .meta-grid, .two-col, .flow { display: grid; gap: 14px; }
+    .meta-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 18px; }
+    .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .flow { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 14px; }
+    .meta-tile, .panel, .flow-step { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fcfcfc; min-width: 0; }
+    .meta-tile strong { display: block; color: #222; font-size: 1.08rem; }
+    .meta-tile span, .caption { color: #777; font-size: .9rem; }
+    .panel.blue { background: #f0f5ff; border-color: #cddcff; }
+    .panel.green { background: #edf8f5; border-color: #c8e8df; }
+    .panel.gold { background: #fff8e8; border-color: #ead6a6; }
+    .panel.rose { background: #fff2f4; border-color: #efc5cd; }
+    .flow-step { min-height: 78px; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; }
+    .callout { border-left: 4px solid #222; padding: 12px 14px; background: #f7f7f7; margin: 14px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: .94rem; display: block; overflow-x: auto; }
+    th, td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f5f5f5; color: #555; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+    .progress-track { height: 16px; border: 1px solid #ddd; border-radius: 999px; background: #eee; overflow: hidden; margin: 10px 0 6px; }
+    .progress-bar { display: block; height: 100%; width: 7.2%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
+    @media (max-width: 900px) { .meta-grid, .two-col, .flow { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -36,39 +54,31 @@
       <header class="post-header"><h1 class="post-title" itemprop="name headline">Taylor Expansion: Expansion Point</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Linear Algebra</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> 2026-07-04</span></div></header>
       <div class="post-body" itemprop="articleBody">
         <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/linear-algebra/">Linear Algebra shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
-        <div class="study-frame"><iframe id="study-note-frame" title="Taylor expansion expansion point study record"></iframe></div>
-        <p class="frame-note">Filed under Book Study / Linear Algebra.</p>
+
+        <section class="study-hero">
+          <h2>Study Focus</h2>
+          <p>This note records why the Taylor center is written as <strong>a</strong> in the general formula, but becomes the current point <strong>x</strong> in gradient descent.</p>
+          <div class="meta-grid" aria-label="Study metadata"><div class="meta-tile"><strong>2026-07-04</strong><span>study date</span></div><div class="meta-tile"><strong>+0 pages</strong><span>new pages counted</span></div><div class="meta-tile"><strong>1 concept</strong><span>expansion center</span></div><div class="meta-tile"><strong>30 / 415</strong><span>main-page coverage</span></div></div>
+        </section>
+
+        <section class="note-section"><h2>1. The General Taylor Formula Has Two Points</h2><div class="two-col"><div class="panel blue"><h3>Known point</h3><p>The point where the function value and derivatives are known is the expansion point.</p><div class="math-display"><math display="block"><mi>a</mi><mo>=</mo><mtext>expansion point</mtext></math></div></div><div class="panel green"><h3>Target point</h3><p>The point where the function is being predicted can be named separately.</p><div class="math-display"><math display="block"><mi>z</mi><mo>=</mo><mtext>point to predict</mtext></math></div></div></div><div class="math-display"><math display="block"><mi>f</mi><mo>(</mo><mi>z</mi><mo>)</mo><mo>&approx;</mo><mi>f</mi><mo>(</mo><mi>a</mi><mo>)</mo><mo>+</mo><msup><mi>f</mi><mo>&prime;</mo></msup><mo>(</mo><mi>a</mi><mo>)</mo><mo>(</mo><mi>z</mi><mo>-</mo><mi>a</mi><mo>)</mo><mo>+</mo><mfrac><mrow><msup><mi>f</mi><mo>&Prime;</mo></msup><mo>(</mo><mi>a</mi><mo>)</mo><msup><mrow><mo>(</mo><mi>z</mi><mo>-</mo><mi>a</mi><mo>)</mo></mrow><mn>2</mn></msup></mrow><mrow><mn>2</mn><mo>!</mo></mrow></mfrac><mo>+</mo><mo>&ctdot;</mo></math></div><p>Key idea: <strong>a is not special by itself</strong>. It is just the name for the point where the approximation is centered.</p></section>
+
+        <section class="note-section"><h2>2. Why Gradient Descent Uses x Instead Of a</h2><p>In gradient descent, the current position is normally named <span class="math-inline"><math><mi>x</mi></math></span>. So the Taylor expansion is centered at the current point.</p><div class="two-col"><div class="panel"><div class="math-display"><math display="block"><mi>a</mi><mo>=</mo><mi>x</mi></math></div><p>Expand around the current point.</p></div><div class="panel"><div class="math-display"><math display="block"><mi>z</mi><mo>=</mo><mi>x</mi><mo>+</mo><mi>&epsilon;</mi><mi>u</mi></math></div><p>Predict after a small step in direction <span class="math-inline"><math><mi>u</mi></math></span>.</p></div></div><p>Substituting those names into the general formula gives:</p><div class="math-display"><math display="block"><mi>f</mi><mo>(</mo><mi>x</mi><mo>+</mo><mi>&epsilon;</mi><mi>u</mi><mo>)</mo><mo>&approx;</mo><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>+</mo><msup><mi>f</mi><mo>&prime;</mo></msup><mo>(</mo><mi>x</mi><mo>)</mo><mi>&epsilon;</mi><mi>u</mi><mo>+</mo><mo>&ctdot;</mo></math></div></section>
+
+        <section class="note-section"><h2>3. Correction From the Photo</h2><div class="two-col"><div class="panel rose"><h3>The mistaken move</h3><p>The attempted rewrite effectively expanded around the wrong center.</p><div class="math-display"><math display="block"><mtext>wrong center:</mtext><mspace width="0.5em"/><mo>-</mo><mi>&epsilon;</mi><mi>u</mi></math></div></div><div class="panel green"><h3>The right move</h3><p>For gradient descent, expand around the current position because that is where the local information is known.</p><div class="math-display"><math display="block"><mtext>right center:</mtext><mspace width="0.5em"/><mi>x</mi></math></div></div></div><div class="callout"><strong>Rule:</strong> Taylor expansion is always centered at the point where the local information is known.</div></section>
+
+        <section class="note-section"><h2>4. Core Philosophy</h2><div class="flow" aria-label="Taylor expansion concept flow"><div class="flow-step">Stand at current point</div><div class="flow-step">Measure local information</div><div class="flow-step">Predict nearby values</div><div class="flow-step">Choose a useful step</div></div><div class="math-display"><math display="block"><mtext>local information at current point</mtext><mo>&rarr;</mo><mtext>prediction near current point</mtext></math></div><p>Gradient descent uses the first-order version of this idea. Newton's method uses the second-order version.</p></section>
+
+        <section class="note-section"><h2>5. Memory Hook</h2><div class="panel gold"><p><strong>Taylor expansion predicts a function near the current point using information measured at that current point.</strong></p></div></section>
+
+        <section class="note-section"><h2>Previous Learning And Coverage</h2><div class="two-col"><div class="panel"><h3>Previously learned</h3><ul><li>First-order Taylor expansion is a tangent-line approximation.</li><li>The derivative predicts local change.</li><li>Second-order Taylor expansion adds curvature.</li><li>Gradient descent moves opposite the derivative or gradient.</li><li>SVD gives special input directions, output directions, and stretch amounts.</li></ul></div><div class="panel"><h3>Coverage status</h3><div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div><p><strong>30 / 415 pages, 7.2%</strong></p><p class="caption">No page-count change. This study deepened Taylor expansion and gradient descent material already counted under VI.4.</p><table aria-label="Coverage status"><tbody><tr><td>Covered or substantially discussed</td><td><strong>30 pages</strong></td></tr><tr><td>Main chapter pages left</td><td><strong>385 pages</strong></td></tr><tr><td>Full physical pages left</td><td><strong>402 pages</strong></td></tr></tbody></table></div></div></section>
+
+        <section class="note-section"><h2>Coverage Table</h2><table aria-label="Linear algebra coverage table"><thead><tr><th>Status</th><th>Section</th><th>Pages</th><th>Estimated pages</th></tr></thead><tbody><tr><td>Covered conceptually</td><td>I.8 Singular Values and Singular Vectors in the SVD</td><td>56-70</td><td>15</td></tr><tr><td>Covered partially</td><td>VI.4 Gradient Descent Toward the Minimum</td><td>344-358</td><td>15</td></tr><tr><td>Mentioned</td><td>I.9 Principal Components and the Best Low Rank Matrix</td><td>71-80</td><td>10</td></tr><tr><td>Mentioned</td><td>VI.5 Stochastic Gradient Descent and ADAM</td><td>359-370</td><td>12</td></tr><tr><td>Mentioned</td><td>VII.1 The Construction of Deep Neural Networks</td><td>375-386</td><td>12</td></tr><tr><td>Mentioned</td><td>VII.3 Backpropagation and the Chain Rule</td><td>397-406</td><td>10</td></tr></tbody></table></section>
+
+        <section class="note-section"><h2>Next Study Thread</h2><ol><li>Finish the second-order Taylor expansion example cleanly.</li><li>Use dot products to prove why the gradient is steepest ascent.</li><li>Derive why negative gradient is steepest descent.</li><li>Connect curvature to learning-rate stability.</li><li>Return to Strang section VI.4 with these ideas in place.</li></ol></section>
       </div>
     </article></div></div></div></main>
     <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
   </div>
-  <script>
-    (function() {
-      var frame = document.getElementById('study-note-frame');
-      var sourceUrl = 'https://raw.githubusercontent.com/MediciHouse07/Learning_Records/main/book-study/2026-07-04-taylor-expansion-expansion-point.html';
-      var mobileCss = 'html,body{max-width:100%;overflow-x:hidden;}*,*::before,*::after{box-sizing:border-box}.page,section,.hero,.panel,.meta-card,.metric,.flow-step{max-width:100%;overflow-wrap:break-word}.hero-grid,.split,.cards,.flow,.progress-wrap,.visual-grid,.takeaways{min-width:0}img,svg,canvas,video,iframe{max-width:100%;height:auto}.formula,pre,code{max-width:100%;overflow-x:auto;white-space:pre;-webkit-overflow-scrolling:touch}table{width:100%;max-width:100%;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}@media(max-width:768px){.page{width:100%!important;padding:14px!important}.hero,section,.panel,.meta-card,.metric{padding:16px!important}.hero-grid,.split,.cards,.flow,.progress-wrap,.visual-grid,.takeaways{grid-template-columns:1fr!important}h1{font-size:clamp(1.7rem,8vw,2.25rem)!important;line-height:1.15!important}h2{font-size:1.3rem!important;line-height:1.25!important}.formula,pre,code{font-size:.85rem!important}}';
-
-      function addMobileCss(html) {
-        var style = '<style>' + mobileCss + '</style>';
-        return html.indexOf('</head>') !== -1 ? html.replace('</head>', style + '</head>') : style + html;
-      }
-
-      function resizeFrame() {
-        try {
-          var doc = frame.contentDocument || frame.contentWindow.document;
-          var height = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
-          frame.style.height = Math.max(height + 24, window.innerHeight - 240) + 'px';
-        } catch (error) {}
-      }
-
-      frame.srcdoc = '<!doctype html><html><body style="margin:0;padding:24px;font-family:sans-serif;color:#666;background:#fbfaf7;">Loading study note...</body></html>';
-      frame.addEventListener('load', function() { resizeFrame(); window.setTimeout(resizeFrame, 100); window.setTimeout(resizeFrame, 500); });
-
-      fetch(sourceUrl)
-        .then(function(response) { if (!response.ok) throw new Error('HTTP ' + response.status); return response.text(); })
-        .then(function(html) { frame.srcdoc = addMobileCss(html); })
-        .catch(function() { frame.parentNode.innerHTML = '<p class="load-fallback">The study note could not be loaded automatically. <a href="' + sourceUrl + '">Open the source HTML</a>.</p>'; });
-    })();
-  </script>
 </body>
 </html>
