@@ -34,9 +34,9 @@ book-study/calculus/2026-07-05-example-note.html
 book-study/differential-equations/2026-07-05-example-note.html
 ```
 
-Do not create a second copy in `Learning_Records` unless the user explicitly asks for that. Avoid the older wrapper/CDN pattern for new notes; direct storage in this repo is cleaner and avoids redundancy.
+Do not create a second copy in `Learning_Records` unless the user explicitly asks for that. Avoid wrapper/CDN patterns for new notes; direct storage in this repo is cleaner and avoids redundancy.
 
-Existing older pages may redirect into the subject-folder hierarchy. Future pages should be standalone HTML files committed directly to the right subject folder.
+Future pages should be standalone HTML files committed directly to the right subject folder.
 
 ## UI Rule
 
@@ -51,11 +51,28 @@ For new subject shelves and new note pages:
 <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 ```
 
-- Use the same outer shell pattern as the current Book Study pages:
+- Use the same outer shell pattern as the current Book Study pages.
+- Do not add NexT's `use-motion` class to standalone Book Study pages. These pages do not run the full generated Hexo motion lifecycle, so `use-motion` can leave content hidden.
+- Include the visibility guard below in the page-level `<style>` block.
 
 ```html
+<style>
+  .book-study-shell .post-body { font-size: 1rem; }
+  .book-study-shell .brand,
+  .book-study-shell .menu-item,
+  .book-study-shell .post-block,
+  .book-study-shell .post-header,
+  .book-study-shell .post-body,
+  .book-study-shell .site-title,
+  .book-study-shell .site-subtitle {
+    opacity: 1 !important;
+    top: auto !important;
+    transform: none !important;
+  }
+</style>
+
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion book-study-shell">
+  <div class="container book-study-shell">
     <div class="headband"></div>
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <!-- Medici House brand and site nav -->
@@ -119,6 +136,16 @@ If the CSS class sets a fixed width, use an inline `style="width: ...%;"` on tha
   <p>One short sentence describing what this note clarifies.</p>
   <a class="note-link" href="/book-study/<subject-slug>/<note-slug>.html">Open note</a>
 </article>
+```
+
+7. Make sure the note page links back to the subject shelf, Book Study index, and home page:
+
+```html
+<nav class="book-study-actions" aria-label="Book study note navigation">
+  <a href="/book-study/<subject-slug>/">Subject shelf</a>
+  <a class="secondary" href="/book-study/">Book Study</a>
+  <a class="secondary" href="/">Home</a>
+</nav>
 ```
 
 ## Add A New Subject
@@ -218,6 +245,8 @@ book-study/calculus/2026-07-05-example-note-title.html
 - The new standalone HTML note exists directly under `book-study/<subject-slug>/` in this blog repo.
 - The subject has a shelf page at `book-study/<subject-slug>/index.html`.
 - The note uses the Hexo/NexT-style outer shell and links back to `/book-study/<subject-slug>/`, `/book-study/`, and `/`.
+- The note shell uses `class="container book-study-shell"`, not `class="container use-motion book-study-shell"`.
+- The note includes the Book Study visibility guard CSS from this guide.
 - The main `book-study/index.html` subject block has updated note count, page count, percent text, and progress width.
 - The subject shelf page has updated note count, page count, percent text, and progress width.
 - The note card appears under the correct subject.
