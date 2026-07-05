@@ -19,13 +19,31 @@
     .book-study-shell .post-body,
     .book-study-shell .site-title,
     .book-study-shell .site-subtitle { opacity: 1 !important; top: auto !important; transform: none !important; }
-    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 18px; }
+    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px; }
     .book-study-actions a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1.2; }
     .book-study-actions a.secondary { background: #f5f5f5; color: #555; border: 1px solid #ddd; }
-    .study-frame { width: 100%; max-width: 100%; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fbfaf7; }
-    .study-frame iframe { width: 100%; max-width: 100%; min-height: calc(100vh - 240px); border: 0; display: block; background: #fbfaf7; }
-    .frame-note { color: #888; font-size: .9rem; margin: 12px 0 0; }
-    .load-fallback { padding: 18px; color: #666; }
+    .study-hero, .note-section { border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: #fff; margin: 18px 0; }
+    .study-hero { background: linear-gradient(135deg, #fff, #f7f7f7); }
+    .study-hero p { color: #666; margin-bottom: 0; }
+    .meta-grid, .two-col, .flow, .takeaways { display: grid; gap: 14px; }
+    .meta-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 18px; }
+    .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .flow { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: 14px; }
+    .takeaways { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0; list-style: none; }
+    .meta-tile, .panel, .flow-step, .takeaways li { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fcfcfc; min-width: 0; }
+    .meta-tile strong { display: block; color: #222; font-size: 1.4rem; line-height: 1; }
+    .meta-tile span, .caption { color: #777; font-size: .9rem; }
+    .panel.blue { background: #f0f5ff; border-color: #cddcff; }
+    .panel.green { background: #edf8f5; border-color: #c8e8df; }
+    .panel.gold { background: #fff8e8; border-color: #ead6a6; }
+    .flow-step { min-height: 78px; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; }
+    .callout { border-left: 4px solid #222; padding: 12px 14px; background: #f7f7f7; margin: 14px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: .94rem; display: block; overflow-x: auto; }
+    th, td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f5f5f5; color: #555; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+    .progress-track { height: 16px; border: 1px solid #ddd; border-radius: 999px; background: #eee; overflow: hidden; margin: 10px 0 6px; }
+    .progress-bar { display: block; height: 100%; width: 7.2%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
+    @media (max-width: 900px) { .meta-grid, .two-col, .flow, .takeaways { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -36,39 +54,31 @@
       <header class="post-header"><h1 class="post-title" itemprop="name headline">Linear Algebra and Learning from Data</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Linear Algebra</span></div></header>
       <div class="post-body" itemprop="articleBody">
         <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/linear-algebra/">Linear Algebra shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
-        <div class="study-frame"><iframe id="study-note-frame" title="Linear Algebra and Learning from Data study record"></iframe></div>
-        <p class="frame-note">Filed under Book Study / Linear Algebra.</p>
+
+        <section class="study-hero">
+          <h2>Study Dashboard</h2>
+          <p>A learning log for Gilbert Strang's <em>Linear Algebra and Learning from Data</em>, centered on Taylor expansion as the bridge from calculus to gradient descent, with SVD and neural-network training kept in view.</p>
+          <div class="meta-grid" aria-label="Progress summary"><div class="meta-tile"><strong>30</strong><span>pages covered or substantially discussed</span></div><div class="meta-tile"><strong>385</strong><span>main chapter pages left</span></div><div class="meta-tile"><strong>432</strong><span>full physical pages in the book</span></div></div>
+        </section>
+
+        <section class="note-section"><h2>Coverage Tracker</h2><div class="two-col"><div class="panel"><h3>Main chapter progress</h3><div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div><p><strong>30 / 415 pages, 7.2%</strong></p><p class="caption">This tracks study progress, not full mastery. A section's page count is estimated from its start page up to the page before the next listed section starts.</p></div><div class="panel gold"><h3>Counting rule</h3><p>Coverage is counted only when the section was covered or substantially discussed. Mentioned future sections are listed for orientation, but they are not all counted as mastered.</p></div></div><table aria-label="Section coverage table"><thead><tr><th>Status</th><th>Section</th><th>Pages</th><th>Estimated pages</th></tr></thead><tbody><tr><td>Covered conceptually</td><td>I.8 Singular Values and Singular Vectors in the SVD</td><td>56-70</td><td>15</td></tr><tr><td>Covered partially</td><td>VI.4 Gradient Descent Toward the Minimum</td><td>344-358</td><td>15</td></tr><tr><td>Mentioned</td><td>I.9 Principal Components and the Best Low Rank Matrix</td><td>71-80</td><td>10</td></tr><tr><td>Mentioned</td><td>VI.5 Stochastic Gradient Descent and ADAM</td><td>359-370</td><td>12</td></tr><tr><td>Mentioned</td><td>VII.1 The Construction of Deep Neural Networks</td><td>375-386</td><td>12</td></tr><tr><td>Mentioned</td><td>VII.3 Backpropagation and the Chain Rule</td><td>397-406</td><td>10</td></tr></tbody></table></section>
+
+        <section class="note-section"><h2>Main Study Thread: Taylor Expansion</h2><div class="two-col"><div class="panel blue"><p>Taylor expansion approximates a complicated function near a known point using local information.</p><div class="math-display"><math display="block"><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>&approx;</mo><mi>f</mi><mo>(</mo><mi>a</mi><mo>)</mo><mo>+</mo><msup><mi>f</mi><mo>&prime;</mo></msup><mo>(</mo><mi>a</mi><mo>)</mo><mo>(</mo><mi>x</mi><mo>-</mo><mi>a</mi><mo>)</mo></math></div><p>First-order Taylor expansion is the tangent-line approximation: same value, same slope.</p></div><div class="panel"><svg class="responsive-svg" viewBox="0 0 520 300" role="img" aria-label="Curve with tangent approximation"><rect x="0" y="0" width="520" height="300" rx="16" fill="#f8fbff"/><line x1="60" y1="240" x2="470" y2="240" stroke="#b8c4d0" stroke-width="2"/><line x1="80" y1="260" x2="80" y2="40" stroke="#b8c4d0" stroke-width="2"/><path d="M75 225 C150 215 205 178 250 130 C300 78 360 55 455 48" fill="none" stroke="#555" stroke-width="5" stroke-linecap="round"/><line x1="165" y1="210" x2="365" y2="68" stroke="#222" stroke-width="4" stroke-linecap="round"/><circle cx="250" cy="130" r="8" fill="#222"/><text x="260" y="125" font-size="18" fill="#333">a</text><text x="110" y="54" font-size="17" fill="#555">function</text><text x="340" y="92" font-size="17" fill="#333">tangent line</text><text x="100" y="276" font-size="14" fill="#666">Near a, the line is a useful local model.</text></svg></div></div></section>
+
+        <section class="note-section"><h2>Example We Studied</h2><div class="two-col"><div class="panel"><p>For <span class="math-inline"><math><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup></math></span> around <span class="math-inline"><math><mi>a</mi><mo>=</mo><mn>2</mn></math></span>:</p><div class="math-display"><math display="block"><mi>f</mi><mo>(</mo><mn>2</mn><mo>)</mo><mo>=</mo><mn>4</mn><mo>,</mo><mspace width="0.5em"/><msup><mi>f</mi><mo>&prime;</mo></msup><mo>(</mo><mn>2</mn><mo>)</mo><mo>=</mo><mn>4</mn></math></div><div class="math-display"><math display="block"><msup><mi>x</mi><mn>2</mn></msup><mo>&approx;</mo><mn>4</mn><mo>+</mo><mn>4</mn><mo>(</mo><mi>x</mi><mo>-</mo><mn>2</mn><mo>)</mo></math></div></div><table aria-label="Taylor example values"><thead><tr><th>Quantity</th><th>Value</th></tr></thead><tbody><tr><td>Exact value</td><td><span class="math-inline"><math><msup><mrow><mo>(</mo><mn>2.1</mn><mo>)</mo></mrow><mn>2</mn></msup><mo>=</mo><mn>4.41</mn></math></span></td></tr><tr><td>Taylor approximation</td><td><span class="math-inline"><math><mn>4</mn><mo>+</mo><mn>4</mn><mo>(</mo><mn>0.1</mn><mo>)</mo><mo>=</mo><mn>4.4</mn></math></span></td></tr><tr><td>Error</td><td><span class="math-inline"><math><mn>0.01</mn></math></span></td></tr></tbody></table></div></section>
+
+        <section class="note-section"><h2>From Taylor To Gradient Descent</h2><div class="flow" aria-label="Concept flow from Taylor expansion to gradient descent"><div class="flow-step">Taylor expansion</div><div class="flow-step">Local change</div><div class="flow-step">Derivative or gradient</div><div class="flow-step">Move downhill</div><div class="flow-step">Backpropagation later</div></div><p>In one dimension, local change is predicted by:</p><div class="math-display"><math display="block"><mi>f</mi><mo>(</mo><mi>x</mi><mo>+</mo><mi>h</mi><mo>)</mo><mo>&approx;</mo><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>+</mo><msup><mi>f</mi><mo>&prime;</mo></msup><mo>(</mo><mi>x</mi><mo>)</mo><mi>h</mi></math></div><p>To decrease the function, choose <span class="math-inline"><math><mi>h</mi></math></span> opposite the sign of <span class="math-inline"><math><msup><mi>f</mi><mo>&prime;</mo></msup><mo>(</mo><mi>x</mi><mo>)</mo></math></span>.</p><div class="math-display"><math display="block"><msub><mi>x</mi><mtext>next</mtext></msub><mo>=</mo><msub><mi>x</mi><mtext>current</mtext></msub><mo>-</mo><mi>&eta;</mi><msup><mi>f</mi><mo>&prime;</mo></msup><mo>(</mo><msub><mi>x</mi><mtext>current</mtext></msub><mo>)</mo></math></div></section>
+
+        <section class="note-section"><h2>Second-Order View</h2><div class="two-col"><div class="panel green"><p>The first derivative gives slope. The second derivative gives curvature: how the slope changes.</p><div class="math-display"><math display="block"><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>&approx;</mo><mi>f</mi><mo>(</mo><mi>a</mi><mo>)</mo><mo>+</mo><msup><mi>f</mi><mo>&prime;</mo></msup><mo>(</mo><mi>a</mi><mo>)</mo><mo>(</mo><mi>x</mi><mo>-</mo><mi>a</mi><mo>)</mo><mo>+</mo><mfrac><mrow><msup><mi>f</mi><mo>&Prime;</mo></msup><mo>(</mo><mi>a</mi><mo>)</mo><msup><mrow><mo>(</mo><mi>x</mi><mo>-</mo><mi>a</mi><mo>)</mo></mrow><mn>2</mn></msup></mrow><mrow><mn>2</mn><mo>!</mo></mrow></mfrac></math></div></div><div class="panel"><p>For <span class="math-inline"><math><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup></math></span>, the second derivative is 2, so the second-order Taylor expansion is exact. This is why quadratic models become important later in Newton's method.</p></div></div></section>
+
+        <section class="note-section"><h2>SVD Context</h2><p>SVD was supporting context in the same study session. The key relation was:</p><div class="math-display"><math display="block"><mi>A</mi><msub><mi>v</mi><mi>i</mi></msub><mo>=</mo><msub><mi>&sigma;</mi><mi>i</mi></msub><msub><mi>u</mi><mi>i</mi></msub></math></div><p>Here <span class="math-inline"><math><msub><mi>v</mi><mi>i</mi></msub></math></span> is a right singular vector, <span class="math-inline"><math><msub><mi>u</mi><mi>i</mi></msub></math></span> is a left singular vector, and <span class="math-inline"><math><msub><mi>&sigma;</mi><mi>i</mi></msub></math></span> is the stretch amount.</p></section>
+
+        <section class="note-section"><h2>Main Takeaways</h2><ul class="takeaways"><li>Taylor expansion was the central topic of this study update.</li><li>First-order Taylor expansion is a tangent-line approximation.</li><li>The derivative predicts local change and gives the direction needed for descent.</li><li>Second-order Taylor expansion adds curvature through the second derivative.</li><li>Gradient descent is motivated by choosing a local step that lowers the Taylor approximation.</li><li>There are about 385 main chapter pages left to understand.</li></ul></section>
+
+        <section class="note-section"><h2>Next Study Thread</h2><ol><li>Why the gradient is steepest ascent.</li><li>Why the negative gradient is steepest descent.</li><li>How the learning rate interacts with curvature.</li><li>Why second-order information leads toward Newton's method.</li><li>How backpropagation computes gradients efficiently for neural networks.</li></ol></section>
       </div>
     </article></div></div></div></main>
     <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
   </div>
-  <script>
-    (function() {
-      var frame = document.getElementById('study-note-frame');
-      var sourceUrl = 'https://raw.githubusercontent.com/MediciHouse07/Learning_Records/main/book-study/linear-algebra-and-learning-from-data.html';
-      var mobileCss = 'html,body{max-width:100%;overflow-x:hidden;}*,*::before,*::after{box-sizing:border-box}.page,section,.hero,.panel,.date-card,.metric,.mini-panel,.flow-step{max-width:100%;overflow-wrap:break-word}.hero-grid,.progress-wrap,.visual-grid,.cards,.takeaways,.flow{min-width:0}img,svg,canvas,video,iframe{max-width:100%;height:auto}.formula,pre,code{max-width:100%;overflow-x:auto;white-space:pre;-webkit-overflow-scrolling:touch}table{width:100%;max-width:100%;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}@media(max-width:768px){.page{width:100%!important;padding:14px!important}.hero,section,.panel,.date-card,.metric,.mini-panel{padding:16px!important}.hero-grid,.progress-wrap,.visual-grid,.cards,.takeaways,.flow{grid-template-columns:1fr!important}h1{font-size:clamp(1.7rem,8vw,2.25rem)!important;line-height:1.15!important}h2{font-size:1.3rem!important;line-height:1.25!important}.formula,pre,code{font-size:.85rem!important}}';
-
-      function addMobileCss(html) {
-        var style = '<style>' + mobileCss + '</style>';
-        return html.indexOf('</head>') !== -1 ? html.replace('</head>', style + '</head>') : style + html;
-      }
-
-      function resizeFrame() {
-        try {
-          var doc = frame.contentDocument || frame.contentWindow.document;
-          var height = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
-          frame.style.height = Math.max(height + 24, window.innerHeight - 240) + 'px';
-        } catch (error) {}
-      }
-
-      frame.srcdoc = '<!doctype html><html><body style="margin:0;padding:24px;font-family:sans-serif;color:#666;background:#fbfaf7;">Loading study note...</body></html>';
-      frame.addEventListener('load', function() { resizeFrame(); window.setTimeout(resizeFrame, 100); window.setTimeout(resizeFrame, 500); });
-
-      fetch(sourceUrl)
-        .then(function(response) { if (!response.ok) throw new Error('HTTP ' + response.status); return response.text(); })
-        .then(function(html) { frame.srcdoc = addMobileCss(html); })
-        .catch(function() { frame.parentNode.innerHTML = '<p class="load-fallback">The study note could not be loaded automatically. <a href="' + sourceUrl + '">Open the source HTML</a>.</p>'; });
-    })();
-  </script>
 </body>
 </html>
