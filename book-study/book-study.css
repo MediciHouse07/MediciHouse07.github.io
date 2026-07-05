@@ -1,0 +1,230 @@
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.book-study-shell,
+.book-study-shell .header,
+.book-study-shell .header-inner,
+.book-study-shell .main,
+.book-study-shell .main-inner,
+.book-study-shell .content-wrap,
+.book-study-shell .content,
+.book-study-shell .post-block,
+.book-study-shell .post-body,
+.book-study-shell .footer,
+.book-study-shell .footer-inner,
+.book-study-shell .study-hero,
+.book-study-shell .note-section,
+.book-study-shell .subject-block,
+.book-study-shell .note-card,
+.book-study-shell .panel,
+.book-study-shell .mini-panel,
+.book-study-shell .meta-tile,
+.book-study-shell .study-frame {
+  max-width: 100%;
+}
+
+.book-study-shell .post-body,
+.book-study-shell .study-hero,
+.book-study-shell .note-section,
+.book-study-shell .subject-block,
+.book-study-shell .note-card,
+.book-study-shell .panel,
+.book-study-shell .mini-panel,
+.book-study-shell .meta-tile,
+.book-study-shell .callout {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.book-study-shell img,
+.book-study-shell svg,
+.book-study-shell canvas,
+.book-study-shell video,
+.book-study-shell iframe {
+  max-width: 100%;
+}
+
+.book-study-shell .two-col,
+.book-study-shell .three-col,
+.book-study-shell .meta-grid,
+.book-study-shell .flow,
+.book-study-shell .note-grid,
+.book-study-shell .subject-header,
+.book-study-shell .coverage,
+.book-study-shell .progress-wrap,
+.book-study-shell .visual-grid,
+.book-study-shell .cards,
+.book-study-shell .hero-grid {
+  min-width: 0;
+}
+
+.book-study-shell .two-col > *,
+.book-study-shell .three-col > *,
+.book-study-shell .meta-grid > *,
+.book-study-shell .flow > *,
+.book-study-shell .note-grid > *,
+.book-study-shell .subject-header > *,
+.book-study-shell .coverage > *,
+.book-study-shell .progress-wrap > *,
+.book-study-shell .visual-grid > *,
+.book-study-shell .cards > *,
+.book-study-shell .hero-grid > * {
+  min-width: 0;
+}
+
+.book-study-shell pre,
+.book-study-shell code,
+.book-study-shell .formula,
+.book-study-shell .code-block,
+.book-study-shell .math-block {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+  -webkit-overflow-scrolling: touch;
+}
+
+.book-study-shell table {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.book-study-shell .book-study-actions {
+  max-width: 100%;
+}
+
+.book-study-shell .book-study-actions a,
+.book-study-shell .note-link,
+.book-study-shell .subject-link {
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+}
+
+.book-study-shell .study-frame {
+  width: 100%;
+}
+
+.book-study-shell .study-frame iframe {
+  width: 100%;
+  border: 0;
+}
+
+@media (max-width: 900px) {
+  .book-study-shell .meta-grid,
+  .book-study-shell .two-col,
+  .book-study-shell .three-col,
+  .book-study-shell .flow,
+  .book-study-shell .note-grid,
+  .book-study-shell .subject-header,
+  .book-study-shell .coverage,
+  .book-study-shell .progress-wrap,
+  .book-study-shell .visual-grid,
+  .book-study-shell .cards,
+  .book-study-shell .hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .book-study-shell .header-inner,
+  .book-study-shell .main-inner,
+  .book-study-shell .content-wrap,
+  .book-study-shell .content,
+  .book-study-shell .post-block,
+  .book-study-shell .footer-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .book-study-shell .main-inner,
+  .book-study-shell .content-wrap,
+  .book-study-shell .content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .book-study-shell .post-block {
+    padding: 20px 14px !important;
+  }
+
+  .book-study-shell .post-body {
+    font-size: 1rem !important;
+  }
+
+  .book-study-shell .post-title {
+    font-size: clamp(1.55rem, 7vw, 2.1rem) !important;
+    line-height: 1.18 !important;
+  }
+
+  .book-study-shell .study-hero,
+  .book-study-shell .note-section {
+    padding: 16px !important;
+    margin: 16px 0 !important;
+    border-radius: 8px !important;
+  }
+
+  .book-study-shell .panel,
+  .book-study-shell .mini-panel,
+  .book-study-shell .note-card,
+  .book-study-shell .meta-tile,
+  .book-study-shell .subject-block summary {
+    padding: 14px !important;
+  }
+
+  .book-study-shell .note-section h2,
+  .book-study-shell .study-hero h2 {
+    font-size: 1.28rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .book-study-shell h3 {
+    font-size: 1.08rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .book-study-shell p,
+  .book-study-shell li,
+  .book-study-shell td,
+  .book-study-shell th {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .book-study-shell .formula,
+  .book-study-shell pre,
+  .book-study-shell code,
+  .book-study-shell .code-block,
+  .book-study-shell .math-block {
+    font-size: .85rem !important;
+    line-height: 1.5;
+  }
+
+  .book-study-shell .book-study-actions a,
+  .book-study-shell .note-link,
+  .book-study-shell .subject-link {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .book-study-shell .meta-tile strong {
+    font-size: 1rem !important;
+  }
+
+  .book-study-shell .top-visual svg {
+    min-height: 260px;
+  }
+}
