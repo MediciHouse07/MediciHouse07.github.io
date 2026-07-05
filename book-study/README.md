@@ -38,11 +38,9 @@ Do not create a second copy in `Learning_Records` unless the user explicitly ask
 
 Future pages should be standalone HTML files committed directly to the right subject folder.
 
-## UI Rule
+## UI Rule (Hexo/NexT alignment)
 
 Book Study pages should visually align with the current Hexo/NexT blog UI.
-
-For new subject shelves and new note pages:
 
 - Load the existing blog assets:
 
@@ -51,54 +49,50 @@ For new subject shelves and new note pages:
 <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 ```
 
-- Use the same outer shell pattern as the current Book Study pages.
-- Do not add NexT's `use-motion` class to standalone Book Study pages. These pages do not run the full generated Hexo motion lifecycle, so `use-motion` can leave content hidden.
-- Include the visibility guard below in the page-level `<style>` block.
+- Use the standard outer shell (`book-study-shell`).
+- Do NOT use NexT `use-motion` on standalone Book Study pages.
+- Always include visibility guard CSS to prevent hidden content.
 
-```html
-<style>
-  .book-study-shell .post-body { font-size: 1rem; }
-  .book-study-shell .brand,
-  .book-study-shell .menu-item,
-  .book-study-shell .post-block,
-  .book-study-shell .post-header,
-  .book-study-shell .post-body,
-  .book-study-shell .site-title,
-  .book-study-shell .site-subtitle {
-    opacity: 1 !important;
-    top: auto !important;
-    transform: none !important;
-  }
-</style>
+## Mobile Responsiveness Rule (IMPORTANT)
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container book-study-shell">
-    <div class="headband"></div>
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <!-- Medici House brand and site nav -->
-    </header>
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div class="content">
-            <article class="post-block" itemscope itemtype="http://schema.org/Article">
-              <header class="post-header">
-                <h1 class="post-title" itemprop="name headline">Note Title</h1>
-              </header>
-              <div class="post-body" itemprop="articleBody">
-                <!-- Study note content -->
-              </div>
-            </article>
-          </div>
-        </div>
-      </div>
-    </main>
-    <footer class="footer"><!-- Hexo/NexT style footer --></footer>
-  </div>
-</body>
+All Book Study HTML pages MUST be mobile-friendly.
+
+Requirements:
+
+- Layout must adapt to screens as small as 360px width
+- No horizontal scrolling allowed
+- All containers must use `max-width: 100%`
+- Use responsive grid collapse (multi-column → single column on mobile)
+- Code blocks must wrap or scroll horizontally:
+
+```css
+pre, code { overflow-x: auto; }
 ```
 
-The study content can still have richer diagrams or dashboards, but the page frame, navigation, and footer should feel like the rest of the Hexo site.
+- Tables must not break layout:
+
+```css
+table { width: 100%; display: block; overflow-x: auto; }
+```
+
+- Images must be responsive:
+
+```css
+img { max-width: 100%; height: auto; }
+```
+
+- Iframes (used in study embeds) must be responsive and height-adjustable
+- Reduce padding and font size on small screens using media queries:
+
+```css
+@media (max-width: 768px) {
+  .page { padding: 16px; }
+  h1 { font-size: 1.6rem; }
+}
+```
+
+- Avoid fixed pixel widths for layout containers
+- Prefer flex/grid layouts that collapse naturally
 
 ## Add A New Note To An Existing Subject
 
@@ -108,147 +102,41 @@ The study content can still have richer diagrams or dashboards, but the page fra
 book-study/<subject-slug>/<note-slug>.html
 ```
 
-2. In `book-study/index.html`, find the relevant subject block.
-3. In `book-study/<subject-slug>/index.html`, update that subject shelf too.
-4. Update metadata in both places as needed:
+2. Update subject shelf and index page metadata.
 
-```html
-<span>3 notes</span>
-<span>50 pages covered</span>
-<span>415 main pages total</span>
-```
-
-5. Update the progress bar width and visible text:
-
-```html
-<span class="progress-bar" style="width: 12%;"></span>
-<strong>50 / 415 pages, 12.0%</strong>
-```
-
-If the CSS class sets a fixed width, use an inline `style="width: ...%;"` on that subject's `.progress-bar`.
-
-6. Add a note card inside that subject's `.note-grid`:
-
-```html
-<article class="note-card">
-  <div class="note-date">YYYY-MM-DD</div>
-  <h3>Note Title</h3>
-  <p>One short sentence describing what this note clarifies.</p>
-  <a class="note-link" href="/book-study/<subject-slug>/<note-slug>.html">Open note</a>
-</article>
-```
-
-7. Make sure the note page links back to the subject shelf, Book Study index, and home page:
-
-```html
-<nav class="book-study-actions" aria-label="Book study note navigation">
-  <a href="/book-study/<subject-slug>/">Subject shelf</a>
-  <a class="secondary" href="/book-study/">Book Study</a>
-  <a class="secondary" href="/">Home</a>
-</nav>
-```
+3. Keep progress bar consistent across all pages.
 
 ## Add A New Subject
 
-1. Create a subject folder:
+1. Create folder:
 
 ```text
 book-study/<subject-slug>/
 ```
 
-2. Create its subject shelf:
+2. Create:
 
 ```text
 book-study/<subject-slug>/index.html
 ```
 
-3. Add a collapsed subject block inside `book-study/index.html`:
-
-```html
-<details class="subject-block">
-  <summary>
-    <div class="subject-header">
-      <div>
-        <h2>Subject Name</h2>
-        <p>Short description of the book, course, or subject cluster.</p>
-        <a class="subject-link" href="/book-study/<subject-slug>/">Open subject shelf</a>
-      </div>
-      <span class="subject-toggle">Tap to</span>
-    </div>
-
-    <div class="book-meta" aria-label="Subject metadata">
-      <span>1 note</span>
-      <span>1 book tracked</span>
-      <span>50 pages covered</span>
-      <span>400 pages total</span>
-    </div>
-
-    <div class="coverage" aria-label="Subject book coverage">
-      <div class="progress-track" aria-hidden="true"><span class="progress-bar" style="width: 12.5%;"></span></div>
-      <strong>50 / 400 pages, 12.5%</strong>
-      <p class="coverage-caption">State the counting rule, for example main chapter pages or full physical pages.</p>
-    </div>
-  </summary>
-
-  <div class="note-grid" aria-label="Subject notes">
-    <article class="note-card">
-      <div class="note-date">YYYY-MM-DD</div>
-      <h3>Note Title</h3>
-      <p>One short sentence describing the note.</p>
-      <a class="note-link" href="/book-study/<subject-slug>/<note-slug>.html">Open note</a>
-    </article>
-  </div>
-</details>
-```
+3. Register subject in main index.
 
 ## Progress Calculation
-
-Use:
 
 ```text
 covered_pages / total_pages * 100
 ```
 
-Round to one decimal place in the visible text. Use the same value for the progress-bar width.
-
-Example:
-
-```text
-50 / 400 = 12.5%
-```
-
-```html
-<span class="progress-bar" style="width: 12.5%;"></span>
-<strong>50 / 400 pages, 12.5%</strong>
-```
-
-## Naming Rules
-
-Use lowercase, hyphen-separated slugs for subject folders and notes:
-
-```text
-book-study/<subject-slug>/<note-slug>.html
-```
-
-Prefer dated filenames for timestamped updates and stable filenames for dashboards.
-
-Examples:
-
-```text
-book-study/linear-algebra/linear-algebra-and-learning-from-data.html
-book-study/linear-algebra/2026-07-04-taylor-expansion-expansion-point.html
-book-study/calculus/2026-07-05-example-note-title.html
-```
+Round to one decimal place.
 
 ## Checklist Before Commit
 
-- The new standalone HTML note exists directly under `book-study/<subject-slug>/` in this blog repo.
-- The subject has a shelf page at `book-study/<subject-slug>/index.html`.
-- The note uses the Hexo/NexT-style outer shell and links back to `/book-study/<subject-slug>/`, `/book-study/`, and `/`.
-- The note shell uses `class="container book-study-shell"`, not `class="container use-motion book-study-shell"`.
-- The note includes the Book Study visibility guard CSS from this guide.
-- The main `book-study/index.html` subject block has updated note count, page count, percent text, and progress width.
-- The subject shelf page has updated note count, page count, percent text, and progress width.
-- The note card appears under the correct subject.
-- Existing blog navigation does not need page-by-page edits; `js/next-boot.js` already injects the `Book Study` menu item into generated Hexo pages.
-- Keep `.nojekyll` in the blog repo so GitHub Pages serves static files directly.
+- New note exists under correct subject folder
+- Shelf page exists for subject
+- Index updated
+- Progress bar updated consistently
+- Mobile layout tested (360px width)
+- No horizontal scroll
+- No `use-motion` class in standalone pages
+- Visibility guard included
