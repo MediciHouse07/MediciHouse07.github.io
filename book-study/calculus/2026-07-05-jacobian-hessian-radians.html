@@ -47,7 +47,7 @@
     .axis::before, .axis::after { content: ""; position: absolute; top: -5px; width: 12px; height: 12px; border-radius: 50%; background: #222; }
     .axis::before { left: 18%; }
     .axis::after { right: 18%; }
-    .stretch .axis:nth-child(2) { transform: scaleX(1.2); transform-origin: left center; }
+    .axis.stretch { transform: scaleX(1.2); transform-origin: left center; }
     .area-box { width: 78%; height: 74px; border: 3px solid #1f5fd2; background: rgba(31, 95, 210, .08); margin: 0 auto; display: grid; place-items: center; font-weight: 700; color: #1f5fd2; }
     .polar-sketch { position: relative; height: 150px; overflow: hidden; }
     .polar-sketch::before { content: ""; position: absolute; left: 18px; bottom: 16px; width: 135px; height: 135px; border: 3px solid #1f5fd2; border-left-color: transparent; border-bottom-color: transparent; border-radius: 50%; transform: rotate(-18deg); }
@@ -170,7 +170,7 @@
           <span class="formula">grad f = (f_x, f_y)</span>
           <span class="formula">Jacobian(grad f) = [[(f_x)_x, (f_x)_y], [(f_y)_x, (f_y)_y]] = [[f_xx, f_xy], [f_yx, f_yy]]</span>
           <table aria-label="Jacobian versus Hessian comparison">
-            <thead><tr><th>Object</th><th>Built from</th><th>Answers</th><th>Today&apos;s phrase</th></tr></thead>
+            <thead><tr><th>Object</th><th>Built from</th><th>Answers</th><th>Today's phrase</th></tr></thead>
             <tbody>
               <tr><td>Jacobian</td><td>First partial derivatives of a vector-valued map</td><td>How does the map stretch, rotate, flip, or scale area?</td><td>local stretching</td></tr>
               <tr><td>Hessian</td><td>Second partial derivatives of a scalar-valued function</td><td>How does the function curve near a point?</td><td>curvature matrix</td></tr>
