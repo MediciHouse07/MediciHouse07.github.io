@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Probability | Book Study | Medici House</title>
+  <meta name="description" content="Probability study notes from Stat 110 and Introduction to Probability.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    .book-study-shell .post-body { font-size: 1rem; }
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle {
+      opacity: 1 !important;
+      top: auto !important;
+      transform: none !important;
+    }
+    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 0; }
+    .book-study-actions a,
+    .note-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 13px;
+      text-decoration: none;
+      font-weight: 700;
+      background: #222;
+      color: #fff;
+      line-height: 1;
+    }
+    .book-study-actions a.secondary { background: #f5f5f5; color: #555; border: 1px solid #ddd; }
+    .book-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+    .book-meta span { border: 1px solid #ddd; border-radius: 999px; padding: 4px 10px; color: #666; background: #fafafa; font-size: .86rem; }
+    .progress-track { height: 16px; border: 1px solid #ddd; border-radius: 999px; background: #eee; overflow: hidden; margin: 10px 0 6px; }
+    .progress-bar { display: block; width: 1.2%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
+    .coverage-line { color: #666; margin: 0 0 22px; }
+    .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
+    .note-card { border: 1px solid #ddd; border-radius: 8px; padding: 18px; background: #fff; }
+    .note-card h3 { margin: 0 0 10px; font-size: 1.08rem; }
+    .note-card p { color: #666; margin: 0 0 14px; }
+    .note-date { color: #888; font-size: .82rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 8px; }
+    @media (max-width: 760px) { .note-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+        <div class="site-meta">
+          <a href="/" class="brand" rel="start">
+            <span class="logo-line-before"><i></i></span>
+            <h1 class="site-title">Medici House</h1>
+            <span class="logo-line-after"><i></i></span>
+          </a>
+          <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+        </div>
+      </div>
+      <nav class="site-nav">
+        <ul id="menu" class="main-menu menu">
+          <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+          <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+          <li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li>
+        </ul>
+      </nav></div>
+    </header>
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div class="content">
+            <article class="post-block" itemscope itemtype="http://schema.org/Article">
+              <header class="post-header">
+                <h1 class="post-title" itemprop="name headline">Probability</h1>
+                <div class="post-meta"><span class="post-meta-item"><i class="fa fa-book fa-fw"></i> Book Study subject shelf</span></div>
+              </header>
+              <div class="post-body" itemprop="articleBody">
+                <p>Notes from Blitzstein and Hwang's <em>Introduction to Probability</em>, connected to the Stat 110 study track. Current focus: Markov chain Monte Carlo, hard-to-sample distributions, normalizing constants, and Metropolis-Hastings intuition.</p>
+                <div class="book-study-actions">
+                  <a href="/book-study/">Back to Book Study</a>
+                  <a class="secondary" href="/">Home</a>
+                </div>
+                <div class="book-meta" aria-label="Probability metadata">
+                  <span>1 note</span>
+                  <span>1 book tracked</span>
+                  <span>7 pages covered</span>
+                  <span>577 main pages total</span>
+                </div>
+                <div class="progress-track" aria-hidden="true"><span class="progress-bar" style="width: 1.2%;"></span></div>
+                <p class="coverage-line"><strong>7 / 577 pages, 1.2%</strong>. Coverage currently counts the Chapter 12 MCMC range discussed in this session: pp. 535-541.</p>
+
+                <div class="note-grid" aria-label="Probability notes">
+                  <article class="note-card">
+                    <div class="note-date">2026-07-06</div>
+                    <h3>Markov Chain Monte Carlo: Socratic Wrap-Up</h3>
+                    <p>A compact wrap-up of the Stat 110 MCMC thread: why direct sampling can be hard, how ratios cancel the normalizing constant, how proposal and accept/reject steps work, and why poor mixing matters.</p>
+                    <a class="note-link" href="/book-study/probability/2026-07-06-markov-chain-monte-carlo-socratic-wrap-up.html">Open note</a>
+                  </article>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
