@@ -38,20 +38,24 @@ Do not create a second copy in `Learning_Records` unless the user explicitly ask
 
 Future pages should be standalone HTML files committed directly to the right subject folder.
 
-## UI Rule (Hexo/NexT alignment)
+## UI Rule (Hexo/NexT Alignment)
 
 Book Study pages should visually align with the current Hexo/NexT blog UI.
 
-- Load the existing blog assets:
+Load the existing blog assets and shared Book Study stylesheet:
 
 ```html
 <link rel="stylesheet" href="/css/main.css">
 <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/book-study/book-study.css">
 ```
 
-- Use the standard outer shell (`book-study-shell`).
-- Do NOT use NexT `use-motion` on standalone Book Study pages.
+Rules:
+
+- Use the standard outer shell: `book-study-shell`.
+- Do not use NexT `use-motion` on standalone Book Study pages.
 - Always include visibility guard CSS to prevent hidden content.
+- Keep note pages left-aligned on mobile; do not justify headings or paragraphs.
 
 Required visibility guard:
 
@@ -69,9 +73,43 @@ Required visibility guard:
 }
 ```
 
-## Mobile Responsiveness Rule (IMPORTANT)
+## Mathematical Formula Rule
 
-All Book Study HTML pages MUST work on mobile phones.
+Mathematical notes should render formulas as math, not as dark code blocks.
+
+Preferred approach:
+
+- Use native MathML for formulas.
+- Wrap display formulas in `.math-display`.
+- Wrap inline formulas in `.math-inline`.
+- Keep long formulas inside their own scrollable math box.
+- Do not put math formulas in `pre`, `code`, or old `.formula` blocks unless the content is actually source code.
+- If a future note needs LaTeX syntax rendered by MathJax or KaTeX, get explicit approval before adding any external JavaScript dependency.
+
+Example display formula:
+
+```html
+<div class="math-display">
+  <math display="block">
+    <mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+    <mo>&approx;</mo>
+    <mi>f</mi><mo>(</mo><mi>a</mi><mo>)</mo>
+    <mo>+</mo>
+    <msup><mi>f</mi><mo>&prime;</mo></msup><mo>(</mo><mi>a</mi><mo>)</mo>
+    <mo>(</mo><mi>x</mi><mo>-</mo><mi>a</mi><mo>)</mo>
+  </math>
+</div>
+```
+
+Example inline formula:
+
+```html
+<span class="math-inline"><math><mi>J</mi><mo>=</mo><mi>r</mi></math></span>
+```
+
+## Mobile Responsiveness Rule (Important)
+
+All Book Study HTML pages must work on mobile phones.
 
 Target viewport:
 
@@ -86,6 +124,7 @@ Acceptance standard:
 - Cards, panels, formulas, diagrams, and tables must stay inside the phone viewport.
 - Only code blocks, formulas, and tables may scroll horizontally, and only inside their own box.
 - The browser should not show clipped text like a sentence or panel disappearing off the right side.
+- Visual bars, axes, progress bars, and diagrams must be responsive SVG or percentage-based CSS, never fixed-width desktop elements.
 
 Required mobile CSS baseline for every note page:
 
@@ -116,8 +155,20 @@ article,
 .panel,
 .mini-panel,
 .hero,
-.study-frame {
+.study-frame,
+.math-display {
   max-width: 100%;
+}
+
+.post-body,
+.post-body h1,
+.post-body h2,
+.post-body h3,
+.post-body p,
+.post-body li,
+.post-body td,
+.post-body th {
+  text-align: left;
 }
 
 .post-body,
@@ -139,11 +190,16 @@ iframe {
   height: auto;
 }
 
+.math-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
 pre,
 code,
-.formula,
-.code-block,
-.math-block {
+.code-block {
   max-width: 100%;
   overflow-x: auto;
   white-space: pre;
@@ -208,14 +264,6 @@ table {
     font-size: 1rem;
     line-height: 1.6;
   }
-
-  pre,
-  code,
-  .formula,
-  .code-block,
-  .math-block {
-    font-size: .86rem;
-  }
 }
 ```
 
@@ -225,7 +273,7 @@ Rules for generated note HTML:
 - Use `width: min(100%, 1140px)` or `max-width: 1140px; width: 100%;` instead.
 - Do not use large fixed left/right padding on mobile.
 - Do not place wide formulas directly in normal paragraphs.
-- Put formulas in `.formula`, `.code-block`, or another horizontally scrollable block.
+- Put display formulas in `.math-display` using MathML.
 - Do not use multi-column grid layouts without a mobile collapse rule.
 - SVG diagrams must use `viewBox` and `max-width: 100%`.
 - If an iframe is used for a legacy study artifact, the iframe must be `width: 100%`, must not set a fixed pixel width, and must be height-adjusted after content loads.
@@ -290,6 +338,7 @@ Round to one decimal place.
 - Progress bar updated consistently.
 - Mobile layout tested at 360px width.
 - No page-level horizontal scroll on mobile.
+- Formulas use MathML in `.math-display` or `.math-inline`.
 - Code blocks, formulas, and tables scroll only inside their own boxes.
 - Cards, panels, diagrams, and iframes fit inside the phone viewport.
 - No fixed desktop-only widths on main containers.
