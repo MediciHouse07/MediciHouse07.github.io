@@ -9,6 +9,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
   <style>
     .book-study-shell .post-body { font-size: 1rem; }
     .book-study-shell .brand,
@@ -17,16 +18,12 @@
     .book-study-shell .post-header,
     .book-study-shell .post-body,
     .book-study-shell .site-title,
-    .book-study-shell .site-subtitle {
-      opacity: 1 !important;
-      top: auto !important;
-      transform: none !important;
-    }
+    .book-study-shell .site-subtitle { opacity: 1 !important; top: auto !important; transform: none !important; }
     .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 18px; }
-    .book-study-actions a { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1; }
+    .book-study-actions a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1.2; }
     .book-study-actions a.secondary { background: #f5f5f5; color: #555; border: 1px solid #ddd; }
-    .study-frame { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fbfaf7; }
-    .study-frame iframe { width: 100%; min-height: calc(100vh - 240px); border: 0; display: block; background: #fbfaf7; }
+    .study-frame { width: 100%; max-width: 100%; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fbfaf7; }
+    .study-frame iframe { width: 100%; max-width: 100%; min-height: calc(100vh - 240px); border: 0; display: block; background: #fbfaf7; }
     .frame-note { color: #888; font-size: .9rem; margin: 12px 0 0; }
     .load-fallback { padding: 18px; color: #666; }
   </style>
@@ -34,12 +31,7 @@
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="container book-study-shell">
     <div class="headband"></div>
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-        <div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p></div>
-      </div>
-      <nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
-    </header>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div></header>
     <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block" itemscope itemtype="http://schema.org/Article">
       <header class="post-header"><h1 class="post-title" itemprop="name headline">Taylor Expansion: Expansion Point</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Linear Algebra</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> 2026-07-04</span></div></header>
       <div class="post-body" itemprop="articleBody">
@@ -54,6 +46,12 @@
     (function() {
       var frame = document.getElementById('study-note-frame');
       var sourceUrl = 'https://raw.githubusercontent.com/MediciHouse07/Learning_Records/main/book-study/2026-07-04-taylor-expansion-expansion-point.html';
+      var mobileCss = 'html,body{max-width:100%;overflow-x:hidden;}*,*::before,*::after{box-sizing:border-box}.page,section,.hero,.panel,.meta-card,.metric,.flow-step{max-width:100%;overflow-wrap:break-word}.hero-grid,.split,.cards,.flow,.progress-wrap,.visual-grid,.takeaways{min-width:0}img,svg,canvas,video,iframe{max-width:100%;height:auto}.formula,pre,code{max-width:100%;overflow-x:auto;white-space:pre;-webkit-overflow-scrolling:touch}table{width:100%;max-width:100%;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}@media(max-width:768px){.page{width:100%!important;padding:14px!important}.hero,section,.panel,.meta-card,.metric{padding:16px!important}.hero-grid,.split,.cards,.flow,.progress-wrap,.visual-grid,.takeaways{grid-template-columns:1fr!important}h1{font-size:clamp(1.7rem,8vw,2.25rem)!important;line-height:1.15!important}h2{font-size:1.3rem!important;line-height:1.25!important}.formula,pre,code{font-size:.85rem!important}}';
+
+      function addMobileCss(html) {
+        var style = '<style>' + mobileCss + '</style>';
+        return html.indexOf('</head>') !== -1 ? html.replace('</head>', style + '</head>') : style + html;
+      }
 
       function resizeFrame() {
         try {
@@ -64,24 +62,12 @@
       }
 
       frame.srcdoc = '<!doctype html><html><body style="margin:0;padding:24px;font-family:sans-serif;color:#666;background:#fbfaf7;">Loading study note...</body></html>';
-      frame.addEventListener('load', function() {
-        resizeFrame();
-        window.setTimeout(resizeFrame, 100);
-        window.setTimeout(resizeFrame, 500);
-      });
+      frame.addEventListener('load', function() { resizeFrame(); window.setTimeout(resizeFrame, 100); window.setTimeout(resizeFrame, 500); });
 
       fetch(sourceUrl)
-        .then(function(response) {
-          if (!response.ok) throw new Error('HTTP ' + response.status);
-          return response.text();
-        })
-        .then(function(html) {
-          frame.srcdoc = html;
-        })
-        .catch(function() {
-          var holder = frame.parentNode;
-          holder.innerHTML = '<p class="load-fallback">The study note could not be loaded automatically. <a href="' + sourceUrl + '">Open the source HTML</a>.</p>';
-        });
+        .then(function(response) { if (!response.ok) throw new Error('HTTP ' + response.status); return response.text(); })
+        .then(function(html) { frame.srcdoc = addMobileCss(html); })
+        .catch(function() { frame.parentNode.innerHTML = '<p class="load-fallback">The study note could not be loaded automatically. <a href="' + sourceUrl + '">Open the source HTML</a>.</p>'; });
     })();
   </script>
 </body>
