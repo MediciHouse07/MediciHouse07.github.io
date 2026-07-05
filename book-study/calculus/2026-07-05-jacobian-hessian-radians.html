@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Jacobian, Hessian, and Radians | Book Study | Medici House</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <style>
+    .book-study-shell .post-body { font-size: 1rem; }
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle {
+      opacity: 1 !important;
+      top: auto !important;
+      transform: none !important;
+    }
+    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px; }
+    .book-study-actions a { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1; }
+    .book-study-actions a.secondary { background: #f5f5f5; color: #555; border: 1px solid #ddd; }
+    .study-hero { border: 1px solid #ddd; border-radius: 10px; padding: 22px; background: linear-gradient(135deg, #fff, #f7f7f7); margin-bottom: 20px; }
+    .study-hero p { color: #666; margin-bottom: 0; }
+    .meta-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 18px 0 0; }
+    .meta-tile { border: 1px solid #ddd; border-radius: 8px; background: #fff; padding: 12px; }
+    .meta-tile strong { display: block; font-size: 1.08rem; color: #222; }
+    .meta-tile span { color: #777; font-size: .86rem; }
+    .note-section { border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: #fff; margin: 18px 0; }
+    .note-section h2 { margin-top: 0; font-size: 1.25rem; }
+    .two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .three-col { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .panel { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fcfcfc; }
+    .panel.blue { background: #f0f5ff; border-color: #cddcff; }
+    .panel.green { background: #edf8f5; border-color: #c8e8df; }
+    .panel.gold { background: #fff8e8; border-color: #ead6a6; }
+    .panel.rose { background: #fff2f4; border-color: #efc5cd; }
+    .formula { display: block; overflow-x: auto; padding: 13px; border-radius: 8px; background: #1f2937; color: #f8fafc; font-family: "SFMono-Regular", Consolas, monospace; font-size: .92rem; white-space: nowrap; margin: 10px 0; }
+    .mini-diagram { min-height: 165px; display: flex; flex-direction: column; justify-content: center; gap: 10px; border: 1px solid #ddd; border-radius: 8px; padding: 16px; background: #fafafa; }
+    .axis-row { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 10px; align-items: center; }
+    .axis { position: relative; height: 3px; background: #222; border-radius: 99px; }
+    .axis::before, .axis::after { content: ""; position: absolute; top: -5px; width: 12px; height: 12px; border-radius: 50%; background: #222; }
+    .axis::before { left: 18%; }
+    .axis::after { right: 18%; }
+    .stretch .axis:nth-child(2) { transform: scaleX(1.2); transform-origin: left center; }
+    .area-box { width: 78%; height: 74px; border: 3px solid #1f5fd2; background: rgba(31, 95, 210, .08); margin: 0 auto; display: grid; place-items: center; font-weight: 700; color: #1f5fd2; }
+    .polar-sketch { position: relative; height: 150px; overflow: hidden; }
+    .polar-sketch::before { content: ""; position: absolute; left: 18px; bottom: 16px; width: 135px; height: 135px; border: 3px solid #1f5fd2; border-left-color: transparent; border-bottom-color: transparent; border-radius: 50%; transform: rotate(-18deg); }
+    .ray { position: absolute; left: 18px; bottom: 16px; width: 150px; height: 3px; background: #222; transform-origin: left center; }
+    .ray.one { transform: rotate(-18deg); }
+    .ray.two { transform: rotate(-58deg); }
+    .polar-label { position: absolute; right: 12px; top: 52px; color: #1f5fd2; font-weight: 700; }
+    .matrix { display: inline-grid; grid-template-columns: repeat(2, auto); gap: 7px 16px; align-items: center; padding: 10px 16px; border-left: 2px solid #222; border-right: 2px solid #222; font-family: "SFMono-Regular", Consolas, monospace; }
+    table { width: 100%; border-collapse: collapse; font-size: .94rem; }
+    th, td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f5f5f5; color: #555; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+    tr:last-child td { border-bottom: 0; }
+    .callout { border-left: 4px solid #222; padding: 12px 14px; background: #f7f7f7; margin: 14px 0; }
+    .progress-track { height: 16px; border: 1px solid #ddd; border-radius: 999px; background: #eee; overflow: hidden; margin: 10px 0 6px; }
+    .progress-bar { display: block; height: 100%; width: 1.7%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
+    .caption { color: #777; font-size: .9rem; margin: 8px 0 0; }
+    @media (max-width: 900px) { .meta-grid, .two-col, .three-col { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block" itemscope itemtype="http://schema.org/Article">
+      <header class="post-header"><h1 class="post-title" itemprop="name headline">Jacobian, Hessian, and Radians</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Calculus</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> 2026-07-05</span></div></header>
+      <div class="post-body" itemprop="articleBody">
+        <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/calculus/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+        <section class="study-hero">
+          <h2>What We Studied Since the Last Commit</h2>
+          <p>We used Simmons's <em>Calculus with Analytic Geometry</em> to connect three nearby ideas: radians as arc-length measure, Jacobians as local area scaling, and Hessians as modern notation for the second-partial information behind the two-variable second derivative test.</p>
+          <div class="meta-grid" aria-label="Study metadata">
+            <div class="meta-tile"><strong>2026-07-05</strong><span>study date, Asia/Tokyo</span></div>
+            <div class="meta-tile"><strong>12 pages</strong><span>new calculus coverage</span></div>
+            <div class="meta-tile"><strong>3 clusters</strong><span>radian, Jacobian, Hessian</span></div>
+            <div class="meta-tile"><strong>12 / 697</strong><span>main-page coverage</span></div>
+          </div>
+        </section>
+
+        <section class="note-section">
+          <h2>1. Radians Explain the Extra r</h2>
+          <div class="two-col">
+            <div class="panel blue">
+              <h3>Definition</h3>
+              <p>A radian measures an angle by comparing arc length with radius.</p>
+              <span class="formula">theta = arc length / radius</span>
+              <p>So if the arc length equals the radius, the angle is 1 radian.</p>
+            </div>
+            <div class="panel green">
+              <h3>Polar patch</h3>
+              <p>For a small polar sector, the curved side has length r dtheta and the radial thickness is dr.</p>
+              <span class="formula">dA approx (r dtheta)(dr) = r dr dtheta</span>
+            </div>
+          </div>
+          <div class="callout"><strong>Memory rule:</strong> the same angle cuts a longer arc farther from the origin, so polar area needs the extra factor r.</div>
+        </section>
+
+        <section class="note-section">
+          <h2>2. Jacobian Means Local Stretching</h2>
+          <div class="three-col">
+            <div class="mini-diagram">
+              <h3>1D stretch</h3>
+              <div class="axis-row"><span>u-axis</span><div class="axis"></div></div>
+              <div class="axis-row"><span>x-axis</span><div class="axis stretch"></div></div>
+              <span class="formula">x = 3u, so dx = 3 du</span>
+            </div>
+            <div class="mini-diagram">
+              <h3>2D stretch</h3>
+              <div class="area-box">area x 6</div>
+              <span class="formula">x = 3u, y = 2v, J = 6</span>
+            </div>
+            <div class="mini-diagram">
+              <h3>Polar stretch</h3>
+              <div class="polar-sketch"><div class="ray one"></div><div class="ray two"></div><span class="polar-label">r dtheta</span></div>
+              <span class="formula">x = r cos theta, y = r sin theta, J = r</span>
+            </div>
+          </div>
+          <p>Simmons introduces the Jacobian in Section 20.9 as the two-variable replacement for the one-variable derivative in change-of-variables formulas.</p>
+          <span class="formula">J = partial(x,y)/partial(u,v) = x_u y_v - x_v y_u</span>
+        </section>
+
+        <section class="note-section">
+          <h2>3. The Polar Jacobian Calculation</h2>
+          <table aria-label="Polar coordinate Jacobian calculation">
+            <thead><tr><th>Quantity</th><th>Value</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>x</td><td>r cos theta</td><td>horizontal coordinate</td></tr>
+              <tr><td>y</td><td>r sin theta</td><td>vertical coordinate</td></tr>
+              <tr><td>x_r, x_theta</td><td>cos theta, -r sin theta</td><td>how x responds to r and theta</td></tr>
+              <tr><td>y_r, y_theta</td><td>sin theta, r cos theta</td><td>how y responds to r and theta</td></tr>
+              <tr><td>Jacobian</td><td>r cos^2 theta + r sin^2 theta = r</td><td>local area scale factor</td></tr>
+            </tbody>
+          </table>
+          <span class="formula">double integral in polar: integral integral f(r cos theta, r sin theta) r dr dtheta</span>
+        </section>
+
+        <section class="note-section">
+          <h2>4. Hessian: Same Shape, Different Question</h2>
+          <div class="two-col">
+            <div class="panel gold">
+              <h3>Jacobian matrix</h3>
+              <p>Uses first derivatives of a transformation. It asks how input motion changes output motion or area.</p>
+              <div class="matrix" aria-label="Jacobian matrix"><span>x_u</span><span>x_v</span><span>y_u</span><span>y_v</span></div>
+            </div>
+            <div class="panel rose">
+              <h3>Hessian matrix</h3>
+              <p>Uses second derivatives of one scalar function. It asks how the graph is curving near a critical point.</p>
+              <div class="matrix" aria-label="Hessian matrix"><span>f_xx</span><span>f_xy</span><span>f_yx</span><span>f_yy</span></div>
+            </div>
+          </div>
+          <p>Simmons does not appear to name the capital-H Hessian matrix explicitly. He teaches the ingredients as second partial derivatives and then uses the discriminant in the second derivative test.</p>
+          <span class="formula">D = f_xx f_yy - (f_xy)^2</span>
+        </section>
+
+        <section class="note-section">
+          <h2>5. Clean Relationship</h2>
+          <p>The reason Jacobians and Hessians look similar is that a Hessian is the Jacobian of the gradient.</p>
+          <span class="formula">grad f = (f_x, f_y)</span>
+          <span class="formula">Jacobian(grad f) = [[(f_x)_x, (f_x)_y], [(f_y)_x, (f_y)_y]] = [[f_xx, f_xy], [f_yx, f_yy]]</span>
+          <table aria-label="Jacobian versus Hessian comparison">
+            <thead><tr><th>Object</th><th>Built from</th><th>Answers</th><th>Today&apos;s phrase</th></tr></thead>
+            <tbody>
+              <tr><td>Jacobian</td><td>First partial derivatives of a vector-valued map</td><td>How does the map stretch, rotate, flip, or scale area?</td><td>local stretching</td></tr>
+              <tr><td>Hessian</td><td>Second partial derivatives of a scalar-valued function</td><td>How does the function curve near a point?</td><td>curvature matrix</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="note-section">
+          <h2>6. Socratic Checkpoints Reached</h2>
+          <ol>
+            <li>Recognized that x = 3u turns du = 0.1 into dx = 0.3.</li>
+            <li>Computed the local stretch factor for x = u^2 at u = 5 as 10.</li>
+            <li>Computed the simple Jacobian for x = 3u, y = 2v as 6.</li>
+            <li>Computed the mixed map x = u + v, y = u - v as J = -2 and area scale |J| = 2.</li>
+            <li>Derived the polar Jacobian J = r from the determinant.</li>
+            <li>Connected radians to arc length using theta = arc length / radius.</li>
+            <li>Distinguished angle from radian: the angle is the thing, the radian is the unit.</li>
+            <li>Separated Jacobian from Hessian, then joined them with Hessian = Jacobian of the gradient.</li>
+          </ol>
+        </section>
+
+        <section class="note-section">
+          <h2>Source Pages and Coverage</h2>
+          <div class="two-col">
+            <div class="panel">
+              <h3>Book locations</h3>
+              <ul>
+                <li>Simmons, Section 19.2, Partial Derivatives: printed pp. 589-593.</li>
+                <li>Simmons, Section 19.7, Maximum and Minimum Problems: printed pp. 613-615.</li>
+                <li>Simmons, Section 20.9, Change of Variables in Multiple Integrals, Jacobians: printed pp. 672-675.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>Coverage</h3>
+              <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+              <p><strong>12 / 697 pages, 1.7%</strong></p>
+              <p class="caption">Coverage counts main chapter printed pages in Simmons, Chapters 1-21. Appendices and front matter are not included in the denominator.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="note-section">
+          <h2>Next Study Thread</h2>
+          <ol>
+            <li>Practice two more Jacobian determinants until area scaling feels automatic.</li>
+            <li>Use the Hessian discriminant D to classify minimum, maximum, and saddle examples.</li>
+            <li>Return to the link: first-order local motion uses Jacobian; second-order local shape uses Hessian.</li>
+          </ol>
+        </section>
+      </div>
+    </article></div></div></div></main>
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
