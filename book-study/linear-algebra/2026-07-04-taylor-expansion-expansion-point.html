@@ -28,6 +28,7 @@
     .study-frame { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fbfaf7; }
     .study-frame iframe { width: 100%; min-height: calc(100vh - 240px); border: 0; display: block; background: #fbfaf7; }
     .frame-note { color: #888; font-size: .9rem; margin: 12px 0 0; }
+    .load-fallback { padding: 18px; color: #666; }
   </style>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -43,11 +44,45 @@
       <header class="post-header"><h1 class="post-title" itemprop="name headline">Taylor Expansion: Expansion Point</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Linear Algebra</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> 2026-07-04</span></div></header>
       <div class="post-body" itemprop="articleBody">
         <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/linear-algebra/">Linear Algebra shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
-        <div class="study-frame"><iframe title="Taylor expansion expansion point study record" src="https://cdn.jsdelivr.net/gh/MediciHouse07/Learning_Records@main/book-study/2026-07-04-taylor-expansion-expansion-point.html"></iframe></div>
+        <div class="study-frame"><iframe id="study-note-frame" title="Taylor expansion expansion point study record"></iframe></div>
         <p class="frame-note">Filed under Book Study / Linear Algebra.</p>
       </div>
     </article></div></div></div></main>
     <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
   </div>
+  <script>
+    (function() {
+      var frame = document.getElementById('study-note-frame');
+      var sourceUrl = 'https://raw.githubusercontent.com/MediciHouse07/Learning_Records/main/book-study/2026-07-04-taylor-expansion-expansion-point.html';
+
+      function resizeFrame() {
+        try {
+          var doc = frame.contentDocument || frame.contentWindow.document;
+          var height = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
+          frame.style.height = Math.max(height + 24, window.innerHeight - 240) + 'px';
+        } catch (error) {}
+      }
+
+      frame.srcdoc = '<!doctype html><html><body style="margin:0;padding:24px;font-family:sans-serif;color:#666;background:#fbfaf7;">Loading study note...</body></html>';
+      frame.addEventListener('load', function() {
+        resizeFrame();
+        window.setTimeout(resizeFrame, 100);
+        window.setTimeout(resizeFrame, 500);
+      });
+
+      fetch(sourceUrl)
+        .then(function(response) {
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          return response.text();
+        })
+        .then(function(html) {
+          frame.srcdoc = html;
+        })
+        .catch(function() {
+          var holder = frame.parentNode;
+          holder.innerHTML = '<p class="load-fallback">The study note could not be loaded automatically. <a href="' + sourceUrl + '">Open the source HTML</a>.</p>';
+        });
+    })();
+  </script>
 </body>
 </html>
