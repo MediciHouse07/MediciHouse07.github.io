@@ -84,6 +84,7 @@ Preferred approach:
 - Wrap inline formulas in `.math-inline`.
 - Keep long formulas inside their own scrollable math box.
 - Do not put math formulas in `pre`, `code`, or old `.formula` blocks unless the content is actually source code.
+- For partial derivative symbols, use `<mo>&#x2202;</mo>`. Do not use `&partial;`, because some browsers render it literally.
 - If a future note needs LaTeX syntax rendered by MathJax or KaTeX, get explicit approval before adding any external JavaScript dependency.
 
 Example display formula:
@@ -97,6 +98,20 @@ Example display formula:
     <mo>+</mo>
     <msup><mi>f</mi><mo>&prime;</mo></msup><mo>(</mo><mi>a</mi><mo>)</mo>
     <mo>(</mo><mi>x</mi><mo>-</mo><mi>a</mi><mo>)</mo>
+  </math>
+</div>
+```
+
+Example partial derivative formula:
+
+```html
+<div class="math-display">
+  <math display="block">
+    <mi>J</mi><mo>=</mo>
+    <mfrac>
+      <mrow><mo>&#x2202;</mo><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo></mrow>
+      <mrow><mo>&#x2202;</mo><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo></mrow>
+    </mfrac>
   </math>
 </div>
 ```
