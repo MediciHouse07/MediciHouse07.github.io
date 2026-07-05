@@ -32,13 +32,16 @@
     .three-col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .meta-tile, .panel, .mini-panel { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fcfcfc; min-width: 0; }
     .meta-tile strong { display: block; color: #222; font-size: 1.08rem; }
-    .meta-tile span, .caption { color: #777; font-size: .9rem; }
+    .meta-tile span, .caption, figcaption { color: #777; font-size: .9rem; }
     .panel.blue { background: #f0f5ff; border-color: #cddcff; }
     .panel.green { background: #edf8f5; border-color: #c8e8df; }
     .panel.gold { background: #fff8e8; border-color: #ead6a6; }
     .panel.rose { background: #fff2f4; border-color: #efc5cd; }
     .panel.gray { background: #f7f7f7; border-color: #ddd; }
     .callout { border-left: 4px solid #222; padding: 12px 14px; background: #f7f7f7; margin: 14px 0; }
+    .study-card-figure { margin: 0; }
+    .study-card-figure img { display: block; width: 100%; max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; background: #fbfaf7; }
+    .study-card-figure figcaption { margin-top: 10px; }
     .progress-track { height: 16px; border: 1px solid #ddd; border-radius: 999px; background: #eee; overflow: hidden; margin: 10px 0 6px; }
     .progress-bar { display: block; height: 100%; width: 2.0%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
     table { width: 100%; border-collapse: collapse; font-size: .94rem; display: block; overflow-x: auto; }
@@ -59,6 +62,8 @@
         <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/calculus/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
 
         <section class="study-hero"><h2>Study Wrap-Up</h2><p>We studied the Hessian matrix through Simmons's second derivative test, but focused on the deeper question: why did people need a matrix at all? The answer is that one-variable curvature has one direction, while two-variable curvature has infinitely many directions, including mixed diagonal behavior.</p><div class="meta-grid" aria-label="Study metadata"><div class="meta-tile"><strong>2026-07-05</strong><span>timestamp, Asia/Tokyo</span></div><div class="meta-tile"><strong>Simmons</strong><span>Calculus with Analytic Geometry</span></div><div class="meta-tile"><strong>pp. 614-617</strong><span>critical points, test, least squares</span></div><div class="meta-tile"><strong>14 / 697</strong><span>calculus coverage after this note</span></div></div></section>
+
+        <section class="note-section"><h2>Visual Map: Hessian Determines Local Shape</h2><figure class="study-card-figure"><img src="/book-study/calculus/assets/hessian-shape-study-card.svg" alt="Four-panel study card showing Hessian determinant cases for S(m,b): bowl minimum, hill maximum, saddle, and inconclusive flat case."><figcaption>The Hessian of <span class="math-inline"><math><mi>S</mi><mo>(</mo><mi>m</mi><mo>,</mo><mi>b</mi><mo>)</mo></math></span> tells the local shape of the error surface near a critical point. The determinant separates bowl or hill from saddle; when it is zero, the test cannot decide.</figcaption></figure></section>
 
         <section class="note-section"><h2>1. The One-Variable Problem Was Too Simple</h2><div class="two-col"><div class="panel blue"><h3>One variable</h3><p>At a critical point, the first derivative vanishes. The second derivative gives the local shape.</p><div class="math-display"><math display="block"><msup><mi>f</mi><mo>&prime;</mo></msup><mo>(</mo><mi>a</mi><mo>)</mo><mo>=</mo><mn>0</mn><mo>,</mo><mspace width="0.5em"/><msup><mi>f</mi><mo>&Prime;</mo></msup><mo>(</mo><mi>a</mi><mo>)</mo><mo>&gt;</mo><mn>0</mn><mo>&Rightarrow;</mo><mtext>minimum</mtext></math></div></div><div class="panel green"><h3>Two variables</h3><p>At a critical point, both first partial derivatives vanish, but the surface can bend differently in different directions.</p><div class="math-display"><math display="block"><msub><mi>f</mi><mi>x</mi></msub><mo>=</mo><mn>0</mn><mo>,</mo><mspace width="0.5em"/><msub><mi>f</mi><mi>y</mi></msub><mo>=</mo><mn>0</mn></math></div></div></div><div class="callout"><strong>Reason for invention:</strong> the Hessian matrix packages every second-order direction clue into one object, so we do not have to check directions one by one forever.</div></section>
 
