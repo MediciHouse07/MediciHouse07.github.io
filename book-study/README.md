@@ -53,46 +53,192 @@ Book Study pages should visually align with the current Hexo/NexT blog UI.
 - Do NOT use NexT `use-motion` on standalone Book Study pages.
 - Always include visibility guard CSS to prevent hidden content.
 
-## Mobile Responsiveness Rule (IMPORTANT)
-
-All Book Study HTML pages MUST be mobile-friendly.
-
-Requirements:
-
-- Layout must adapt to screens as small as 360px width
-- No horizontal scrolling allowed
-- All containers must use `max-width: 100%`
-- Use responsive grid collapse (multi-column → single column on mobile)
-- Code blocks must wrap or scroll horizontally:
+Required visibility guard:
 
 ```css
-pre, code { overflow-x: auto; }
-```
-
-- Tables must not break layout:
-
-```css
-table { width: 100%; display: block; overflow-x: auto; }
-```
-
-- Images must be responsive:
-
-```css
-img { max-width: 100%; height: auto; }
-```
-
-- Iframes (used in study embeds) must be responsive and height-adjustable
-- Reduce padding and font size on small screens using media queries:
-
-```css
-@media (max-width: 768px) {
-  .page { padding: 16px; }
-  h1 { font-size: 1.6rem; }
+.book-study-shell .brand,
+.book-study-shell .menu-item,
+.book-study-shell .post-block,
+.book-study-shell .post-header,
+.book-study-shell .post-body,
+.book-study-shell .site-title,
+.book-study-shell .site-subtitle {
+  opacity: 1 !important;
+  top: auto !important;
+  transform: none !important;
 }
 ```
 
-- Avoid fixed pixel widths for layout containers
-- Prefer flex/grid layouts that collapse naturally
+## Mobile Responsiveness Rule (IMPORTANT)
+
+All Book Study HTML pages MUST work on mobile phones.
+
+Target viewport:
+
+```text
+360px wide minimum, tested in Chrome mobile view or a real phone browser
+```
+
+Acceptance standard:
+
+- The page itself must not have horizontal scrolling.
+- Text must remain readable without zooming.
+- Cards, panels, formulas, diagrams, and tables must stay inside the phone viewport.
+- Only code blocks, formulas, and tables may scroll horizontally, and only inside their own box.
+- The browser should not show clipped text like a sentence or panel disappearing off the right side.
+
+Required mobile CSS baseline for every note page:
+
+```css
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.book-study-shell,
+.main,
+.main-inner,
+.content-wrap,
+.content,
+.post-block,
+.post-body,
+.page,
+section,
+article,
+.card,
+.panel,
+.mini-panel,
+.hero,
+.study-frame {
+  max-width: 100%;
+}
+
+.post-body,
+.page,
+section,
+article,
+.card,
+.panel,
+.mini-panel {
+  overflow-wrap: break-word;
+}
+
+img,
+svg,
+canvas,
+video,
+iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+pre,
+code,
+.formula,
+.code-block,
+.math-block {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+table {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .main-inner,
+  .content-wrap,
+  .content,
+  .post-block {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .post-block,
+  .post-body,
+  .page,
+  section,
+  article,
+  .card,
+  .panel,
+  .mini-panel,
+  .hero {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .hero-grid,
+  .visual-grid,
+  .split,
+  .cards,
+  .flow,
+  .note-grid,
+  .subject-header,
+  .coverage {
+    grid-template-columns: 1fr !important;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 8vw, 2.2rem) !important;
+    line-height: 1.15;
+  }
+
+  h2 {
+    font-size: 1.35rem !important;
+    line-height: 1.2;
+  }
+
+  p,
+  li,
+  td,
+  th {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  pre,
+  code,
+  .formula,
+  .code-block,
+  .math-block {
+    font-size: .86rem;
+  }
+}
+```
+
+Rules for generated note HTML:
+
+- Do not use fixed desktop widths like `width: 1140px` on main containers.
+- Use `width: min(100%, 1140px)` or `max-width: 1140px; width: 100%;` instead.
+- Do not use large fixed left/right padding on mobile.
+- Do not place wide formulas directly in normal paragraphs.
+- Put formulas in `.formula`, `.code-block`, or another horizontally scrollable block.
+- Do not use multi-column grid layouts without a mobile collapse rule.
+- SVG diagrams must use `viewBox` and `max-width: 100%`.
+- If an iframe is used for a legacy study artifact, the iframe must be `width: 100%`, must not set a fixed pixel width, and must be height-adjusted after content loads.
+
+Mobile test checklist:
+
+1. Open the page at 360px width.
+2. Scroll vertically from top to bottom.
+3. Confirm the body itself does not move left/right.
+4. Confirm long formulas scroll only inside their formula box.
+5. Confirm tables scroll only inside the table box.
+6. Confirm every card/panel fits inside the viewport.
+7. Confirm the same page still looks acceptable on desktop.
 
 ## Add A New Note To An Existing Subject
 
@@ -105,6 +251,10 @@ book-study/<subject-slug>/<note-slug>.html
 2. Update subject shelf and index page metadata.
 
 3. Keep progress bar consistent across all pages.
+
+4. Apply the required mobile CSS baseline from this guide.
+
+5. Test the page at 360px width before commit.
 
 ## Add A New Subject
 
@@ -122,6 +272,8 @@ book-study/<subject-slug>/index.html
 
 3. Register subject in main index.
 
+4. Apply the same mobile rules to the subject shelf page.
+
 ## Progress Calculation
 
 ```text
@@ -132,11 +284,14 @@ Round to one decimal place.
 
 ## Checklist Before Commit
 
-- New note exists under correct subject folder
-- Shelf page exists for subject
-- Index updated
-- Progress bar updated consistently
-- Mobile layout tested (360px width)
-- No horizontal scroll
-- No `use-motion` class in standalone pages
-- Visibility guard included
+- New note exists under correct subject folder.
+- Shelf page exists for subject.
+- Index updated.
+- Progress bar updated consistently.
+- Mobile layout tested at 360px width.
+- No page-level horizontal scroll on mobile.
+- Code blocks, formulas, and tables scroll only inside their own boxes.
+- Cards, panels, diagrams, and iframes fit inside the phone viewport.
+- No fixed desktop-only widths on main containers.
+- No `use-motion` class in standalone pages.
+- Visibility guard included.
