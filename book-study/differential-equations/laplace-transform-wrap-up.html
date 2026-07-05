@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Laplace Transform – Socratic Wrap-Up</title>
+<style>
+body{font-family:Arial, sans-serif;margin:40px;line-height:1.6;background:#fafafa}
+h1{color:#2c3e50}
+h2{color:#34495e}
+.box{background:#fff;padding:12px 15px;border-left:4px solid #3498db;margin:10px 0}
+.meta{font-size:12px;color:#666;margin-bottom:20px}
+</style>
+</head>
+<body>
+
+<h1>Laplace Transform – Socratic Wrap-Up</h1>
+
+<div class="meta">
+Book: Boyce & DiPrima – Elementary Differential Equations and Boundary Value Problems<br>
+Subject: Differential Equations (Laplace Transform Chapter)<br>
+Session: Socratic Build-Up to Inverse Transform
+</div>
+
+<h2>1. Core Problem</h2>
+<div class="box">
+Differential equations mix y(t), y'(t), y''(t), making algebraic solving impossible.
+</div>
+
+<h2>2. Why Transform Exists</h2>
+<div class="box">
+Goal: convert derivatives into algebra so equations become solvable.
+</div>
+
+<h2>3. Definition</h2>
+<div class="box">
+L{y(t)} = ∫₀^∞ e^{-st} y(t) dt = Y(s)
+</div>
+
+<h2>4. Key Idea (Lens Interpretation)</h2>
+<div class="box">
+Small s → long-term behavior<br>
+Large s → short-term behavior
+</div>
+
+<h2>5. Why Exponentials</h2>
+<div class="box">
+Derivative stability: d/dt e^{-st} = -s e^{-st}
+</div>
+
+<h2>6. Integration by Parts Result</h2>
+<div class="box">
+L{y'} = sY(s) - y(0)
+</div>
+
+<h2>7. Higher Derivatives</h2>
+<div class="box">
+L{y''} = s^2Y - s y(0) - y'(0)<br>
+L{y'''} = s^3Y - s^2 y(0) - s y'(0) - y''(0)
+</div>
+
+<h2>8. Example</h2>
+<div class="box">
+y' + 2y = 0, y(0)=3 → Y = 3/(s+2)
+</div>
+
+<h2>9. Inverse Idea</h2>
+<div class="box">
+Y(s) is mapped back using transform tables (dictionary).
+</div>
+
+<h2>10. Big Insight</h2>
+<div class="box">
+Differential equation → algebraic equation → inverse transform → solution
+</div>
+
+</body>
+</html>
