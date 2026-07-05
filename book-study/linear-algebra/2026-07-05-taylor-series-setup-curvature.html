@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Taylor Series: Setup, Accuracy, and Curvature | Book Study | Medici House</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <style>
+    .book-study-shell .post-body { font-size: 1rem; }
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle {
+      opacity: 1 !important;
+      top: auto !important;
+      transform: none !important;
+    }
+    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px; }
+    .book-study-actions a { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1; }
+    .book-study-actions a.secondary { background: #f5f5f5; color: #555; border: 1px solid #ddd; }
+    .study-hero { border: 1px solid #ddd; border-radius: 10px; padding: 22px; background: linear-gradient(135deg, #fff, #f7f7f7); margin-bottom: 20px; }
+    .study-hero p { color: #666; margin-bottom: 0; }
+    .meta-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 18px 0 0; }
+    .meta-tile { border: 1px solid #ddd; border-radius: 8px; background: #fff; padding: 12px; }
+    .meta-tile strong { display: block; font-size: 1.15rem; color: #222; }
+    .meta-tile span { color: #777; font-size: .86rem; }
+    .note-section { border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: #fff; margin: 18px 0; }
+    .note-section h2 { margin-top: 0; font-size: 1.25rem; }
+    .two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .panel { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fcfcfc; }
+    .panel.blue { background: #f0f5ff; border-color: #cddcff; }
+    .panel.green { background: #edf8f5; border-color: #c8e8df; }
+    .panel.gold { background: #fff8e8; border-color: #ead6a6; }
+    .panel.rose { background: #fff2f4; border-color: #efc5cd; }
+    .formula { display: block; overflow-x: auto; padding: 13px; border-radius: 8px; background: #1f2937; color: #f8fafc; font-family: "SFMono-Regular", Consolas, monospace; font-size: .92rem; white-space: nowrap; margin: 10px 0; }
+    .flow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+    .flow-step { min-height: 86px; display: flex; align-items: center; justify-content: center; text-align: center; border: 1px solid #ddd; border-radius: 8px; padding: 10px; background: #fafafa; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; font-size: .94rem; }
+    th, td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f5f5f5; color: #555; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+    tr:last-child td { border-bottom: 0; }
+    .progress-track { height: 16px; border: 1px solid #ddd; border-radius: 999px; background: #eee; overflow: hidden; margin: 10px 0 6px; }
+    .progress-bar { display: block; height: 100%; width: 7.2%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
+    .caption { color: #777; font-size: .9rem; margin: 8px 0 0; }
+    .callout { border-left: 4px solid #222; padding: 12px 14px; background: #f7f7f7; margin: 14px 0; }
+    @media (max-width: 800px) { .meta-grid, .two-col, .flow { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block" itemscope itemtype="http://schema.org/Article">
+      <header class="post-header"><h1 class="post-title" itemprop="name headline">Taylor Series: Setup, Accuracy, and Curvature</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Linear Algebra</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> 2026-07-05</span></div></header>
+      <div class="post-body" itemprop="articleBody">
+        <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/linear-algebra/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+        <section class="study-hero">
+          <h2>What We Studied This Time</h2>
+          <p>We tested whether the Taylor-series idea is truly internalized: choosing the right function, choosing the expansion point, predicting whether first-order Taylor is accurate, and using curvature to know whether the tangent line underestimates or overestimates.</p>
+          <div class="meta-grid" aria-label="Study metadata">
+            <div class="meta-tile"><strong>2026-07-05</strong><span>study date</span></div>
+            <div class="meta-tile"><strong>+0 pages</strong><span>coverage change</span></div>
+            <div class="meta-tile"><strong>+4 ideas</strong><span>concepts clarified</span></div>
+            <div class="meta-tile"><strong>30 / 415</strong><span>current main-page coverage</span></div>
+          </div>
+        </section>
+
+        <section class="note-section">
+          <h2>1. How To Choose the Function</h2>
+          <div class="two-col">
+            <div class="panel rose"><h3>Common mistake</h3><p>For approximating sqrt(4.01), choosing f(x)=x^2 feels nearby, but it is not the function being evaluated.</p><span class="formula">wrong setup: f(x) = x^2</span></div>
+            <div class="panel green"><h3>Correct setup</h3><p>The function should come directly from the expression we want to approximate.</p><span class="formula">sqrt(4.01) means choose f(x) = sqrt(x)</span></div>
+          </div>
+          <div class="callout"><strong>Memory rule:</strong> Taylor expansion approximates the function you are trying to evaluate.</div>
+        </section>
+
+        <section class="note-section">
+          <h2>2. Why Expand Around 4 for sqrt(4.01)?</h2>
+          <p>We choose the expansion point a=4 because it is close to 4.01 and easy to compute.</p>
+          <span class="formula">f(x)=sqrt(x), a=4, x=4.01</span>
+          <table aria-label="Square root Taylor example">
+            <thead><tr><th>Step</th><th>Value</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>Function value</td><td>f(4)=2</td><td>Known exact value</td></tr>
+              <tr><td>Derivative</td><td>f'(x)=1/(2 sqrt(x))</td><td>Slope of sqrt(x)</td></tr>
+              <tr><td>Derivative at 4</td><td>f'(4)=1/4</td><td>Local slope</td></tr>
+              <tr><td>First-order estimate</td><td>2 + (1/4)(0.01) = 2.0025</td><td>Approximation of sqrt(4.01)</td></tr>
+            </tbody>
+          </table>
+          <p>The correction term is positive because both f'(4) and 4.01-4 are positive. Since sqrt(x) is increasing, moving right from 4 should increase the value slightly above 2.</p>
+        </section>
+
+        <section class="note-section">
+          <h2>3. Accuracy: Why the Tangent Line Works Here</h2>
+          <p>First-order Taylor is accurate here because 4.01 is extremely close to 4. The tangent line is a local model, and local models work best near the expansion point.</p>
+          <div class="flow" aria-label="Taylor approximation reasoning flow">
+            <div class="flow-step">Pick function</div>
+            <div class="flow-step">Pick nearby easy point</div>
+            <div class="flow-step">Use value and slope</div>
+            <div class="flow-step">Make local estimate</div>
+            <div class="flow-step">Check curvature intuition</div>
+          </div>
+        </section>
+
+        <section class="note-section">
+          <h2>4. e^0.1 Quiz: Setup Before Calculation</h2>
+          <p>For e^0.1, the correct setup is:</p>
+          <span class="formula">f(x)=e^x, a=0, target x=0.1</span>
+          <p>The point a=0 is good because e^0=1, every derivative of e^x is still e^x, and 0 is close to 0.1.</p>
+          <div class="panel blue"><p>Before calculation, we predicted the first-order approximation would be slightly smaller than the true value because e^x curves upward.</p></div>
+        </section>
+
+        <section class="note-section">
+          <h2>5. Curvature Tells Underestimate vs Overestimate</h2>
+          <table aria-label="Curvature and tangent line behavior">
+            <thead><tr><th>Second derivative</th><th>Shape</th><th>First-order tangent line</th></tr></thead>
+            <tbody>
+              <tr><td>f''(a) &gt; 0</td><td>Concave up</td><td>Underestimates nearby values</td></tr>
+              <tr><td>f''(a) &lt; 0</td><td>Concave down</td><td>Overestimates nearby values</td></tr>
+            </tbody>
+          </table>
+          <p>This was the strongest sign that the idea is becoming geometric, not just symbolic.</p>
+        </section>
+
+        <section class="note-section">
+          <h2>6. Bridge Back To Gradient Descent</h2>
+          <p>The next question connects Taylor expansion directly to optimization:</p>
+          <span class="formula">f(x+h) approx f(x) + f'(x)h</span>
+          <p>To make the approximation smaller, the product f'(x)h must be negative. That means h should have the opposite sign from f'(x).</p>
+          <span class="formula">choose h opposite f'(x) -> move downhill</span>
+          <p>This is the conceptual birth of gradient descent.</p>
+        </section>
+
+        <section class="note-section">
+          <h2>Previous Learning And Page Coverage</h2>
+          <div class="two-col">
+            <div class="panel">
+              <h3>Previously learned</h3>
+              <ul>
+                <li>Taylor expansion predicts nearby values from local information.</li>
+                <li>The expansion point is the point where derivatives are known.</li>
+                <li>In gradient descent, the expansion point is the current iterate x.</li>
+                <li>SVD gives special input directions, output directions, and stretch values.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>Coverage</h3>
+              <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+              <p><strong>30 / 415 pages, 7.2%</strong></p>
+              <p class="caption">No new book pages were added today. The learning deepened section VI.4, Gradient Descent Toward the Minimum, which is already counted as partially covered.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="note-section">
+          <h2>Next Study Thread</h2>
+          <ol>
+            <li>Answer the sign-of-h question directly from f(x+h) approx f(x)+f'(x)h.</li>
+            <li>Move from one-dimensional h to vector direction u.</li>
+            <li>Use dot products to show why the gradient is steepest ascent.</li>
+            <li>Return to Strang VI.4 with the Taylor intuition in place.</li>
+          </ol>
+        </section>
+      </div>
+    </article></div></div></div></main>
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
