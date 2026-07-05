@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Markov Chain Monte Carlo: Socratic Wrap-Up | Book Study | Medici House</title>
+  <meta name="description" content="A Socratic wrap-up of Markov chain Monte Carlo from Stat 110: hard sampling, normalizing constants, Metropolis-Hastings, proposals, acceptance, and mixing.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    .book-study-shell .post-body { font-size: 1rem; }
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle { opacity: 1 !important; top: auto !important; transform: none !important; }
+    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px; }
+    .book-study-actions a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1.2; }
+    .book-study-actions a.secondary { background: #f5f5f5; color: #555; border: 1px solid #ddd; }
+    .study-hero, .note-section { border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: #fff; margin: 18px 0; }
+    .study-hero { background: linear-gradient(135deg, #fff, #f7f7f7); }
+    .study-hero p { color: #666; margin-bottom: 0; }
+    .meta-grid, .two-col, .three-col, .flow { display: grid; gap: 14px; }
+    .meta-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 18px; }
+    .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three-col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .flow { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: 14px; }
+    .meta-tile, .panel, .flow-step { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fcfcfc; min-width: 0; }
+    .meta-tile strong { display: block; color: #222; font-size: 1.08rem; }
+    .meta-tile span, .caption { color: #777; font-size: .9rem; }
+    .panel.blue { background: #f0f5ff; border-color: #cddcff; }
+    .panel.green { background: #edf8f5; border-color: #c8e8df; }
+    .panel.gold { background: #fff8e8; border-color: #ead6a6; }
+    .panel.rose { background: #fff2f4; border-color: #efc5cd; }
+    .flow-step { min-height: 80px; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; }
+    .callout { border-left: 4px solid #222; padding: 12px 14px; background: #f7f7f7; margin: 14px 0; }
+    .question-card { border: 1px solid #ddd; border-radius: 8px; padding: 14px; background: #fbfaf7; }
+    .question-card strong { display: block; margin-bottom: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: .94rem; display: block; overflow-x: auto; }
+    th, td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #f5f5f5; color: #555; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+    .progress-track { height: 16px; border: 1px solid #ddd; border-radius: 999px; background: #eee; overflow: hidden; margin: 10px 0 6px; }
+    .progress-bar { display: block; height: 100%; width: 1.2%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
+    @media (max-width: 900px) { .meta-grid, .two-col, .three-col, .flow { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block" itemscope itemtype="http://schema.org/Article">
+      <header class="post-header"><h1 class="post-title" itemprop="name headline">Markov Chain Monte Carlo: Socratic Wrap-Up</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Probability</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> 2026-07-06</span></div></header>
+      <div class="post-body" itemprop="articleBody">
+        <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/probability/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+        <section class="study-hero">
+          <h2>What This Note Captures</h2>
+          <p>This note wraps the Socratic study thread on Markov chain Monte Carlo from Blitzstein and Hwang's <em>Introduction to Probability</em>. The focus was not on memorizing the algorithm, but on understanding why a Markov chain can help us sample from a distribution that is hard to sample from directly.</p>
+          <div class="meta-grid" aria-label="Study metadata"><div class="meta-tile"><strong>2026-07-06</strong><span>study date, Asia/Tokyo</span></div><div class="meta-tile"><strong>Chapter 12</strong><span>Markov chain Monte Carlo</span></div><div class="meta-tile"><strong>pp. 535-541</strong><span>main source range</span></div><div class="meta-tile"><strong>7 / 577</strong><span>main-page coverage</span></div></div>
+        </section>
+
+        <section class="note-section"><h2>1. The Goal of MCMC</h2><p>The goal is to get approximate samples from a target distribution when direct sampling is hard. Instead of trying to jump directly to a perfect independent sample, we build a Markov chain whose long-run visiting frequency matches the target distribution.</p><div class="math-display"><math display="block"><mtext>long-run time spent in state</mtext><mo>&#x2248;</mo><mtext>target probability of that state</mtext></math></div><div class="callout"><strong>Memory hook:</strong> MCMC turns direct sampling into a carefully designed random walk.</div></section>
+
+        <section class="note-section"><h2>2. Easy Sampling vs Hard Sampling</h2><div class="two-col"><div class="panel green"><h3>Easy example: Bernoulli</h3><p>For a Bernoulli random variable, one uniform random number and one comparison are enough.</p><div class="math-display"><math display="block"><mtext>if</mtext><mspace width="0.5em"/><mi>U</mi><mo>&lt;</mo><mi>p</mi><mspace width="0.5em"/><mtext>output</mtext><mspace width="0.5em"/><mn>1</mn><mo>;</mo><mspace width="0.5em"/><mtext>otherwise output</mtext><mspace width="0.5em"/><mn>0</mn></math></div></div><div class="panel rose"><h3>Hard example: shape known, total unknown</h3><p>A difficult target may be known only up to a proportionality constant.</p><div class="math-display"><math display="block"><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>&#x221D;</mo><mi>exp</mi><mo>(</mo><mo>-</mo><msup><mi>x</mi><mn>4</mn></msup><mo>+</mo><mn>3</mn><msup><mi>x</mi><mn>2</mn></msup><mo>)</mo></math></div></div></div><p>The hard part is often not evaluating the shape at one point. The hard part is normalizing the whole distribution or inverting its CDF.</p></section>
+
+        <section class="note-section"><h2>3. The Normalizing Constant Problem</h2><p>If we know a nonnegative shape function <span class="math-inline"><math><mi>g</mi><mo>(</mo><mi>x</mi><mo>)</mo></math></span>, the true probability density is:</p><div class="math-display"><math display="block"><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mi>g</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow><mi>C</mi></mfrac></math></div><p>where the normalizing constant is:</p><div class="math-display"><math display="block"><mi>C</mi><mo>=</mo><mo>&#x222B;</mo><mi>g</mi><mo>(</mo><mi>x</mi><mo>)</mo><mi>d</mi><mi>x</mi></math></div><p>Direct sampling may require this constant or the CDF. MCMC can often avoid both because it only compares two points.</p><div class="math-display"><math display="block"><mfrac><mrow><mi>p</mi><mo>(</mo><mi>y</mi><mo>)</mo></mrow><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>g</mi><mo>(</mo><mi>y</mi><mo>)</mo><mo>/</mo><mi>C</mi></mrow><mrow><mi>g</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>/</mo><mi>C</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>g</mi><mo>(</mo><mi>y</mi><mo>)</mo></mrow><mrow><mi>g</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mfrac></math></div><div class="callout"><strong>Key answer from the session:</strong> the unknown constant cancels in the ratio.</div></section>
+
+        <section class="note-section"><h2>4. Metropolis-Hastings in One Line</h2><p>The Metropolis-Hastings move is: propose a new state, compare its target weight with the current state, then either move or stay.</p><div class="flow" aria-label="Metropolis-Hastings workflow"><div class="flow-step">Start at x</div><div class="flow-step">Propose y</div><div class="flow-step">Compute ratio</div><div class="flow-step">Accept or reject</div><div class="flow-step">Repeat</div></div><div class="math-display"><math display="block"><mi>acceptance</mi><mo>=</mo><mi>min</mi><mo>(</mo><mn>1</mn><mo>,</mo><mfrac><mrow><mi>target</mi><mo>(</mo><mi>y</mi><mo>)</mo></mrow><mrow><mi>target</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mfrac><mo>)</mo></math></div><p>When the proposed state has higher target weight, it is accepted for sure. When it has lower weight, it may still be accepted, which helps the chain avoid getting trapped too easily.</p></section>
+
+        <section class="note-section"><h2>5. Concrete Treasure-Map Version</h2><p>We used a simplified finite example: there are many places, and each place has a known local score <span class="math-inline"><math><mi>w</mi><mo>(</mo><mi>i</mi><mo>)</mo></math></span>. The target probability is proportional to the score.</p><div class="math-display"><math display="block"><mi>P</mi><mo>(</mo><mi>i</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mi>w</mi><mo>(</mo><mi>i</mi><mo>)</mo></mrow><mrow><munderover><mo>&#x2211;</mo><mi>k</mi><mi>N</mi></munderover><mi>w</mi><mo>(</mo><mi>k</mi><mo>)</mo></mrow></mfrac></math></div><p>If there are 10,000,000 places, the score of the current or proposed place may be easy to check, but summing all scores may be expensive. MCMC avoids the full sum.</p><table aria-label="Treasure example"><thead><tr><th>Current</th><th>Proposed</th><th>Ratio</th><th>Decision</th></tr></thead><tbody><tr><td>place 1, score 10</td><td>place 101, score 30</td><td>30 / 10 = 3</td><td>accept for sure</td></tr><tr><td>place 101, score 30</td><td>place 51, score 15</td><td>15 / 30 = 0.5</td><td>accept with probability 0.5</td></tr></tbody></table></section>
+
+        <section class="note-section"><h2>6. How the Next Place Is Chosen</h2><p>The next candidate is chosen randomly by a proposal rule. The proposal rule is not the target distribution itself; it is just a way to explore possible moves.</p><div class="three-col"><div class="panel blue"><h3>Nearby proposal</h3><p>From place <span class="math-inline"><math><mi>i</mi></math></span>, propose <span class="math-inline"><math><mi>i</mi><mo>+</mo><mtext>random jump</mtext></math></span>.</p></div><div class="panel gold"><h3>Example jumps</h3><p>Choose randomly from -100, -50, -10, 10, 50, 100.</p></div><div class="panel green"><h3>Accept/reject</h3><p>The proposal suggests where to try; the ratio decides whether to move there.</p></div></div><div class="callout"><strong>Important:</strong> the randomness appears twice: random proposal, then random accept/reject.</div></section>
+
+        <section class="note-section"><h2>7. Why Standard Normal Is Not the Main Problem</h2><p>You asked whether the standard Normal distribution is hard to sample. In practice, usually no. Computers already have efficient algorithms for it, such as transformations from uniform random variables.</p><div class="two-col"><div class="panel green"><h3>Simple in practice</h3><p>Named common distributions often have built-in, tested sampling algorithms.</p></div><div class="panel rose"><h3>Hard in practice</h3><p>Custom, high-dimensional, or only-proportional distributions may not have a direct sampler.</p></div></div></section>
+
+        <section class="note-section"><h2>8. Subset Exploration and Poor Mixing</h2><p>You noticed an important practical point: in a huge space, the chain may only visit a subset of all possible states. That is normal, but it must be the right kind of subset: the chain should spend more time in high-probability regions and still be able to move between important regions.</p><div class="two-col"><div class="panel green"><h3>Good chain</h3><p>Explores important regions and moves between them often enough.</p></div><div class="panel rose"><h3>Poor mixing</h3><p>Gets stuck in one region, misses other important regions, and gives unreliable samples.</p></div></div><div class="callout"><strong>Session checkpoint:</strong> MCMC samples are approximate and correlated. The algorithm is powerful, but proposal design and mixing matter.</div></section>
+
+        <section class="note-section"><h2>9. Socratic Questions We Answered</h2><div class="two-col"><div class="question-card"><strong>What is the MCMC goal?</strong><p>Make a Markov chain whose long-run visiting frequencies match the target distribution.</p></div><div class="question-card"><strong>Why can direct sampling be hard?</strong><p>The full normalized distribution, CDF, or inverse CDF may be hard to compute.</p></div><div class="question-card"><strong>Why can MCMC avoid the normalizing constant?</strong><p>It uses ratios, so the unknown constant cancels.</p></div><div class="question-card"><strong>How does it move?</strong><p>Randomly propose a candidate, accept high-weight moves often, and sometimes accept lower-weight moves.</p></div></div></section>
+
+        <section class="note-section"><h2>Source Pages and Coverage</h2><div class="two-col"><div class="panel"><h3>Book</h3><p>Joseph K. Blitzstein and Jessica Hwang, <em>Introduction to Probability</em>, Second Edition.</p><p class="caption">This session focused on Chapter 12, especially the opening motivation and Metropolis-Hastings setup.</p></div><div class="panel"><h3>Coverage</h3><div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div><p><strong>7 / 577 pages, 1.2%</strong></p><p class="caption">Counted range: pp. 535-541. This is conservative and can grow as later probability sessions are added.</p></div></div></section>
+      </div>
+    </article></div></div></div></main>
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
