@@ -1,71 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Laplace Transform – Study Wrap-Up</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
-    h1 { color: #2c3e50; }
-    h2 { color: #34495e; margin-top: 24px; }
-    .box { background: #f4f6f8; padding: 15px; border-left: 5px solid #3498db; margin: 15px 0; }
-    .tag { display:inline-block; background:#eee; padding:4px 8px; border-radius:6px; margin-right:6px; font-size:12px; }
-  </style>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url=/book-study/differential-equations/laplace-transform-wrap-up.html">
+  <link rel="canonical" href="/book-study/differential-equations/laplace-transform-wrap-up.html">
+  <title>Moved | Laplace Transform: Socratic Wrap-Up</title>
 </head>
 <body>
-
-<h1>Laplace Transform – Wrap-Up (Socratic Study)</h1>
-
-<div class="box">
-  <span class="tag">Topic</span> Differential Equations → Algebra via Transform
-  <span class="tag">Book</span> Boyce & DiPrima – Elementary Differential Equations
-</div>
-
-<h2>1. Why Laplace Exists</h2>
-<p>We started from a core difficulty: differential equations mix a function y(t) with its derivatives, making direct algebraic solving impossible.</p>
-<p>Goal: convert differential equations into algebraic equations.</p>
-
-<h2>2. The Key Idea (Lens Interpretation)</h2>
-<p>The Laplace transform acts like a lens:</p>
-<div class="box">
-  Small s → long-term behavior (slow decay lens)<br/>
-  Large s → short-term behavior (early-time focus)
-</div>
-<p>This is achieved by weighting the function with an exponential decay e^{-st}.</p>
-
-<h2>3. Definition</h2>
-<div class="box">
-L{y(t)} = Y(s) = ∫₀^∞ e^{-st} y(t) dt
-</div>
-<p>This creates a new representation Y(s), not a single number but a full function of s.</p>
-
-<h2>4. Why Exponentials?</h2>
-<p>Exponentials are stable under differentiation:</p>
-<div class="box">d/dt (e^{-st}) = -s e^{-st}</div>
-<p>This is why integration by parts works cleanly.</p>
-
-<h2>5. Core Result (Derivative Rule)</h2>
-<div class="box">
-L{y'} = sY(s) − y(0)<br/>
-L{y''} = s²Y(s) − s y(0) − y'(0)
-</div>
-<p>Derivatives become algebraic expressions + initial conditions appear naturally.</p>
-
-<h2>6. Example Result</h2>
-<p>For y' + 2y = 0, y(0)=3:</p>
-<div class="box">
-(s+2)Y = 3 → Y = 3/(s+2)
-</div>
-<p>Inverse gives y(t) = 3e^{-2t}</p>
-
-<h2>7. Inverse Idea</h2>
-<p>The inverse Laplace transform retrieves y(t) from Y(s) using a transform table (dictionary between domains).</p>
-
-<h2>8. Big Picture</h2>
-<div class="box">
-Differential equation → Laplace transform → algebraic equation → inverse transform → solution
-</div>
-
-<p><b>Key Insight:</b> The transform doesn’t solve equations directly—it changes the representation where solving becomes simple.</p>
-
+  <p>This Book Study note moved to <a href="/book-study/differential-equations/laplace-transform-wrap-up.html">Book Study / Differential Equations / Laplace Transform: Socratic Wrap-Up</a>.</p>
 </body>
 </html>
