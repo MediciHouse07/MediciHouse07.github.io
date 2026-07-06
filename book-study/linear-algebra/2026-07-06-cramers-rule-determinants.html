@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Cramer's Rule and Determinants | Book Study | Medici House</title>
+  <meta name="description" content="A Socratic wrap-up of Cramer's rule: determinant ad-bc from elimination, singular matrices, column replacement, and a Stats 110 bridge.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    .book-study-shell .post-body { font-size: 1rem; }
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle { opacity: 1 !important; top: auto !important; transform: none !important; }
+    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px; }
+    .book-study-actions a { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1.2; }
+    .book-study-actions a.secondary { background: #f5f5f5; color: #555; border: 1px solid #ddd; }
+    .study-hero, .note-section { border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: #fff; margin: 18px 0; }
+    .study-hero { background: linear-gradient(135deg, #fff, #f7f7f7); }
+    .study-hero p { color: #666; margin-bottom: 0; }
+    .meta-grid, .two-col, .three-col, .flow-grid { display: grid; gap: 14px; }
+    .meta-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 18px; }
+    .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three-col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .flow-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; }
+    .meta-tile, .panel, .flow-step { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fcfcfc; min-width: 0; }
+    .meta-tile strong { display: block; color: #222; font-size: 1.08rem; }
+    .meta-tile span, .caption { color: #777; font-size: .9rem; }
+    .panel.blue { background: #f0f5ff; border-color: #cddcff; }
+    .panel.green { background: #edf8f5; border-color: #c8e8df; }
+    .panel.gold { background: #fff8e8; border-color: #ead6a6; }
+    .panel.rose { background: #fff2f4; border-color: #efc5cd; }
+    .flow-step { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; min-height: 86px; }
+    .callout { border-left: 4px solid #222; padding: 12px 14px; background: #f7f7f7; margin: 14px 0; }
+    .question-card { border: 1px solid #ddd; border-radius: 8px; padding: 14px; background: #fbfaf7; }
+    .question-card strong { display: block; margin-bottom: 6px; }
+    .det-visual { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+    .det-card { border: 1px solid #ddd; border-radius: 8px; padding: 14px; background: #fff; text-align: center; }
+    .det-card strong { display: block; margin-bottom: 8px; }
+    @media (max-width: 900px) { .meta-grid, .two-col, .three-col, .flow-grid, .det-visual { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block" itemscope itemtype="http://schema.org/Article">
+      <header class="post-header"><h1 class="post-title" itemprop="name headline">Cramer's Rule and Determinants</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Linear Algebra</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> 2026-07-06</span></div></header>
+      <div class="post-body" itemprop="articleBody">
+        <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/linear-algebra/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+        <section class="study-hero">
+          <h2>What This Note Captures</h2>
+          <p>This note wraps the Socratic study thread on Cramer's rule: why the two-by-two determinant is <span class="math-inline"><math><mi>a</mi><mi>d</mi><mo>-</mo><mi>b</mi><mi>c</mi></math></span>, why determinant zero means no unique solution, and why the higher-dimensional formula works by replacing one column.</p>
+          <div class="meta-grid" aria-label="Study metadata"><div class="meta-tile"><strong>2026-07-06</strong><span>study date, Asia/Tokyo</span></div><div class="meta-tile"><strong>Cramer's rule</strong><span>main concept</span></div><div class="meta-tile"><strong>Determinants</strong><span>formula source</span></div><div class="meta-tile"><strong>Stats 110 bridge</strong><span>independent information</span></div></div>
+        </section>
+
+        <section class="note-section">
+          <h2>1. Start from the System</h2>
+          <p>For two variables, the system is:</p>
+          <div class="math-display"><math display="block"><mtable columnalign="right center left"><mtr><mtd><mi>a</mi><mi>x</mi><mo>+</mo><mi>b</mi><mi>y</mi></mtd><mtd><mo>=</mo></mtd><mtd><mi>e</mi></mtd></mtr><mtr><mtd><mi>c</mi><mi>x</mi><mo>+</mo><mi>d</mi><mi>y</mi></mtd><mtd><mo>=</mo></mtd><mtd><mi>f</mi></mtd></mtr></mtable></math></div>
+          <p>In matrix form:</p>
+          <div class="math-display"><math display="block"><mrow><mo>[</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>]</mo><mo>[</mo><mtable><mtr><mtd><mi>x</mi></mtd></mtr><mtr><mtd><mi>y</mi></mtd></mtr></mtable><mo>]</mo><mo>=</mo><mo>[</mo><mtable><mtr><mtd><mi>e</mi></mtd></mtr><mtr><mtd><mi>f</mi></mtd></mtr></mtable><mo>]</mo></mrow></math></div>
+          <div class="callout"><strong>Key interpretation:</strong> the answer vector is made by mixing the columns of the matrix.</div>
+        </section>
+
+        <section class="note-section">
+          <h2>2. Where Does <span class="math-inline"><math><mi>a</mi><mi>d</mi><mo>-</mo><mi>b</mi><mi>c</mi></math></span> Come From?</h2>
+          <p>It comes from elimination. To solve for <span class="math-inline"><math><mi>x</mi></math></span>, make the <span class="math-inline"><math><mi>y</mi></math></span> parts equal, then subtract.</p>
+          <div class="flow-grid"><div class="flow-step">multiply first equation by <span class="math-inline"><math><mi>d</mi></math></span></div><div class="flow-step">multiply second equation by <span class="math-inline"><math><mi>b</mi></math></span></div><div class="flow-step">subtract to remove <span class="math-inline"><math><mi>y</mi></math></span></div><div class="flow-step">coefficient of <span class="math-inline"><math><mi>x</mi></math></span> becomes determinant</div></div>
+          <div class="math-display"><math display="block"><mtable columnalign="right center left"><mtr><mtd><mi>a</mi><mi>d</mi><mi>x</mi><mo>+</mo><mi>b</mi><mi>d</mi><mi>y</mi></mtd><mtd><mo>=</mo></mtd><mtd><mi>d</mi><mi>e</mi></mtd></mtr><mtr><mtd><mi>b</mi><mi>c</mi><mi>x</mi><mo>+</mo><mi>b</mi><mi>d</mi><mi>y</mi></mtd><mtd><mo>=</mo></mtd><mtd><mi>b</mi><mi>f</mi></mtd></mtr></mtable></math></div>
+          <div class="math-display"><math display="block"><mo>(</mo><mi>a</mi><mi>d</mi><mo>-</mo><mi>b</mi><mi>c</mi><mo>)</mo><mi>x</mi><mo>=</mo><mi>d</mi><mi>e</mi><mo>-</mo><mi>b</mi><mi>f</mi></math></div>
+          <p>So the denominator in Cramer's rule is not magic. It is the leftover coefficient after elimination.</p>
+          <div class="math-display"><math display="block"><mrow><mi>det</mi><mo>[</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>]</mo><mo>=</mo><mi>a</mi><mi>d</mi><mo>-</mo><mi>b</mi><mi>c</mi></mrow></math></div>
+        </section>
+
+        <section class="note-section">
+          <h2>3. Cramer's Rule in Two Variables</h2>
+          <p>The rule says: to solve for one variable, replace that variable's column by the right-hand side column.</p>
+          <div class="det-visual"><div class="det-card"><strong>Original determinant</strong><div class="math-display"><math display="block"><mi>det</mi><mo>(</mo><mi>A</mi><mo>)</mo><mo>=</mo><mi>a</mi><mi>d</mi><mo>-</mo><mi>b</mi><mi>c</mi></math></div></div><div class="det-card"><strong>Replace first column for <span class="math-inline"><math><mi>x</mi></math></span></strong><div class="math-display"><math display="block"><mi>x</mi><mo>=</mo><mfrac><mrow><mi>det</mi><mo>[</mo><mtable><mtr><mtd><mi>e</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>f</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo>]</mo></mrow><mrow><mi>det</mi><mo>(</mo><mi>A</mi><mo>)</mo></mrow></mfrac></math></div></div><div class="det-card"><strong>Replace second column for <span class="math-inline"><math><mi>y</mi></math></span></strong><div class="math-display"><math display="block"><mi>y</mi><mo>=</mo><mfrac><mrow><mi>det</mi><mo>[</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>e</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>f</mi></mtd></mtr></mtable><mo>]</mo></mrow><mrow><mi>det</mi><mo>(</mo><mi>A</mi><mo>)</mo></mrow></mfrac></math></div></div></div>
+        </section>
+
+        <section class="note-section">
+          <h2>4. What If the Determinant Is Zero?</h2>
+          <div class="two-col"><div class="panel gold"><h3>Your intuition</h3><p>You said: determinant zero means singular, and the system does not have enough formulas to solve the variables.</p></div><div class="panel blue"><h3>Refined version</h3><p>For a square system, the number of written equations may equal the number of variables. But the equations are not independent, so there are fewer useful equations than variables.</p></div></div>
+          <div class="math-display"><math display="block"><mi>det</mi><mo>(</mo><mi>A</mi><mo>)</mo><mo>=</mo><mn>0</mn><mo>&#x21D2;</mo><mtext>no unique solution</mtext></math></div>
+          <p>That can mean infinitely many solutions or no solution. It cannot mean exactly one solution.</p>
+        </section>
+
+        <section class="note-section">
+          <h2>5. More Variables: Same Pattern</h2>
+          <p>For a three-variable system, write the matrix by columns:</p>
+          <div class="math-display"><math display="block"><mi>A</mi><mo>=</mo><mo>[</mo><msub><mi>a</mi><mn>1</mn></msub><mspace width="0.5em"/><msub><mi>a</mi><mn>2</mn></msub><mspace width="0.5em"/><msub><mi>a</mi><mn>3</mn></msub><mo>]</mo></math></div>
+          <p>The equation <span class="math-inline"><math><mi>A</mi><mi>x</mi><mo>=</mo><mi>b</mi></math></span> means:</p>
+          <div class="math-display"><math display="block"><mi>b</mi><mo>=</mo><mi>x</mi><msub><mi>a</mi><mn>1</mn></msub><mo>+</mo><mi>y</mi><msub><mi>a</mi><mn>2</mn></msub><mo>+</mo><mi>z</mi><msub><mi>a</mi><mn>3</mn></msub></math></div>
+          <p>To get <span class="math-inline"><math><mi>x</mi></math></span>, replace the first column by <span class="math-inline"><math><mi>b</mi></math></span>:</p>
+          <div class="math-display"><math display="block"><mi>det</mi><mo>(</mo><mi>b</mi><mo>,</mo><msub><mi>a</mi><mn>2</mn></msub><mo>,</mo><msub><mi>a</mi><mn>3</mn></msub><mo>)</mo><mo>=</mo><mi>x</mi><mi>det</mi><mo>(</mo><msub><mi>a</mi><mn>1</mn></msub><mo>,</mo><msub><mi>a</mi><mn>2</mn></msub><mo>,</mo><msub><mi>a</mi><mn>3</mn></msub><mo>)</mo></math></div>
+          <p>The other terms disappear because they create repeated columns, and a determinant with repeated columns is zero.</p>
+          <div class="callout"><strong>General rule:</strong> <span class="math-inline"><math><msub><mi>x</mi><mi>k</mi></msub><mo>=</mo><mfrac><mrow><mi>det</mi><mo>(</mo><msub><mi>A</mi><mi>k</mi></msub><mo>)</mo></mrow><mrow><mi>det</mi><mo>(</mo><mi>A</mi><mo>)</mo></mrow></mfrac></math></span>, where <span class="math-inline"><math><msub><mi>A</mi><mi>k</mi></msub></math></span> replaces the <span class="math-inline"><math><mi>k</mi></math></span>-th column of <span class="math-inline"><math><mi>A</mi></math></span> with <span class="math-inline"><math><mi>b</mi></math></span>.</div>
+        </section>
+
+        <section class="note-section">
+          <h2>6. Stats 110 Bridge: Independent Information</h2>
+          <p>The same thinking appears in probability and statistics. A formula, statistic, or equation is only useful if it contributes independent information.</p>
+          <div class="three-col"><div class="panel green"><h3>Bernoulli MGF memory</h3><p>In the earlier Stat 110 thread, one parameter <span class="math-inline"><math><mi>p</mi></math></span> determined the Bernoulli MGF, expectation, second moment, and variance.</p></div><div class="panel blue"><h3>Linear system memory</h3><p>In Cramer's rule, independent equations determine the unknowns. Dependent equations collapse the determinant to zero.</p></div><div class="panel gold"><h3>Statistics translation</h3><p>Singularity often means the data or model cannot identify a unique answer. More rows on paper do not help if they repeat the same information.</p></div></div>
+          <div class="math-display"><math display="block"><mtext>unique solution needs independent information</mtext></math></div>
+        </section>
+
+        <section class="note-section">
+          <h2>7. Socratic Checkpoints</h2>
+          <div class="two-col"><div class="question-card"><strong>Checkpoint 1</strong><p>When deriving <span class="math-inline"><math><mi>a</mi><mi>d</mi><mo>-</mo><mi>b</mi><mi>c</mi></math></span>, why do we multiply the first equation by <span class="math-inline"><math><mi>d</mi></math></span> and the second by <span class="math-inline"><math><mi>b</mi></math></span>?</p></div><div class="question-card"><strong>Checkpoint 2</strong><p>For <span class="math-inline"><math><mi>x</mi><mo>+</mo><mi>y</mi><mo>=</mo><mn>2</mn></math></span> and <span class="math-inline"><math><mn>2</mn><mi>x</mi><mo>+</mo><mn>2</mn><mi>y</mi><mo>=</mo><mn>5</mn></math></span>, are the equations dependent? Does the system have infinitely many solutions or no solution?</p></div></div>
+        </section>
+      </div>
+    </article></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
