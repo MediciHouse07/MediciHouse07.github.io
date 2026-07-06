@@ -9,6 +9,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
   <style>
     .book-study-shell .post-body { font-size: 1rem; }
     .book-study-shell .brand,
@@ -45,6 +46,7 @@
     .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
     .note-card { border: 1px solid #ddd; border-radius: 8px; padding: 18px; background: #fff; }
     .note-card h3 { margin: 0 0 10px; font-size: 1.08rem; }
+    .note-card p { color: #666; margin: 0 0 14px; }
     .note-date { color: #888; font-size: .82rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 8px; }
     @media (max-width: 760px) { .note-grid { grid-template-columns: 1fr; } }
   </style>
@@ -82,19 +84,19 @@
                 <div class="post-meta"><span class="post-meta-item"><i class="fa fa-book fa-fw"></i> Book Study subject shelf</span></div>
               </header>
               <div class="post-body" itemprop="articleBody">
-                <p>Notes from <em>Linear Algebra and Learning from Data</em>, currently focused on Taylor expansion, gradient descent, and SVD.</p>
+                <p>Notes from <em>Linear Algebra and Learning from Data</em>, currently focused on determinants, Cramer's rule, Taylor expansion, gradient descent, and SVD.</p>
                 <div class="book-study-actions">
                   <a href="/book-study/">Back to Book Study</a>
                   <a class="secondary" href="/">Home</a>
                 </div>
                 <div class="book-meta" aria-label="Linear algebra metadata">
-                  <span>3 notes</span>
+                  <span>4 notes</span>
                   <span>1 book tracked</span>
                   <span>30 pages covered</span>
                   <span>415 main pages total</span>
                 </div>
                 <div class="progress-track" aria-hidden="true"><span class="progress-bar" style="width: 7.2%;"></span></div>
-                <p class="coverage-line"><strong>30 / 415 pages, 7.2%</strong>. Full physical book count remains 432 pages.</p>
+                <p class="coverage-line"><strong>30 / 415 pages, 7.2%</strong>. Full physical book count remains 432 pages. The Cramer's rule note is tracked as a concept reinforcement note, so it does not add new page coverage.</p>
 
                 <div class="note-grid" aria-label="Linear algebra notes">
                   <article class="note-card">
@@ -104,16 +106,22 @@
                     <a class="note-link" href="/book-study/linear-algebra/linear-algebra-and-learning-from-data.html">Open note</a>
                   </article>
                   <article class="note-card">
-                    <div class="note-date">2026-07-04</div>
-                    <h3>Taylor Expansion: Expansion Point</h3>
-                    <p>A focused update about why Taylor's expansion point is a general center, then becomes the current point in gradient descent.</p>
-                    <a class="note-link" href="/book-study/linear-algebra/2026-07-04-taylor-expansion-expansion-point.html">Open note</a>
+                    <div class="note-date">2026-07-06</div>
+                    <h3>Cramer's Rule and Determinants</h3>
+                    <p>A Socratic wrap-up on deriving the two-by-two determinant from elimination, singular systems, column replacement, and the Stats 110 bridge to independent information.</p>
+                    <a class="note-link" href="/book-study/linear-algebra/2026-07-06-cramers-rule-determinants.html">Open note</a>
                   </article>
                   <article class="note-card">
                     <div class="note-date">2026-07-05</div>
                     <h3>Taylor Series: Setup, Accuracy, and Curvature</h3>
                     <p>A quiz-based note on choosing the right function, choosing the expansion point, and using curvature to judge tangent-line error.</p>
                     <a class="note-link" href="/book-study/linear-algebra/2026-07-05-taylor-series-setup-curvature.html">Open note</a>
+                  </article>
+                  <article class="note-card">
+                    <div class="note-date">2026-07-04</div>
+                    <h3>Taylor Expansion: Expansion Point</h3>
+                    <p>A focused update about why Taylor's expansion point is a general center, then becomes the current point in gradient descent.</p>
+                    <a class="note-link" href="/book-study/linear-algebra/2026-07-04-taylor-expansion-expansion-point.html">Open note</a>
                   </article>
                 </div>
               </div>
@@ -123,7 +131,7 @@
       </div>
     </main>
 
-    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
   </div>
 </body>
 </html>
