@@ -12,122 +12,33 @@
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
   <link rel="stylesheet" href="/book-study/book-study.css">
   <style>
-    .book-study-shell .post-body { font-size: 1rem; }
-    .book-study-shell .brand,
-    .book-study-shell .menu-item,
-    .book-study-shell .post-block,
-    .book-study-shell .post-header,
-    .book-study-shell .post-body,
-    .book-study-shell .site-title,
-    .book-study-shell .site-subtitle {
-      opacity: 1 !important;
-      top: auto !important;
-      transform: none !important;
-    }
-    .subject-list { display: grid; gap: 18px; margin-top: 18px; }
-    .subject-block { border: 1px solid #ddd; border-radius: 8px; background: #fff; overflow: hidden; }
-    .subject-block summary { cursor: pointer; display: block; padding: 18px; list-style: none; }
-    .subject-block summary::-webkit-details-marker { display: none; }
-    .subject-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: start; }
-    .subject-header h2 { margin: 0 0 8px; font-size: 1.28rem; }
-    .subject-header p { margin: 0; color: #666; }
-    .subject-toggle { border: 1px solid #ddd; border-radius: 999px; padding: 7px 12px; background: #f5f5f5; color: #666; font-weight: 700; white-space: nowrap; }
-    .subject-block[open] .subject-toggle::after { content: " collapse"; }
-    .subject-block:not([open]) .subject-toggle::after { content: " expand"; }
-    .book-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-    .book-meta span { border: 1px solid #ddd; border-radius: 999px; padding: 4px 10px; color: #666; background: #fafafa; font-size: .86rem; }
-    .coverage { margin-top: 16px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
-    .progress-track { height: 16px; border: 1px solid #ddd; border-radius: 999px; background: #eee; overflow: hidden; }
-    .progress-bar { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
-    .coverage-caption { grid-column: 1 / -1; margin: 0; color: #888; font-size: .9rem; }
-    .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 0 18px 18px; }
-    .note-card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; background: #fcfcfc; }
-    .note-card h3 { margin: 0 0 8px; font-size: 1.05rem; }
-    .note-card p { color: #666; margin: 0 0 14px; }
-    .note-date { color: #888; font-size: .82rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 8px; }
-    .note-link, .subject-link { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1; }
-    .subject-link { margin-top: 16px; }
-    @media (max-width: 760px) { .subject-header, .coverage, .note-grid { grid-template-columns: 1fr; } .subject-toggle { justify-self: start; } }
+    .book-study-shell .post-body { font-size:1rem; }
+    .book-study-shell .brand,.book-study-shell .menu-item,.book-study-shell .post-block,.book-study-shell .post-header,.book-study-shell .post-body,.book-study-shell .site-title,.book-study-shell .site-subtitle { opacity:1 !important; top:auto !important; transform:none !important; }
+    .subject-list { display:grid; gap:18px; margin-top:18px; }
+    .subject-block { border:1px solid #ddd; border-radius:8px; background:#fff; overflow:hidden; }
+    .subject-block summary { cursor:pointer; display:block; padding:18px; list-style:none; }
+    .subject-block summary::-webkit-details-marker { display:none; }
+    .subject-header { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:start; }
+    .subject-header h2 { margin:0 0 8px; font-size:1.28rem; }
+    .subject-header p { margin:0; color:#666; }
+    .book-meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+    .book-meta span { border:1px solid #ddd; border-radius:999px; padding:4px 10px; color:#666; background:#fafafa; font-size:.86rem; }
+    .coverage { margin-top:16px; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; align-items:center; }
+    .progress-track { height:16px; border:1px solid #ddd; border-radius:999px; background:#eee; overflow:hidden; }
+    .progress-bar { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#555,#222); }
+    .subject-link { display:inline-flex; align-items:center; gap:8px; border-radius:999px; padding:8px 13px; text-decoration:none; font-weight:700; background:#222; color:#fff; line-height:1; margin-top:16px; }
+    @media (max-width:760px) { .subject-header,.coverage { grid-template-columns:1fr; } }
   </style>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container book-study-shell">
-    <div class="headband"></div>
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-        <div class="site-meta">
-          <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
-          <p class="site-subtitle">Knowledge matters, while people don't value it for real</p>
-        </div>
-      </div>
-      <nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/">Home</a></li><li class="menu-item"><a href="/book-study/">Book Study</a></li></ul></nav></div>
-    </header>
-
-    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block">
-      <header class="post-header"><h1 class="post-title">Book Study</h1></header>
-      <div class="post-body">
-        <section class="subject-list">
-
-          <details class="subject-block">
-            <summary>
-              <div class="subject-header">
-                <div>
-                  <h2>Linear Algebra</h2>
-                  <p>Notes from Linear Algebra and Learning from Data, plus determinant and Cramer's rule reinforcement notes.</p>
-                  <a class="subject-link" href="/book-study/linear-algebra/">Open subject shelf</a>
-                </div>
-              </div>
-              <div class="book-meta"><span>4 notes</span><span>1 book tracked</span><span>30 pages covered</span><span>415 main pages total</span></div>
-              <div class="coverage"><div class="progress-track"><span class="progress-bar" style="width: 7.2%;"></span></div><strong>30 / 415 pages</strong></div>
-            </summary>
-          </details>
-
-          <details class="subject-block">
-            <summary>
-              <div class="subject-header">
-                <div>
-                  <h2>Probability</h2>
-                  <p>Notes from Stat 110 and Blitzstein &amp; Hwang's Introduction to Probability.</p>
-                  <a class="subject-link" href="/book-study/probability/">Open subject shelf</a>
-                </div>
-              </div>
-              <div class="book-meta"><span>1 note</span><span>1 book tracked</span><span>7 pages covered</span><span>577 main pages total</span></div>
-              <div class="coverage"><div class="progress-track"><span class="progress-bar" style="width: 1.2%;"></span></div><strong>7 / 577 pages</strong></div>
-            </summary>
-          </details>
-
-          <details class="subject-block">
-            <summary>
-              <div class="subject-header">
-                <div>
-                  <h2>Calculus</h2>
-                  <p>Notes from Simmons Calculus.</p>
-                  <a class="subject-link" href="/book-study/calculus/">Open subject shelf</a>
-                </div>
-              </div>
-              <div class="book-meta"><span>2 notes</span><span>1 book tracked</span><span>14 pages covered</span><span>697 main pages total</span></div>
-              <div class="coverage"><div class="progress-track"><span class="progress-bar" style="width: 2.0%;"></span></div><strong>14 / 697 pages</strong></div>
-            </summary>
-          </details>
-
-          <details class="subject-block">
-            <summary>
-              <div class="subject-header">
-                <div>
-                  <h2>Differential Equations</h2>
-                  <p>Notes from Boyce &amp; DiPrima, focusing on Laplace transforms and IVPs.</p>
-                  <a class="subject-link" href="/book-study/differential-equations/">Open subject shelf</a>
-                </div>
-              </div>
-              <div class="book-meta"><span>1 note</span><span>1 book tracked</span><span>3 pages covered</span><span>120 main pages total</span></div>
-              <div class="coverage"><div class="progress-track"><span class="progress-bar" style="width: 2.5%;"></span></div><strong>3 / 120 pages</strong></div>
-            </summary>
-          </details>
-
-        </section>
-      </div>
-    </article></div></div></div></main>
-
+  <div class="container book-study-shell"><div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle">Knowledge matters, while people don't value it for real</p></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/">Home</a></li><li class="menu-item"><a href="/book-study/">Book Study</a></li></ul></nav></div></header>
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block"><header class="post-header"><h1 class="post-title">Book Study</h1></header><div class="post-body"><section class="subject-list">
+      <details class="subject-block"><summary><div class="subject-header"><div><h2>Linear Algebra</h2><p>Notes from Linear Algebra and Learning from Data, plus determinant and Cramer's rule reinforcement notes.</p><a class="subject-link" href="/book-study/linear-algebra/">Open subject shelf</a></div></div><div class="book-meta"><span>4 notes</span><span>1 book tracked</span><span>30 pages covered</span><span>415 main pages total</span></div><div class="coverage"><div class="progress-track"><span class="progress-bar" style="width:7.2%;"></span></div><strong>30 / 415 pages</strong></div></summary></details>
+      <details class="subject-block"><summary><div class="subject-header"><div><h2>Probability</h2><p>Notes from Stat 110 and Blitzstein &amp; Hwang's Introduction to Probability.</p><a class="subject-link" href="/book-study/probability/">Open subject shelf</a></div></div><div class="book-meta"><span>1 note</span><span>1 book tracked</span><span>7 pages covered</span><span>577 main pages total</span></div><div class="coverage"><div class="progress-track"><span class="progress-bar" style="width:1.2%;"></span></div><strong>7 / 577 pages</strong></div></summary></details>
+      <details class="subject-block"><summary><div class="subject-header"><div><h2>Calculus</h2><p>Notes from Simmons Calculus, including multivariable calculus and Taylor-series approximation.</p><a class="subject-link" href="/book-study/calculus/">Open subject shelf</a></div></div><div class="book-meta"><span>3 notes</span><span>1 book tracked</span><span>21 pages covered</span><span>697 main pages total</span></div><div class="coverage"><div class="progress-track"><span class="progress-bar" style="width:3.0%;"></span></div><strong>21 / 697 pages</strong></div></summary></details>
+      <details class="subject-block"><summary><div class="subject-header"><div><h2>Differential Equations</h2><p>Notes from Boyce &amp; DiPrima, focusing on Laplace transforms and IVPs.</p><a class="subject-link" href="/book-study/differential-equations/">Open subject shelf</a></div></div><div class="book-meta"><span>1 note</span><span>1 book tracked</span><span>3 pages covered</span><span>120 main pages total</span></div><div class="coverage"><div class="progress-track"><span class="progress-bar" style="width:2.5%;"></span></div><strong>3 / 120 pages</strong></div></summary></details>
+    </section></div></article></div></div></div></main>
   </div>
 </body>
 </html>
