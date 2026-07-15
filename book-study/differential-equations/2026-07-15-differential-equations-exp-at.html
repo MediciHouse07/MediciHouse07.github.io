@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Differential Equations and exp(At) | Book Study | Medici House</title>
+  <meta name="description" content="A Book Study note on linear differential systems du/dt = Au and the matrix exponential exp(At), based on MIT OCW Linear Algebra Lecture 23.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    .book-study-shell .post-body { font-size: 1rem; }
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle { opacity: 1 !important; top: auto !important; transform: none !important; }
+    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px; }
+    .book-study-actions a { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1.2; }
+    .book-study-actions a.secondary { background: #f5f5f5; color: #555; border: 1px solid #ddd; }
+    .study-figure { margin: 0 0 20px; border: 1px solid #ddd; border-radius: 10px; padding: 10px; background: #fff; }
+    .study-figure img { display: block; width: 100%; height: auto; border-radius: 6px; }
+    .study-figure figcaption { margin-top: 8px; color: #777; font-size: .9rem; text-align: left; }
+    .study-hero, .note-section { border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: #fff; margin: 18px 0; }
+    .study-hero { background: linear-gradient(135deg, #fff, #f7f7f7); }
+    .study-hero p { color: #666; margin-bottom: 0; }
+    .meta-grid, .two-col, .three-col, .flow-grid { display: grid; gap: 14px; }
+    .meta-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 18px; }
+    .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three-col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .flow-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .meta-tile, .panel, .flow-step, .question-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fcfcfc; min-width: 0; }
+    .meta-tile strong { display: block; color: #222; font-size: 1.08rem; }
+    .meta-tile span, .caption { color: #777; font-size: .9rem; }
+    .panel.blue { background: #f0f5ff; border-color: #cddcff; }
+    .panel.green { background: #edf8f5; border-color: #c8e8df; }
+    .panel.gold { background: #fff8e8; border-color: #ead6a6; }
+    .panel.rose { background: #fff2f4; border-color: #efc5cd; }
+    .flow-step { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; min-height: 76px; }
+    .callout { border-left: 4px solid #222; padding: 12px 14px; background: #f7f7f7; margin: 14px 0; }
+    .question-card strong { display: block; margin-bottom: 6px; }
+    @media (max-width: 900px) { .meta-grid, .two-col, .three-col, .flow-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block" itemscope itemtype="http://schema.org/Article">
+      <header class="post-header"><h1 class="post-title" itemprop="name headline">Differential Equations and exp(At)</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Differential Equations</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> 2026-07-15</span></div></header>
+      <div class="post-body" itemprop="articleBody">
+        <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/differential-equations/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+        <figure class="study-figure">
+          <img src="/book-study/differential-equations/assets/2026-07-15-differential-equations-exp-at.svg" alt="MIT OCW lecture frame showing Differential Equations, du/dt equals Au, and the exponential e to the At of a matrix." loading="eager">
+          <figcaption>MIT OCW Linear Algebra Lecture 23: differential equations become linear algebra when a system is written as <span class="math-inline"><math><mfrac><mrow><mi>d</mi><mi>u</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>A</mi><mi>u</mi></math></span>.</figcaption>
+        </figure>
+
+        <section class="study-hero">
+          <h2>What This Note Captures</h2>
+          <p>The lecture screenshot points to the central idea of linear differential systems: replace one scalar equation by a vector equation, then solve it using the matrix exponential.</p>
+          <div class="meta-grid" aria-label="Study metadata"><div class="meta-tile"><strong>2026-07-15</strong><span>study date, Asia/Tokyo</span></div><div class="meta-tile"><strong>MIT OCW 18.06</strong><span>Lecture 23 companion</span></div><div class="meta-tile"><strong>du/dt = Au</strong><span>main system form</span></div><div class="meta-tile"><strong>exp(At)</strong><span>solution operator</span></div></div>
+        </section>
+
+        <section class="note-section">
+          <h2>1. From One Equation to a System</h2>
+          <p>A single first-order differential equation has one changing quantity. A system has several changing quantities collected into a vector.</p>
+          <div class="math-display"><math display="block"><mfrac><mrow><mi>d</mi><mi>u</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>A</mi><mi>u</mi></math></div>
+          <div class="two-col"><div class="panel green"><h3>Scalar memory</h3><div class="math-display"><math display="block"><mfrac><mrow><mi>d</mi><mi>u</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>a</mi><mi>u</mi><mo>&#x21D2;</mo><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><msup><mi>e</mi><mrow><mi>a</mi><mi>t</mi></mrow></msup><mi>u</mi><mo>(</mo><mn>0</mn><mo>)</mo></math></div></div><div class="panel blue"><h3>Matrix version</h3><div class="math-display"><math display="block"><mfrac><mrow><mi>d</mi><mi>u</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>A</mi><mi>u</mi><mo>&#x21D2;</mo><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><msup><mi>e</mi><mrow><mi>A</mi><mi>t</mi></mrow></msup><mi>u</mi><mo>(</mo><mn>0</mn><mo>)</mo></math></div></div></div>
+        </section>
+
+        <section class="note-section">
+          <h2>2. What Is <span class="math-inline"><math><msup><mi>e</mi><mrow><mi>A</mi><mi>t</mi></mrow></msup></math></span>?</h2>
+          <p>The matrix exponential is defined by the same power series as the ordinary exponential. The only difference is that powers of the number are replaced by powers of the matrix.</p>
+          <div class="math-display"><math display="block"><msup><mi>e</mi><mrow><mi>A</mi><mi>t</mi></mrow></msup><mo>=</mo><mi>I</mi><mo>+</mo><mi>A</mi><mi>t</mi><mo>+</mo><mfrac><msup><mrow><mo>(</mo><mi>A</mi><mi>t</mi><mo>)</mo></mrow><mn>2</mn></msup><mrow><mn>2</mn><mo>!</mo></mrow></mfrac><mo>+</mo><mfrac><msup><mrow><mo>(</mo><mi>A</mi><mi>t</mi><mo>)</mo></mrow><mn>3</mn></msup><mrow><mn>3</mn><mo>!</mo></mrow></mfrac><mo>+</mo><mo>&#x22EF;</mo></math></div>
+          <div class="callout"><strong>Memory rule:</strong> <span class="math-inline"><math><msup><mi>e</mi><mrow><mi>A</mi><mi>t</mi></mrow></msup></math></span> is the machine that moves the initial vector <span class="math-inline"><math><mi>u</mi><mo>(</mo><mn>0</mn><mo>)</mo></math></span> forward to time <span class="math-inline"><math><mi>t</mi></math></span>.</div>
+        </section>
+
+        <section class="note-section">
+          <h2>3. Eigenvectors Make the System Decouple</h2>
+          <p>The easiest case happens when the initial vector points in an eigenvector direction.</p>
+          <div class="math-display"><math display="block"><mi>A</mi><mi>x</mi><mo>=</mo><mi>&#x03BB;</mi><mi>x</mi><mo>&#x21D2;</mo><msup><mi>e</mi><mrow><mi>A</mi><mi>t</mi></mrow></msup><mi>x</mi><mo>=</mo><msup><mi>e</mi><mrow><mi>&#x03BB;</mi><mi>t</mi></mrow></msup><mi>x</mi></math></div>
+          <p>So the complicated matrix system becomes separate scalar exponential growth or decay along eigenvector directions.</p>
+          <div class="flow-grid"><div class="flow-step">find eigenvectors</div><div class="flow-step">split the initial vector</div><div class="flow-step">multiply each part by <span class="math-inline"><math><msup><mi>e</mi><mrow><mi>&#x03BB;</mi><mi>t</mi></mrow></msup></math></span></div><div class="flow-step">add the pieces back</div></div>
+        </section>
+
+        <section class="note-section">
+          <h2>4. The Lecture Example on the Board</h2>
+          <p>The board shows a triangular system of the form:</p>
+          <div class="math-display"><math display="block"><mtable columnalign="right center left"><mtr><mtd><mfrac><mrow><mi>d</mi><msub><mi>u</mi><mn>1</mn></msub></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd><mo>=</mo></mtd><mtd><mo>-</mo><msub><mi>u</mi><mn>1</mn></msub><mo>+</mo><mn>2</mn><msub><mi>u</mi><mn>2</mn></msub></mtd></mtr><mtr><mtd><mfrac><mrow><mi>d</mi><msub><mi>u</mi><mn>2</mn></msub></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></mtd><mtd><mo>=</mo></mtd><mtd><mo>-</mo><mn>2</mn><msub><mi>u</mi><mn>2</mn></msub></mtd></mtr></mtable></math></div>
+          <p>That corresponds to this matrix:</p>
+          <div class="math-display"><math display="block"><mi>A</mi><mo>=</mo><mo>[</mo><mtable><mtr><mtd><mo>-</mo><mn>1</mn></mtd><mtd><mn>2</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mo>-</mo><mn>2</mn></mtd></mtr></mtable><mo>]</mo></math></div>
+          <p>Because the matrix is triangular, the eigenvalues are visible on the diagonal: <span class="math-inline"><math><mo>-</mo><mn>1</mn></math></span> and <span class="math-inline"><math><mo>-</mo><mn>2</mn></math></span>. Both are negative, so both modes decay.</p>
+        </section>
+
+        <section class="note-section">
+          <h2>5. Matrix Exponential for the Example</h2>
+          <p>For the board matrix, the exponential has the form:</p>
+          <div class="math-display"><math display="block"><msup><mi>e</mi><mrow><mi>A</mi><mi>t</mi></mrow></msup><mo>=</mo><mo>[</mo><mtable><mtr><mtd><msup><mi>e</mi><mrow><mo>-</mo><mi>t</mi></mrow></msup></mtd><mtd><mn>2</mn><mo>(</mo><msup><mi>e</mi><mrow><mo>-</mo><mi>t</mi></mrow></msup><mo>-</mo><msup><mi>e</mi><mrow><mo>-</mo><mn>2</mn><mi>t</mi></mrow></msup><mo>)</mo></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><msup><mi>e</mi><mrow><mo>-</mo><mn>2</mn><mi>t</mi></mrow></msup></mtd></mtr></mtable><mo>]</mo></math></div>
+          <p>The diagonal entries show the two decay speeds. The upper-right entry shows coupling: <span class="math-inline"><math><msub><mi>u</mi><mn>2</mn></msub></math></span> feeds into <span class="math-inline"><math><msub><mi>u</mi><mn>1</mn></msub></math></span>.</p>
+        </section>
+
+        <section class="note-section">
+          <h2>6. Socratic Checkpoints</h2>
+          <div class="two-col"><div class="question-card"><strong>Checkpoint 1</strong><p>If <span class="math-inline"><math><mi>A</mi><mi>x</mi><mo>=</mo><mi>&#x03BB;</mi><mi>x</mi></math></span>, why does that direction become easy for the differential equation?</p></div><div class="question-card"><strong>Checkpoint 2</strong><p>In the board example, why can we read the eigenvalues directly from the diagonal of <span class="math-inline"><math><mi>A</mi></math></span>?</p></div></div>
+        </section>
+      </div>
+    </article></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
