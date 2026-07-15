@@ -73,6 +73,58 @@ Required visibility guard:
 }
 ```
 
+## Study Image / Screenshot Rule
+
+When the user provides a screenshot, generated study card, or asks for a picture to be attached to a note, the image should appear near the top of the HTML note.
+
+Rules:
+
+- Put the image immediately after the note navigation and before the main study hero section.
+- Store image assets under the subject folder, usually:
+
+```text
+book-study/<subject-slug>/assets/<note-slug>-study-card.<ext>
+```
+
+- Prefer optimized `.jpg`, `.png`, or `.svg` assets instead of very large inline base64 inside the note HTML.
+- If the available GitHub path cannot upload binary directly, a small SVG wrapper around an optimized image data URI is acceptable.
+- Crop away irrelevant browser/app chrome when the educational content is the screenshot target, unless the user asks to preserve the full screenshot.
+- Add useful `alt` text and a short `<figcaption>`.
+- Use responsive figure styling so the image works on both desktop and mobile.
+
+Recommended figure block:
+
+```html
+<figure class="study-figure">
+  <img src="/book-study/<subject-slug>/assets/<asset-name>.svg" alt="Clear description of the study image" loading="eager">
+  <figcaption>Short explanation of what the image anchors in the note.</figcaption>
+</figure>
+```
+
+Recommended figure CSS:
+
+```css
+.study-figure {
+  margin: 0 0 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  background: #fff;
+}
+.study-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+.study-figure figcaption {
+  margin-top: 8px;
+  color: #777;
+  font-size: .9rem;
+  text-align: left;
+}
+```
+
 ## Mathematical Formula Rule
 
 Mathematical notes should render formulas as math, not as dark code blocks.
@@ -351,6 +403,7 @@ Round to one decimal place.
 - Shelf page exists for subject.
 - Index updated.
 - Progress bar updated consistently.
+- Study image or screenshot, if provided by the user, is optimized, stored under the subject assets folder, and placed near the top of the note.
 - Mobile layout tested at 360px width.
 - No page-level horizontal scroll on mobile.
 - Formulas use MathML in `.math-display` or `.math-inline`.
