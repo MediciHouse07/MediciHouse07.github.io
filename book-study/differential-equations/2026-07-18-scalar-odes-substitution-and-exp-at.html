@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Scalar ODEs, Substitution, and exp(At) | Book Study | Medici House</title>
+  <meta name="description" content="A Socratic wrap-up connecting scalar exponential differential equations, separation of variables, u-substitution, zero-crossing restrictions, eigenvalues, and the matrix exponential exp(At).">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    .book-study-shell .post-body { font-size: 1rem; }
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle { opacity: 1 !important; top: auto !important; transform: none !important; }
+    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px; }
+    .book-study-actions a { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1.2; }
+    .book-study-actions a.secondary { background: #f5f5f5; color: #555; border: 1px solid #ddd; }
+    .study-figure { margin: 0 0 20px; border: 1px solid #ddd; border-radius: 10px; padding: 10px; background: #fff; }
+    .study-figure img { display: block; width: 100%; height: auto; border-radius: 6px; }
+    .study-figure figcaption { margin-top: 8px; color: #777; font-size: .9rem; text-align: left; }
+    .study-hero, .note-section { border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: #fff; margin: 18px 0; }
+    .study-hero { background: linear-gradient(135deg, #fff, #f7f7f7); }
+    .study-hero p { color: #666; margin-bottom: 0; }
+    .meta-grid, .two-col, .three-col, .step-grid { display: grid; gap: 14px; }
+    .meta-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 18px; }
+    .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three-col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .step-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); counter-reset: steps; }
+    .meta-tile, .panel, .step, .question-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fcfcfc; min-width: 0; }
+    .meta-tile strong { display: block; color: #222; font-size: 1.04rem; }
+    .meta-tile span, .caption { color: #777; font-size: .9rem; }
+    .panel.blue { background: #f0f5ff; border-color: #cddcff; }
+    .panel.green { background: #edf8f5; border-color: #c8e8df; }
+    .panel.gold { background: #fff8e8; border-color: #ead6a6; }
+    .panel.rose { background: #fff2f4; border-color: #efc5cd; }
+    .panel.purple { background: #f6f1fb; border-color: #d9c8eb; }
+    .callout { border-left: 4px solid #222; padding: 12px 14px; background: #f7f7f7; margin: 14px 0; }
+    .warning { border-left-color: #c53a49; background: #fff3f4; }
+    .step::before { counter-increment: steps; content: counter(steps); display: inline-flex; width: 28px; height: 28px; border-radius: 50%; align-items: center; justify-content: center; margin-bottom: 9px; background: #222; color: #fff; font-weight: 700; }
+    .question-card strong { display: block; margin-bottom: 6px; }
+    @media (max-width: 900px) { .meta-grid, .two-col, .three-col, .step-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content"><article class="post-block" itemscope itemtype="http://schema.org/Article">
+      <header class="post-header"><h1 class="post-title" itemprop="name headline">Scalar ODEs, Substitution, and exp(At)</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Differential Equations × Linear Algebra</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> 2026-07-18</span></div></header>
+      <div class="post-body" itemprop="articleBody">
+        <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/differential-equations/">Subject shelf</a><a class="secondary" href="/book-study/differential-equations/2026-07-15-differential-equations-exp-at.html">Earlier exp(At) note</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+        <figure class="study-figure">
+          <img src="/book-study/differential-equations/assets/2026-07-18-scalar-ode-substitution-exp-at-study-map.svg" alt="A three-panel study map connecting scalar exponential differential equations, separation and substitution, and eigenvalue modes in the matrix system u prime equals A u." loading="eager">
+          <figcaption>The whole learning path: a scalar exponential mode, a careful change of integration variable, and the same exponential behavior along matrix eigenvectors.</figcaption>
+        </figure>
+
+        <section class="study-hero">
+          <h2>What We Clarified</h2>
+          <p>This discussion began with the MIT lecture equation <span class="math-inline"><math><msup><mi>u</mi><mo>&prime;</mo></msup><mo>=</mo><mi>A</mi><mi>u</mi></math></span>. We slowed down to understand its scalar ancestor, why exponential solutions appear, how the initial value fixes the constant, why separation of variables is legitimate, what substitution really changes, and why crossing zero breaks the logarithmic step.</p>
+          <div class="meta-grid" aria-label="Study metadata"><div class="meta-tile"><strong>2026-07-18</strong><span>study date, Asia/Tokyo</span></div><div class="meta-tile"><strong>Mixed topic</strong><span>differential equations + linear algebra</span></div><div class="meta-tile"><strong>Question-driven</strong><span>Socratic clarification trail</span></div><div class="meta-tile"><strong>0 new book pages</strong><span>lecture and concept companion</span></div></div>
+        </section>
+
+        <section class="note-section">
+          <h2>1. The Scalar Model Comes First</h2>
+          <p>Before understanding a matrix differential equation, study one scalar equation:</p>
+          <div class="math-display"><math display="block"><mfrac><mrow><mi>d</mi><mi>u</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>&#x03BB;</mi><mi>u</mi></math></div>
+          <p>We need a function whose derivative is <span class="math-inline"><math><mi>&#x03BB;</mi></math></span> times itself. Exponentials have exactly that property:</p>
+          <div class="math-display"><math display="block"><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi>C</mi><msup><mi>e</mi><mrow><mi>&#x03BB;</mi><mi>t</mi></mrow></msup></math></div>
+          <div class="two-col"><div class="panel blue"><h3>The role of <span class="math-inline"><math><mi>C</mi></math></span></h3><p><span class="math-inline"><math><mi>C</mi></math></span> is the starting amount. Setting <span class="math-inline"><math><mi>t</mi><mo>=</mo><mn>0</mn></math></span> gives <span class="math-inline"><math><mi>u</mi><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mi>C</mi></math></span>.</p></div><div class="panel green"><h3>The role of <span class="math-inline"><math><mi>&#x03BB;</mi></math></span></h3><p><span class="math-inline"><math><mi>&#x03BB;</mi></math></span> controls the change: negative means decay, positive means growth, zero means steady, and a complex value can create oscillation.</p></div></div>
+          <div class="callout"><strong>Important correction:</strong> the integration constant is not added to the final exponential solution. It becomes multiplicative because <span class="math-inline"><math><msup><mi>e</mi><mrow><mo>-</mo><mn>3</mn><mi>t</mi><mo>+</mo><mi>K</mi></mrow></msup><mo>=</mo><msup><mi>e</mi><mi>K</mi></msup><msup><mi>e</mi><mrow><mo>-</mo><mn>3</mn><mi>t</mi></mrow></msup></math></span>, and the constant <span class="math-inline"><math><msup><mi>e</mi><mi>K</mi></msup></math></span> is renamed <span class="math-inline"><math><mi>C</mi></math></span>.</div>
+        </section>
+
+        <section class="note-section">
+          <h2>2. Why Separation of Variables Is Legitimate</h2>
+          <p>For the example <span class="math-inline"><math><msup><mi>u</mi><mo>&prime;</mo></msup><mo>=</mo><mo>-</mo><mn>3</mn><mi>u</mi></math></span>, first assume <span class="math-inline"><math><mi>u</mi><mo>&#x2260;</mo><mn>0</mn></math></span> and divide by <span class="math-inline"><math><mi>u</mi></math></span>:</p>
+          <div class="math-display"><math display="block"><mfrac><mn>1</mn><mi>u</mi></mfrac><mfrac><mrow><mi>d</mi><mi>u</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mo>-</mo><mn>3</mn></math></div>
+          <p>The rigorous next step integrates both sides with respect to the same variable <span class="math-inline"><math><mi>t</mi></math></span>:</p>
+          <div class="math-display"><math display="block"><mrow><mo>&#x222B;</mo><mfrac><mn>1</mn><mrow><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo></mrow></mfrac><mfrac><mrow><mi>d</mi><mi>u</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mi>d</mi><mi>t</mi></mrow><mo>=</mo><mrow><mo>&#x222B;</mo><mo>-</mo><mn>3</mn><mi>d</mi><mi>t</mi></mrow></math></div>
+          <p>Only then do we use substitution on the left. Let <span class="math-inline"><math><mi>s</mi><mo>=</mo><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo></math></span>, so <span class="math-inline"><math><mi>d</mi><mi>s</mi><mo>=</mo><msup><mi>u</mi><mo>&prime;</mo></msup><mo>(</mo><mi>t</mi><mo>)</mo><mi>d</mi><mi>t</mi></math></span>.</p>
+          <div class="math-display"><math display="block"><mrow><mo>&#x222B;</mo><mfrac><msup><mi>u</mi><mo>&prime;</mo></msup><mo>(</mo><mi>t</mi><mo>)</mo><mrow><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo></mrow></mfrac><mi>d</mi><mi>t</mi></mrow><mo>=</mo><mrow><mo>&#x222B;</mo><mfrac><mn>1</mn><mi>s</mi></mfrac><mi>d</mi><mi>s</mi></mrow><mo>=</mo><mi>ln</mi><mo>|</mo><mi>s</mi><mo>|</mo><mo>+</mo><mi>K</mi></math></div>
+          <div class="step-grid"><div class="step"><strong>Divide</strong><p>Put every <span class="math-inline"><math><mi>u</mi></math></span>-dependent factor with <span class="math-inline"><math><mi>d</mi><mi>u</mi></math></span>.</p></div><div class="step"><strong>Integrate in <span class="math-inline"><math><mi>t</mi></math></span></strong><p>The equality is still an equality of functions of time.</p></div><div class="step"><strong>Substitute</strong><p>Rewrite the left integral using <span class="math-inline"><math><mi>s</mi><mo>=</mo><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo></math></span>.</p></div><div class="step"><strong>Exponentiate</strong><p>Remove the logarithm and absorb <span class="math-inline"><math><msup><mi>e</mi><mi>K</mi></msup></math></span> into <span class="math-inline"><math><mi>C</mi></math></span>.</p></div></div>
+        </section>
+
+        <section class="note-section">
+          <h2>3. Definite Integrals and Changed Limits</h2>
+          <p>For a definite integral, the original variable is still <span class="math-inline"><math><mi>t</mi></math></span>:</p>
+          <div class="math-display"><math display="block"><mrow><msubsup><mo>&#x222B;</mo><mn>0</mn><mi>T</mi></msubsup><mfrac><msup><mi>u</mi><mo>&prime;</mo></msup><mo>(</mo><mi>t</mi><mo>)</mo><mrow><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo></mrow></mfrac><mi>d</mi><mi>t</mi></mrow><mo>=</mo><mrow><msubsup><mo>&#x222B;</mo><mrow><mi>u</mi><mo>(</mo><mn>0</mn><mo>)</mo></mrow><mrow><mi>u</mi><mo>(</mo><mi>T</mi><mo>)</mo></mrow></msubsup><mfrac><mn>1</mn><mi>s</mi></mfrac><mi>d</mi><mi>s</mi></mrow></math></div>
+          <p>The new limits come from the same endpoints: <span class="math-inline"><math><mi>t</mi><mo>=</mo><mn>0</mn></math></span> maps to <span class="math-inline"><math><mi>s</mi><mo>=</mo><mi>u</mi><mo>(</mo><mn>0</mn><mo>)</mo></math></span>, and <span class="math-inline"><math><mi>t</mi><mo>=</mo><mi>T</mi></math></span> maps to <span class="math-inline"><math><mi>s</mi><mo>=</mo><mi>u</mi><mo>(</mo><mi>T</mi><mo>)</mo></math></span>.</p>
+          <div class="callout"><strong>The variable did not split into two unrelated integrations.</strong> The <span class="math-inline"><math><mi>s</mi></math></span>-integral is a rewritten form of the original <span class="math-inline"><math><mi>t</mi></math></span>-integral.</div>
+          <p>Even if <span class="math-inline"><math><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo></math></span> wiggles or revisits values, the endpoint formula can still hold because the integrand is the derivative of <span class="math-inline"><math><mi>ln</mi><mo>|</mo><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>|</mo></math></span>. The essential restriction is that the whole path must stay away from zero.</p>
+        </section>
+
+        <section class="note-section">
+          <h2>4. The Zero-Crossing Restriction</h2>
+          <div class="two-col"><div class="panel green"><h3>Safe interval</h3><p>If <span class="math-inline"><math><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>&#x2260;</mo><mn>0</mn></math></span> throughout the interval, then</p><div class="math-display"><math display="block"><mrow><msubsup><mo>&#x222B;</mo><mn>0</mn><mi>T</mi></msubsup><mfrac><msup><mi>u</mi><mo>&prime;</mo></msup><mo>(</mo><mi>t</mi><mo>)</mo><mrow><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo></mrow></mfrac><mi>d</mi><mi>t</mi></mrow><mo>=</mo><mi>ln</mi><mo>|</mo><mi>u</mi><mo>(</mo><mi>T</mi><mo>)</mo><mo>|</mo><mo>-</mo><mi>ln</mi><mo>|</mo><mi>u</mi><mo>(</mo><mn>0</mn><mo>)</mo><mo>|</mo></math></div></div><div class="panel rose"><h3>Zero crossing</h3><p>If <span class="math-inline"><math><mi>u</mi><mo>(</mo><mi>c</mi><mo>)</mo><mo>=</mo><mn>0</mn></math></span>, then <span class="math-inline"><math><mfrac><msup><mi>u</mi><mo>&prime;</mo></msup><mi>u</mi></mfrac></math></span> is undefined at <span class="math-inline"><math><mi>t</mi><mo>=</mo><mi>c</mi></math></span>. The integral must be split and treated as improper; it may diverge.</p></div></div>
+          <div class="callout warning"><strong>Same singularity, two views:</strong> in the original variable, the problem occurs at a time <span class="math-inline"><math><mi>t</mi><mo>=</mo><mi>c</mi></math></span> where <span class="math-inline"><math><mi>u</mi><mo>(</mo><mi>c</mi><mo>)</mo><mo>=</mo><mn>0</mn></math></span>. After substitution, the same problem appears as <span class="math-inline"><math><mfrac><mn>1</mn><mi>s</mi></mfrac></math></span> being undefined at <span class="math-inline"><math><mi>s</mi><mo>=</mo><mn>0</mn></math></span>.</div>
+        </section>
+
+        <section class="note-section">
+          <h2>5. Did the Dimension Change?</h2>
+          <p>No physical or mathematical object was reduced from two dimensions to one. The graph of <span class="math-inline"><math><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo></math></span> is drawn in the two-coordinate <span class="math-inline"><math><mo>(</mo><mi>t</mi><mo>,</mo><mi>u</mi><mo>)</mo></math></span> plane so we can see how one scalar value changes with time.</p>
+          <div class="three-col"><div class="panel blue"><h3>The function</h3><p><span class="math-inline"><math><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo></math></span> is one scalar output for each scalar input <span class="math-inline"><math><mi>t</mi></math></span>.</p></div><div class="panel green"><h3>The graph</h3><p>The picture uses two axes because it displays input and output together.</p></div><div class="panel purple"><h3>The substitution</h3><p><span class="math-inline"><math><mi>s</mi><mo>=</mo><mi>u</mi><mo>(</mo><mi>t</mi><mo>)</mo></math></span> follows the visited output values directly on the real number line.</p></div></div>
+          <p>The change to a one-dimensional <span class="math-inline"><math><mi>s</mi></math></span>-line is therefore a change of coordinate for integration, not a loss of dimension.</p>
+        </section>
+
+        <section class="note-section">
+          <h2>6. Bridge to Linear Algebra</h2>
+          <p>The matrix system is</p>
+          <div class="math-display"><math display="block"><mfrac><mrow><mi>d</mi><mi mathvariant="bold">u</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>A</mi><mi mathvariant="bold">u</mi></math></div>
+          <p>An eigenvector <span class="math-inline"><math><mi mathvariant="bold">x</mi></math></span> satisfies</p>
+          <div class="math-display"><math display="block"><mi>A</mi><mi mathvariant="bold">x</mi><mo>=</mo><mi>&#x03BB;</mi><mi mathvariant="bold">x</mi></math></div>
+          <p>Along that direction, the matrix equation becomes the scalar equation again. A single eigenvector mode has the form</p>
+          <div class="math-display"><math display="block"><mi mathvariant="bold">u</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi>c</mi><msup><mi>e</mi><mrow><mi>&#x03BB;</mi><mi>t</mi></mrow></msup><mi mathvariant="bold">x</mi></math></div>
+          <p>The initial vector determines the coefficients of the eigenvector modes, while each eigenvalue determines how its mode changes over time.</p>
+          <div class="two-col"><div class="panel gold"><h3>Initial condition</h3><div class="math-display"><math display="block"><mi mathvariant="bold">u</mi><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><msub><mi>c</mi><mn>1</mn></msub><msub><mi mathvariant="bold">x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>c</mi><mn>2</mn></msub><msub><mi mathvariant="bold">x</mi><mn>2</mn></msub></math></div><p>This fixes the mode coefficients.</p></div><div class="panel purple"><h3>Time evolution</h3><div class="math-display"><math display="block"><mi mathvariant="bold">u</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><msub><mi>c</mi><mn>1</mn></msub><msup><mi>e</mi><mrow><msub><mi>&#x03BB;</mi><mn>1</mn></msub><mi>t</mi></mrow></msup><msub><mi mathvariant="bold">x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>c</mi><mn>2</mn></msub><msup><mi>e</mi><mrow><msub><mi>&#x03BB;</mi><mn>2</mn></msub><mi>t</mi></mrow></msup><msub><mi mathvariant="bold">x</mi><mn>2</mn></msub></math></div><p>The matrix exponential packages these modes as <span class="math-inline"><math><mi mathvariant="bold">u</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><msup><mi>e</mi><mrow><mi>A</mi><mi>t</mi></mrow></msup><mi mathvariant="bold">u</mi><mo>(</mo><mn>0</mn><mo>)</mo></math></span>.</p></div></div>
+        </section>
+
+        <section class="note-section">
+          <h2>7. The Questions That Moved the Lesson Forward</h2>
+          <div class="two-col"><div class="question-card"><strong>Is this differential equations or linear algebra?</strong><p>Both. Time evolution is the differential-equation part; the matrix, eigenvalues, and eigenvectors are the linear-algebra part.</p></div><div class="question-card"><strong>Why is the answer not <span class="math-inline"><math><msup><mi>e</mi><mrow><mo>-</mo><mn>3</mn><mi>t</mi></mrow></msup><mo>+</mo><mi>C</mi></math></span>?</strong><p>Because differentiating an added constant does not reproduce the required right side. The constant becomes a multiplier after exponentiation.</p></div><div class="question-card"><strong>Can we integrate both sides blindly?</strong><p>No. First express an equality in a common variable, integrate both sides in that variable, and then apply a valid substitution.</p></div><div class="question-card"><strong>Do only the endpoints matter?</strong><p>They do for a logarithmic derivative on an interval where the function stays nonzero. A zero crossing creates a singularity.</p></div><div class="question-card"><strong>Does substitution make a 2D problem 1D?</strong><p>No. The two-axis graph visualizes one scalar function. The substitution follows its output values on the one-dimensional real line.</p></div><div class="question-card"><strong>Where does the matrix exponential come from?</strong><p>Every eigenvector mode behaves like a scalar exponential <span class="math-inline"><math><msup><mi>e</mi><mrow><mi>&#x03BB;</mi><mi>t</mi></mrow></msup></math></span>; <span class="math-inline"><math><msup><mi>e</mi><mrow><mi>A</mi><mi>t</mi></mrow></msup></math></span> combines all modes.</p></div></div>
+        </section>
+
+        <section class="note-section">
+          <h2>Memory Map</h2>
+          <div class="math-display"><math display="block"><mrow><msup><mi>u</mi><mo>&prime;</mo></msup><mo>=</mo><mi>&#x03BB;</mi><mi>u</mi></mrow><mo>&#x21D2;</mo><mrow><mi>u</mi><mo>=</mo><mi>C</mi><msup><mi>e</mi><mrow><mi>&#x03BB;</mi><mi>t</mi></mrow></msup></mrow><mo>&#x21D2;</mo><mrow><mi>A</mi><mi mathvariant="bold">x</mi><mo>=</mo><mi>&#x03BB;</mi><mi mathvariant="bold">x</mi></mrow><mo>&#x21D2;</mo><mrow><mi mathvariant="bold">u</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><msup><mi>e</mi><mrow><mi>A</mi><mi>t</mi></mrow></msup><mi mathvariant="bold">u</mi><mo>(</mo><mn>0</mn><mo>)</mo></mrow></math></div>
+          <div class="callout"><strong>One sentence:</strong> the scalar equation teaches why exponentials appear; substitution explains the logarithmic derivation carefully; eigenvectors let the same scalar behavior solve a matrix differential system.</div>
+        </section>
+      </div>
+    </article></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
