@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Why the MGF Uses E(eᵗˣ): Socratic Practice | Book Study | Medici House</title>
+  <meta name="description" content="A Socratic probability study record explaining why the moment generating function uses E(e^{tX}), how the Taylor series stores moments, and how derivatives recover them.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html, body { max-width: 100%; overflow-x: hidden; }
+    *, *::before, *::after { box-sizing: border-box; }
+    .book-study-shell, .main, .main-inner, .content-wrap, .content, .post-block, .post-body, .page, section, article, .card, .panel, .mini-panel, .hero, .study-frame, .math-display { max-width: 100%; }
+    .book-study-shell .post-body { font-size: 1rem; }
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle { opacity: 1 !important; top: auto !important; transform: none !important; }
+    .post-body, .post-body h1, .post-body h2, .post-body h3, .post-body p, .post-body li, .post-body td, .post-body th { text-align: left; }
+    .post-body, .page, section, article, .card, .panel, .mini-panel { overflow-wrap: break-word; }
+    img, svg, canvas, video, iframe { max-width: 100%; height: auto; }
+    .math-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; padding: 13px 14px; margin: 14px 0; border: 1px solid #ddd; border-radius: 9px; background: #fafafa; }
+    .math-display math { font-size: 1.08rem; }
+    .math-inline { white-space: nowrap; }
+    pre, code, .code-block { max-width: 100%; overflow-x: auto; white-space: pre; }
+    table { width: 100%; max-width: 100%; display: block; overflow-x: auto; }
+    .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px; }
+    .book-study-actions a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; padding: 8px 13px; text-decoration: none; font-weight: 700; background: #222; color: #fff; line-height: 1.2; }
+    .book-study-actions a.secondary { background: #f5f5f5; color: #555; border: 1px solid #ddd; }
+    .study-hero, .note-section { border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: #fff; margin: 18px 0; }
+    .study-hero { background: linear-gradient(135deg, #fff, #f7f7f7); }
+    .study-hero p:last-child { margin-bottom: 0; }
+    .meta-grid, .two-col, .three-col, .flow { display: grid; gap: 14px; }
+    .meta-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 18px; }
+    .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three-col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .flow { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 14px; }
+    .meta-tile, .panel, .flow-step, .question-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fcfcfc; min-width: 0; }
+    .meta-tile strong { display: block; color: #222; font-size: 1.06rem; }
+    .meta-tile span, .caption { color: #777; font-size: .9rem; }
+    .panel.blue, .flow-step.blue { background: #f0f5ff; border-color: #cddcff; }
+    .panel.green, .flow-step.green { background: #edf8f5; border-color: #c8e8df; }
+    .panel.gold, .flow-step.gold { background: #fff8e8; border-color: #ead6a6; }
+    .panel.rose, .flow-step.rose { background: #fff2f4; border-color: #efc5cd; }
+    .flow-step { min-height: 92px; display: flex; flex-direction: column; justify-content: center; }
+    .flow-step strong { display: block; margin-bottom: 5px; }
+    .callout { border-left: 4px solid #222; padding: 12px 14px; background: #f7f7f7; margin: 14px 0; }
+    .success { border-left-color: #277a60; background: #edf8f5; }
+    .warning { border-left-color: #b27b19; background: #fff8e8; }
+    .question-card strong { display: block; margin-bottom: 6px; }
+    .progress-track { height: 16px; border: 1px solid #ddd; border-radius: 999px; background: #eee; overflow: hidden; margin: 10px 0 6px; }
+    .progress-bar { display: block; height: 100%; width: 2.1%; border-radius: inherit; background: linear-gradient(90deg, #555, #222); }
+    @media (max-width: 900px) { .meta-grid, .two-col, .three-col, .flow { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) {
+      .main-inner, .content-wrap, .content, .post-block { width: 100% !important; max-width: 100% !important; margin-left: 0 !important; margin-right: 0 !important; }
+      .post-block, .post-body, .page, section, article, .card, .panel, .mini-panel, .hero { padding-left: 16px !important; padding-right: 16px !important; }
+      .study-hero, .note-section { padding: 16px !important; }
+      .hero-grid, .visual-grid, .split, .cards, .flow, .note-grid, .subject-header, .coverage, .meta-grid, .two-col, .three-col { grid-template-columns: 1fr !important; }
+      h1 { font-size: clamp(1.6rem, 8vw, 2.2rem) !important; line-height: 1.15; }
+      h2 { font-size: 1.35rem !important; line-height: 1.2; }
+      p, li, td, th { font-size: 1rem; line-height: 1.6; }
+      .math-display { padding: 10px; }
+      .math-display math { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-book-study"><a href="/book-study/" rel="section"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Why the MGF Uses E(e<sup>tX</sup>): Socratic Practice</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Probability</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> 2026-07-28 10:03 JST</span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/probability/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>What This Practice Captures</h2>
+            <p>This Socratic thread focused on one question: why is the moment generating function defined using an exponential? The key distinction was that the Taylor series explains the design of the MGF, while differentiation extracts the stored moments.</p>
+            <div class="meta-grid" aria-label="Study metadata">
+              <div class="meta-tile"><strong>2026-07-28 10:03 JST</strong><span>study timestamp, Asia/Tokyo</span></div>
+              <div class="meta-tile"><strong>Chapter 6</strong><span>Moments</span></div>
+              <div class="meta-tile"><strong>pp. 279-283</strong><span>Sections 6.4-6.5</span></div>
+              <div class="meta-tile"><strong>12 / 577</strong><span>Probability coverage after this note</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>12 / 577 pages, 2.1%.</strong></p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. Start With the Textbook Definition</h2>
+            <p>For a random variable <span class="math-inline"><math><mi>X</mi></math></span>, the moment generating function is</p>
+            <div class="math-display"><math display="block"><mrow><msub><mi>M</mi><mi>X</mi></msub><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mo>[</mo><msup><mi>e</mi><mrow><mi>t</mi><mi>X</mi></mrow></msup><mo>]</mo></mrow></math></div>
+            <p>The textbook says that <span class="math-inline"><math><mi>t</mi></math></span> has no special probabilistic interpretation. It is a bookkeeping device that lets calculus act on the sequence of moments.</p>
+            <div class="callout"><strong>Important correction:</strong> the formula is not forced by probability. It is a clever definition chosen because it encodes moments efficiently.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. Is This a Two-Variable Taylor Series?</h2>
+            <p>No. For the expansion, temporarily treat <span class="math-inline"><math><mi>X</mi></math></span> as fixed and expand only in the variable <span class="math-inline"><math><mi>t</mi></math></span>.</p>
+            <div class="two-col">
+              <div class="panel blue">
+                <h3>Known expansion</h3>
+                <div class="math-display"><math display="block"><mrow><msup><mi>e</mi><mi>z</mi></msup><mo>=</mo><mn>1</mn><mo>+</mo><mi>z</mi><mo>+</mo><mfrac><msup><mi>z</mi><mn>2</mn></msup><mrow><mn>2</mn><mo>!</mo></mrow></mfrac><mo>+</mo><mfrac><msup><mi>z</mi><mn>3</mn></msup><mrow><mn>3</mn><mo>!</mo></mrow></mfrac><mo>+</mo><mo>&#x22EF;</mo></mrow></math></div>
+              </div>
+              <div class="panel gold">
+                <h3>Substitute z = tX</h3>
+                <div class="math-display"><math display="block"><mrow><msup><mi>e</mi><mrow><mi>t</mi><mi>X</mi></mrow></msup><mo>=</mo><mn>1</mn><mo>+</mo><mi>t</mi><mi>X</mi><mo>+</mo><mfrac><mrow><msup><mi>t</mi><mn>2</mn></msup><msup><mi>X</mi><mn>2</mn></msup></mrow><mrow><mn>2</mn><mo>!</mo></mrow></mfrac><mo>+</mo><mfrac><mrow><msup><mi>t</mi><mn>3</mn></msup><msup><mi>X</mi><mn>3</mn></msup></mrow><mrow><mn>3</mn><mo>!</mo></mrow></mfrac><mo>+</mo><mo>&#x22EF;</mo></mrow></math></div>
+              </div>
+            </div>
+            <div class="callout success"><strong>Unlocked idea:</strong> it is the ordinary Taylor series of the exponential, with the single substitution <span class="math-inline"><math><mi>z</mi><mo>=</mo><mi>t</mi><mi>X</mi></math></span>.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>3. Take Expectation Term by Term</h2>
+            <p>Apply expectation to the expansion:</p>
+            <div class="math-display"><math display="block"><mrow><mi mathvariant="double-struck">E</mi><mo>[</mo><msup><mi>e</mi><mrow><mi>t</mi><mi>X</mi></mrow></msup><mo>]</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mo>[</mo><mn>1</mn><mo>+</mo><mi>t</mi><mi>X</mi><mo>+</mo><mfrac><mrow><msup><mi>t</mi><mn>2</mn></msup><msup><mi>X</mi><mn>2</mn></msup></mrow><mrow><mn>2</mn><mo>!</mo></mrow></mfrac><mo>+</mo><mo>&#x22EF;</mo><mo>]</mo></mrow></math></div>
+            <p>Linearity separates the terms. Since <span class="math-inline"><math><mi>t</mi></math></span> is not random, its powers come outside the expectation:</p>
+            <div class="math-display"><math display="block"><mrow><msub><mi>M</mi><mi>X</mi></msub><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mn>1</mn><mo>+</mo><mi>t</mi><mi mathvariant="double-struck">E</mi><mo>[</mo><mi>X</mi><mo>]</mo><mo>+</mo><mfrac><msup><mi>t</mi><mn>2</mn></msup><mrow><mn>2</mn><mo>!</mo></mrow></mfrac><mi mathvariant="double-struck">E</mi><mo>[</mo><msup><mi>X</mi><mn>2</mn></msup><mo>]</mo><mo>+</mo><mfrac><msup><mi>t</mi><mn>3</mn></msup><mrow><mn>3</mn><mo>!</mo></mrow></mfrac><mi mathvariant="double-struck">E</mi><mo>[</mo><msup><mi>X</mi><mn>3</mn></msup><mo>]</mo><mo>+</mo><mo>&#x22EF;</mo></mrow></math></div>
+            <p>This shows where the name comes from: the coefficients contain the moments.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>4. Why Does an Extra X Appear When We Differentiate?</h2>
+            <p>Differentiate with respect to <span class="math-inline"><math><mi>t</mi></math></span>. The chain rule creates the extra factor.</p>
+            <div class="flow" aria-label="Chain rule steps">
+              <div class="flow-step blue"><strong>Inner function</strong><span><math><mi>u</mi><mo>=</mo><mi>t</mi><mi>X</mi></math></span></div>
+              <div class="flow-step gold"><strong>Outer derivative</strong><span><math><mfrac><mi>d</mi><mrow><mi>d</mi><mi>u</mi></mrow></mfrac><msup><mi>e</mi><mi>u</mi></msup><mo>=</mo><msup><mi>e</mi><mi>u</mi></msup></math></span></div>
+              <div class="flow-step rose"><strong>Inner derivative</strong><span><math><mfrac><mrow><mi>d</mi><mi>u</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>X</mi></math></span></div>
+              <div class="flow-step green"><strong>Combine</strong><span><math><mfrac><mi>d</mi><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><msup><mi>e</mi><mrow><mi>t</mi><mi>X</mi></mrow></msup><mo>=</mo><mi>X</mi><msup><mi>e</mi><mrow><mi>t</mi><mi>X</mi></mrow></msup></math></span></div>
+            </div>
+            <div class="callout"><strong>Simple check:</strong> if <span class="math-inline"><math><mi>X</mi><mo>=</mo><mn>3</mn></math></span>, then the expression is <span class="math-inline"><math><msup><mi>e</mi><mrow><mn>3</mn><mi>t</mi></mrow></msup></math></span>, whose derivative is <span class="math-inline"><math><mn>3</mn><msup><mi>e</mi><mrow><mn>3</mn><mi>t</mi></mrow></msup></math></span>.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>5. Extract the First and Second Moments</h2>
+            <p>Differentiate the MGF and evaluate at zero:</p>
+            <div class="math-display"><math display="block"><mrow><msubsup><mi>M</mi><mi>X</mi><mo>&prime;</mo></msubsup><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mo>[</mo><mi>X</mi><msup><mi>e</mi><mrow><mi>t</mi><mi>X</mi></mrow></msup><mo>]</mo></mrow></math></div>
+            <div class="math-display"><math display="block"><mrow><msubsup><mi>M</mi><mi>X</mi><mo>&prime;</mo></msubsup><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mo>[</mo><mi>X</mi><msup><mi>e</mi><mn>0</mn></msup><mo>]</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mo>[</mo><mi>X</mi><mo>]</mo></mrow></math></div>
+            <p>Differentiate again:</p>
+            <div class="math-display"><math display="block"><mrow><msubsup><mi>M</mi><mi>X</mi><mo>&Prime;</mo></msubsup><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mo>[</mo><msup><mi>X</mi><mn>2</mn></msup><mo>]</mo></mrow></math></div>
+            <p>In general:</p>
+            <div class="math-display"><math display="block"><mrow><msubsup><mi>M</mi><mi>X</mi><mrow><mo>(</mo><mi>n</mi><mo>)</mo></mrow></msubsup><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mo>[</mo><msup><mi>X</mi><mi>n</mi></msup><mo>]</mo></mrow></math></div>
+          </section>
+
+          <section class="note-section">
+            <h2>6. The Distinction That Resolved the Confusion</h2>
+            <div class="two-col">
+              <div class="panel blue">
+                <h3>Taylor series: why this formula?</h3>
+                <p>It reveals that the powers of <span class="math-inline"><math><mi>t</mi></math></span> have the moments as coefficients.</p>
+                <div class="math-display"><math display="block"><mrow><msub><mi>M</mi><mi>X</mi></msub><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><munderover><mo>&#x2211;</mo><mrow><mi>n</mi><mo>=</mo><mn>0</mn></mrow><mi>&#x221E;</mi></munderover><mi mathvariant="double-struck">E</mi><mo>[</mo><msup><mi>X</mi><mi>n</mi></msup><mo>]</mo><mfrac><msup><mi>t</mi><mi>n</mi></msup><mrow><mi>n</mi><mo>!</mo></mrow></mfrac></mrow></math></div>
+              </div>
+              <div class="panel green">
+                <h3>Differentiation: how do we retrieve them?</h3>
+                <p>Differentiate the MGF and evaluate at zero to isolate one moment.</p>
+                <div class="math-display"><math display="block"><mrow><msubsup><mi>M</mi><mi>X</mi><mrow><mo>(</mo><mi>n</mi><mo>)</mo></mrow></msubsup><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mo>[</mo><msup><mi>X</mi><mi>n</mi></msup><mo>]</mo></mrow></math></div>
+              </div>
+            </div>
+            <div class="callout success"><strong>Final wording:</strong> Taylor expansion explains the design; differentiation extracts the moments.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>7. Bernoulli and Machine-Learning Bridge</h2>
+            <p><strong>Application bridge, not a textbook example:</strong> let <span class="math-inline"><math><mi>X</mi></math></span> be a classifier's error indicator: zero for correct and one for wrong. Then <span class="math-inline"><math><mi>X</mi><mo>&#x223C;</mo><mi>Bern</mi><mo>(</mo><mi>p</mi><mo>)</mo></math></span>, where <span class="math-inline"><math><mi>p</mi></math></span> is the model's error probability.</p>
+            <div class="math-display"><math display="block"><mrow><msub><mi>M</mi><mi>X</mi></msub><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mo>(</mo><mn>1</mn><mo>&#x2212;</mo><mi>p</mi><mo>)</mo><mo>+</mo><mi>p</mi><msup><mi>e</mi><mi>t</mi></msup></mrow></math></div>
+            <div class="math-display"><math display="block"><mrow><msubsup><mi>M</mi><mi>X</mi><mo>&prime;</mo></msubsup><mo>(</mo><mn>0</mn><mo>)</mo><mo>=</mo><mi>p</mi><mo>=</mo><mi mathvariant="double-struck">E</mi><mo>[</mo><mi>X</mi><mo>]</mo></mrow></math></div>
+            <p>So in this binary-error example, the first moment is the expected error rate. This connects the textbook's Bernoulli MGF to a simple machine-learning quantity.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>8. Questions That Unlocked the Topic</h2>
+            <div class="two-col">
+              <article class="question-card"><strong>“Is e<sup>tX</sup> a two-variable Taylor series?”</strong><span>No. Hold X fixed and expand in t.</span></article>
+              <article class="question-card"><strong>“Why do we multiply by X after differentiating?”</strong><span>The chain rule differentiates the exponent tX, producing X.</span></article>
+              <article class="question-card"><strong>“Why use Taylor series if derivatives already recover moments?”</strong><span>Taylor explains why the exponential was chosen; derivatives perform the extraction.</span></article>
+              <article class="question-card"><strong>“Was the MGF formula derived?”</strong><span>It was designed as a generating function whose coefficients encode the moments.</span></article>
+            </div>
+          </section>
+
+          <section class="note-section">
+            <h2>Final Takeaway</h2>
+            <div class="math-display"><math display="block"><mrow><mtext>Taylor series stores the moments</mtext><mo>;</mo><mspace width="1em"/><mtext>derivatives at zero retrieve them.</mtext></mrow></math></div>
+            <p>The exponential is useful because repeated differentiation keeps the exponential and repeatedly brings down powers of <span class="math-inline"><math><mi>X</mi></math></span>.</p>
+          </section>
+        </div>
+      </article>
+    </div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
