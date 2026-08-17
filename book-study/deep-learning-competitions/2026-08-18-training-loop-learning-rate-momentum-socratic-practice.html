@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Training Loop, Learning Rate, and Momentum: Socratic Practice | Book Study | Medici House</title>
+  <meta name="description" content="A Socratic practice note from 深度学习比赛知识自查表 covering the training loop, batch/step/epoch, gradient accumulation, learning rate scheduling, warmup, cosine decay, and momentum.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-display math{font-size:1.06rem;}
+    .math-inline{white-space:nowrap;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col,.five-step{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .five-step{grid-template-columns:repeat(5,minmax(0,1fr));margin-top:14px;}
+    .meta-tile,.panel,.step-card{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .step-card{text-align:center;font-weight:700;}
+    .step-card small{display:block;margin-top:6px;color:#777;font-weight:400;}
+    .panel.blue{background:#f0f5ff;border-color:#cddcff;}
+    .panel.green{background:#edf8f5;border-color:#c8e8df;}
+    .panel.gold{background:#fff8e8;border-color:#ead6a6;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .warning{border-left-color:#b27b19;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:8.2%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    .schedule{display:grid;grid-template-columns:1fr 2fr;gap:0;margin:14px 0;border:1px solid #ddd;border-radius:9px;overflow:hidden;}
+    .schedule div{padding:14px;text-align:center;font-weight:700;}
+    .schedule .warmup{background:#f0f5ff;}
+    .schedule .decay{background:#edf8f5;}
+    @media (max-width:900px){.meta-grid,.two-col,.five-step{grid-template-columns:1fr;}.schedule{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col,.five-step{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+      .math-display math{font-size:1rem;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Training Loop, Learning Rate, and Momentum: Socratic Practice</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-08-18T06:56:00+08:00">2026-08-18 06:56 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>This session followed pages 3–8 of <em>深度学习比赛知识自查表</em>. The path was deliberately incremental: first understand what each stage of training does, then connect batch size to gradient noise, then separate learning-rate direction from learning-rate step size, and finally add momentum as memory of previous gradients.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-08-18 06:56 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>深度学习比赛知识自查表</strong><span>73-page study source</span></div>
+              <div class="meta-tile"><strong>Pages 3–8</strong><span>training foundations covered in this session</span></div>
+              <div class="meta-tile"><strong>6 / 73</strong><span>8.2% source coverage</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>6 / 73 pages, 8.2%.</strong> Pages 1–2 are roadmap/checklist pages and were not studied in detail. Page 9 begins weight decay; the session paused before that topic was taught, so it is not counted yet.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. The Five-Part Training Loop</h2>
+            <div class="five-step" aria-label="Five stages of model training">
+              <div class="step-card">1. Batch<small>feed a small group of training samples</small></div>
+              <div class="step-card">2. Forward<small>run the current model and produce predictions</small></div>
+              <div class="step-card">3. Loss<small>measure how wrong those predictions are</small></div>
+              <div class="step-card">4. Backward<small>compute gradients for the parameters</small></div>
+              <div class="step-card">5. Optimizer<small>use gradients to update the parameters</small></div>
+            </div>
+            <div class="callout key-idea"><strong>Key distinction:</strong> backward computes the gradient; the optimizer performs the parameter update.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. A Linear Model Makes the Loop Concrete</h2>
+            <p>Use a simple model:</p>
+            <div class="math-display"><math display="block"><mrow><mover><mi>y</mi><mo>^</mo></mover><mo>=</mo><mi>a</mi><mi>x</mi><mo>+</mo><mi>b</mi></mrow></math></div>
+            <p><strong>Forward</strong> means evaluating the model with the current <span class="math-inline"><math><mi>a</mi></math></span> and <span class="math-inline"><math><mi>b</mi></math></span>. A regression loss can then be written as squared error:</p>
+            <div class="math-display"><math display="block"><mrow><mi>L</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo>(</mo><mover><mi>y</mi><mo>^</mo></mover><mo>−</mo><mi>y</mi><mo>)</mo></mrow><mn>2</mn></msup></mrow></math></div>
+            <p><strong>Backward</strong> computes gradients such as:</p>
+            <div class="math-display"><math display="block"><mrow><mfrac><mrow><mo>&#x2202;</mo><mi>L</mi></mrow><mrow><mo>&#x2202;</mo><mi>a</mi></mrow></mfrac><mo>=</mo><mo>(</mo><mover><mi>y</mi><mo>^</mo></mover><mo>−</mo><mi>y</mi><mo>)</mo><mi>x</mi><mo>,</mo><mspace width="1em"/><mfrac><mrow><mo>&#x2202;</mo><mi>L</mi></mrow><mrow><mo>&#x2202;</mo><mi>b</mi></mrow></mfrac><mo>=</mo><mover><mi>y</mi><mo>^</mo></mover><mo>−</mo><mi>y</mi></mrow></math></div>
+            <p>The <strong>optimizer</strong> then uses those gradients:</p>
+            <div class="math-display"><math display="block"><mrow><msub><mi>a</mi><mtext>new</mtext></msub><mo>=</mo><msub><mi>a</mi><mtext>old</mtext></msub><mo>−</mo><mi>η</mi><mfrac><mrow><mo>&#x2202;</mo><mi>L</mi></mrow><mrow><mo>&#x2202;</mo><mi>a</mi></mrow></mfrac></mrow></math></div>
+            <div class="callout"><strong>Mental model:</strong> forward answers the question, loss grades the answer, backward produces the error-attribution gradients, and the optimizer applies the correction.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>3. Batch, Step, and Epoch</h2>
+            <div class="two-col">
+              <div class="panel blue"><h3>Batch</h3><p>A small subset of training samples processed together.</p></div>
+              <div class="panel green"><h3>Step</h3><p>One batch is processed and one parameter update is made.</p></div>
+              <div class="panel gold"><h3>Epoch</h3><p>The complete training set has been passed through once.</p></div>
+              <div class="panel"><h3>Why multiple epochs?</h3><p>One pass may not be enough to learn; too many passes can lead toward memorization and overfitting, which is why early stopping is useful.</p></div>
+            </div>
+            <p>For 10,000 samples with batch size 100:</p>
+            <div class="math-display"><math display="block"><mrow><mfrac><mn>10000</mn><mn>100</mn></mfrac><mo>=</mo><mn>100</mn><mtext> steps per epoch</mtext></mrow></math></div>
+            <p>Five epochs therefore produce:</p>
+            <div class="math-display"><math display="block"><mrow><mn>5</mn><mo>×</mo><mn>100</mn><mo>=</mo><mn>500</mn><mtext> total steps</mtext></mrow></math></div>
+          </section>
+
+          <section class="note-section">
+            <h2>4. Batch Size and Gradient Noise</h2>
+            <p>The checklist’s intuition is that batch size determines how many samples contribute to each gradient estimate.</p>
+            <div class="two-col">
+              <div class="panel gold"><h3>Small batch</h3><p>Fewer samples per update means a noisier gradient estimate. It uses less GPU memory, and the noise can sometimes help generalization.</p></div>
+              <div class="panel green"><h3>Large batch</h3><p>More samples per update gives a steadier gradient estimate and higher throughput, but uses more GPU memory.</p></div>
+            </div>
+            <p>If GPU memory cannot hold a large batch, the source introduces <strong>gradient accumulation</strong>. For physical batch size 32 accumulated across four mini-batches:</p>
+            <div class="math-display"><math display="block"><mrow><mtext>effective batch size</mtext><mo>=</mo><mn>32</mn><mo>×</mo><mn>4</mn><mo>=</mo><mn>128</mn></mrow></math></div>
+            <p>The four gradients are accumulated first; the optimizer updates the weights once after the accumulation window.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>5. Learning Rate: Step Size, Not Direction</h2>
+            <p>The gradient determines the local direction. The learning rate determines how large a step the optimizer takes:</p>
+            <div class="math-display"><math display="block"><mrow><msub><mi>θ</mi><mtext>new</mtext></msub><mo>=</mo><msub><mi>θ</mi><mtext>old</mtext></msub><mo>−</mo><mi>η</mi><mo>∇</mo><mi>L</mi></mrow></math></div>
+            <div class="two-col">
+              <div class="panel gold"><h3>Learning rate too large</h3><p>The optimizer can overshoot, oscillate, or even diverge.</p></div>
+              <div class="panel blue"><h3>Learning rate too small</h3><p>Loss may still decrease, but training becomes extremely slow.</p></div>
+            </div>
+          </section>
+
+          <section class="note-section">
+            <h2>6. Warmup and Cosine Decay</h2>
+            <p>The session corrected one subtle intuition: training often uses a relatively high learning rate early and lowers it later, but many modern schedules insert a short <strong>warmup</strong> first.</p>
+            <div class="schedule" aria-label="Learning rate schedule">
+              <div class="warmup">Warmup<br><small>very small LR → target LR</small></div>
+              <div class="decay">Normal training / cosine decay<br><small>target LR → gradually smaller LR</small></div>
+            </div>
+            <div class="math-display"><math display="block"><mrow><mn>0</mn><mo>↗</mo><msub><mi>η</mi><mtext>max</mtext></msub><mo>↘</mo><mn>0</mn></mrow></math></div>
+            <p>The checklist describes warmup as commonly taking roughly the first 5–10% of steps. After warmup, the learning rate begins decreasing; cosine decay is presented as a common default.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>7. Momentum: Remembering Previous Gradients</h2>
+            <p>Without momentum, the update reacts mainly to the current batch. Momentum keeps an accumulated velocity:</p>
+            <div class="math-display"><math display="block"><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mi>β</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>g</mi><mi>t</mi></msub></mrow></math></div>
+            <div class="math-display"><math display="block"><mrow><msub><mi>θ</mi><mi>t</mi></msub><mo>=</mo><msub><mi>θ</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>−</mo><mi>η</mi><msub><mi>v</mi><mi>t</mi></msub></mrow></math></div>
+            <p>If successive gradients point in roughly the same direction, momentum reinforces that direction and accelerates movement. If <span class="math-inline"><math><mi>β</mi><mo>=</mo><mn>0</mn></math></span>, the previous velocity is forgotten. The checklist gives about <span class="math-inline"><math><mi>β</mi><mo>=</mo><mn>0.9</mn></math></span> as a common value, while very large momentum such as 0.99 can carry too much inertia and cause overshooting or oscillation near the optimum.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>8. What Is Firm Now</h2>
+            <table aria-label="Socratic checkpoints from the session"><thead><tr><th>Concept</th><th>Current understanding</th></tr></thead><tbody>
+              <tr><td>Forward vs backward</td><td>Forward computes predictions; backward computes gradients such as ∂L/∂a and ∂L/∂b.</td></tr>
+              <tr><td>Backward vs optimizer</td><td>Backward reports gradients; the optimizer changes weights using those gradients.</td></tr>
+              <tr><td>Batch size</td><td>Smaller batches give noisier gradient estimates; larger batches are steadier but use more memory.</td></tr>
+              <tr><td>Gradient accumulation</td><td>Accumulate gradients across several small batches, then update once to approximate a larger effective batch.</td></tr>
+              <tr><td>Learning rate</td><td>Controls step size, not gradient direction.</td></tr>
+              <tr><td>Warmup</td><td>Briefly ramps LR from very small to target LR before the decay phase.</td></tr>
+              <tr><td>Momentum</td><td>Adds memory/inertia from previous gradients; too much can overshoot.</td></tr>
+            </tbody></table>
+            <div class="callout warning"><strong>Next study point:</strong> page 9 begins <em>Weight Decay</em>. It was introduced as the next topic but not yet studied, so it is intentionally left out of coverage.</div>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
