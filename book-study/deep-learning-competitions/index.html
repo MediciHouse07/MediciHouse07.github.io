@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Deep Learning Competitions | Book Study | Medici House</title>
+  <meta name="description" content="Book Study notes for deep learning competition fundamentals and practical model-training methodology.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0;}
+    .book-study-actions a,.note-link{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .book-meta{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;}
+    .book-meta span{border:1px solid #ddd;border-radius:999px;padding:4px 10px;color:#666;background:#fafafa;font-size:.86rem;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;width:8.2%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    .coverage-line{color:#666;margin:0 0 22px;}
+    .note-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px;}
+    .note-card{border:1px solid #ddd;border-radius:8px;padding:18px;background:#fff;}
+    .note-card h3{margin:0 0 10px;font-size:1.08rem;}
+    .note-card p{color:#666;margin:0 0 14px;}
+    .note-date{color:#888;font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px;}
+    @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header"><h1 class="post-title" itemprop="name headline">Deep Learning Competitions</h1><div class="post-meta"><span class="post-meta-item"><i class="fa fa-book fa-fw"></i> Book Study subject shelf</span></div></header>
+        <div class="post-body" itemprop="articleBody">
+          <p>Notes from <em>深度学习比赛知识自查表</em>, following its competition-oriented path from training and evaluation foundations into general methodology, tabular competitions, computer vision, LLM fine-tuning, efficiency, hardware, and post-competition review.</p>
+          <div class="book-study-actions"><a href="/book-study/">Back to Book Study</a><a class="secondary" href="/">Home</a></div>
+          <div class="book-meta" aria-label="Deep learning competitions metadata"><span>1 note</span><span>1 study source tracked</span><span>6 pages covered</span><span>73 pages total</span></div>
+          <div class="progress-track" aria-hidden="true"><span class="progress-bar" style="width:8.2%;"></span></div>
+          <p class="coverage-line"><strong>6 / 73 pages, 8.2%.</strong> Current detailed coverage is pages 3–8: training loop, batch/step/epoch, batch size and gradient accumulation, learning rate scheduling, warmup/cosine decay, and momentum. Pages 1–2 are roadmap/checklist pages and page 9 starts the next uncompleted topic, weight decay.</p>
+
+          <div class="note-grid" aria-label="Deep learning competition notes">
+            <article class="note-card">
+              <div class="note-date">2026-08-18</div>
+              <h3>Training Loop, Learning Rate, and Momentum: Socratic Practice</h3>
+              <p>A step-by-step practice note connecting batch → forward → loss → backward → optimizer, then building intuition for step/epoch, gradient accumulation, learning-rate schedules, warmup, cosine decay, and momentum.</p>
+              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-18-training-loop-learning-rate-momentum-socratic-practice.html">Open note</a>
+            </article>
+          </div>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
