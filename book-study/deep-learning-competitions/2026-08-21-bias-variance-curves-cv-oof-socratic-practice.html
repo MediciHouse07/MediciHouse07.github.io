@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Bias, Variance, Diagnostic Curves, CV, and OOF: Socratic Practice | Book Study | Medici House</title>
+  <meta name="description" content="A Socratic practice note from 深度学习比赛知识自查表 covering bias versus variance, learning and validation curves, two layers of optimization, 5-fold cross-validation, and OOF predictions.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-display math{font-size:1.06rem;}
+    .math-inline{white-space:nowrap;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col,.three-col,.flow{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .three-col{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .flow{grid-template-columns:repeat(4,minmax(0,1fr));margin:14px 0;}
+    .meta-tile,.panel,.flow-step{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .panel.blue{background:#f0f5ff;border-color:#cddcff;}
+    .panel.green{background:#edf8f5;border-color:#c8e8df;}
+    .panel.gold{background:#fff8e8;border-color:#ead6a6;}
+    .panel.rose{background:#fff2f4;border-color:#efc5cd;}
+    .flow-step{text-align:center;font-weight:700;display:flex;align-items:center;justify-content:center;min-height:68px;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .warning{border-left-color:#b27b19;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:19.2%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    .curve-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:14px;}
+    .curve-card{border:1px solid #ddd;border-radius:10px;padding:14px;background:#fff;min-width:0;}
+    .curve-card svg{display:block;width:100%;height:auto;}
+    .caption{color:#777;font-size:.9rem;margin:8px 0 0;}
+    @media (max-width:900px){.meta-grid,.two-col,.three-col,.flow,.curve-grid{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col,.three-col,.curve-grid{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+      .math-display math{font-size:1rem;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Bias, Variance, Diagnostic Curves, CV, and OOF: Socratic Practice</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-08-21T07:07:00+08:00">2026-08-21 07:07 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>This session finished the core bias-versus-variance reasoning in Part 0, connected learning and validation curves to model selection, then crossed into Part 1 with 5-fold cross-validation and out-of-fold predictions.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-08-21 07:07 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>Part 0 → Part 1</strong><span>training/evaluation into competition methodology</span></div>
+              <div class="meta-tile"><strong>Pages 14–17</strong><span>newly counted coverage</span></div>
+              <div class="meta-tile"><strong>14 / 73</strong><span>19.2% overall coverage</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>14 / 73 pages, 19.2%.</strong> Pages 14–17 are newly counted. Page 13’s broad metric catalog was intentionally skimmed, while page 18 is only partially covered because nested CV has not yet been studied.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. High Bias and High Variance</h2>
+            <p>The practical diagnostic mapping used in the checklist is:</p>
+            <div class="two-col">
+              <div class="panel gold"><h3>High bias → underfitting</h3><p>The model cannot learn the training pattern well. Training performance is poor, and validation performance is also poor.</p></div>
+              <div class="panel rose"><h3>High variance → overfitting</h3><p>The model fits the training data very well but changes too much with the particular training sample, so validation performance is much worse.</p></div>
+            </div>
+            <div class="callout key-idea"><strong>Ideal case:</strong> strong training performance together with strong validation performance suggests both bias and variance are reasonably low.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. What To Change After the Diagnosis</h2>
+            <table aria-label="Bias and variance actions">
+              <thead><tr><th>Diagnosis</th><th>Typical evidence</th><th>Direction to try</th></tr></thead>
+              <tbody>
+                <tr><td>High bias</td><td>Training and validation both weak</td><td>More capable model, better features, or weaker regularization</td></tr>
+                <tr><td>High variance</td><td>Training strong, validation much weaker</td><td>More data, stronger regularization, early stopping, or a smaller model</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="note-section">
+            <h2>3. Validation Curve vs Learning Curve</h2>
+            <p>The two curves answer different questions. A <strong>validation curve</strong> varies one hyperparameter. A <strong>learning curve</strong> varies how much training data is used.</p>
+            <div class="curve-grid">
+              <div class="curve-card">
+                <h3>Validation curve</h3>
+                <svg viewBox="0 0 500 260" role="img" aria-label="Conceptual validation curve showing training and validation score as a hyperparameter changes">
+                  <rect x="0" y="0" width="500" height="260" rx="14" fill="#fafafa"/>
+                  <line x1="55" y1="215" x2="455" y2="215" stroke="#bbb" stroke-width="2"/>
+                  <line x1="55" y1="215" x2="55" y2="35" stroke="#bbb" stroke-width="2"/>
+                  <path d="M65 70 C150 80 250 105 445 175" fill="none" stroke="#444" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M65 190 C150 130 245 85 330 110 C385 125 420 155 445 185" fill="none" stroke="#888" stroke-width="4" stroke-linecap="round"/>
+                  <text x="355" y="68" font-size="16" fill="#444">training</text>
+                  <text x="318" y="105" font-size="16" fill="#666">validation</text>
+                  <text x="170" y="245" font-size="15" fill="#666">hyperparameter value</text>
+                </svg>
+                <p class="caption">Use the validation metric that matters for the task—for example F1 if F1 is the competition metric.</p>
+              </div>
+              <div class="curve-card">
+                <h3>Learning curve</h3>
+                <svg viewBox="0 0 500 260" role="img" aria-label="Conceptual learning curve showing training and validation score as training-set size increases">
+                  <rect x="0" y="0" width="500" height="260" rx="14" fill="#fafafa"/>
+                  <line x1="55" y1="215" x2="455" y2="215" stroke="#bbb" stroke-width="2"/>
+                  <line x1="55" y1="215" x2="55" y2="35" stroke="#bbb" stroke-width="2"/>
+                  <path d="M65 65 C155 80 270 100 445 112" fill="none" stroke="#444" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M65 200 C150 165 265 130 445 118" fill="none" stroke="#888" stroke-width="4" stroke-linecap="round"/>
+                  <text x="365" y="92" font-size="16" fill="#444">training</text>
+                  <text x="350" y="145" font-size="16" fill="#666">validation</text>
+                  <text x="180" y="245" font-size="15" fill="#666">training data size</text>
+                </svg>
+                <p class="caption">If more data narrows a large train–validation gap, that is evidence that additional data is helping reduce variance.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="note-section">
+            <h2>4. Two Layers of Optimization</h2>
+            <p>The session separated two connected but different levels:</p>
+            <div class="two-col">
+              <div class="panel blue"><h3>Layer 1 — train one model</h3><p>Hold the setup fixed and run batch → forward → loss → backward → optimizer. The loss trains the model parameters.</p></div>
+              <div class="panel green"><h3>Layer 2 — choose the setup</h3><p>Vary hyperparameters, data amount, or model design; train a model for each setup; then compare those trained models using the validation metric.</p></div>
+            </div>
+            <div class="callout key-idea"><strong>Compact distinction:</strong> Layer 1 optimizes parameters. Layer 2 searches hyperparameters and training design.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>5. Enter Part 1: 5-Fold Cross-Validation</h2>
+            <p>Split the training data into five folds. In each round, train on four folds and validate on the one fold that was held out. Rotate until every fold has been the validation fold once.</p>
+            <div class="flow" aria-label="Five-fold cross-validation idea">
+              <div class="flow-step">Split into 5 folds</div>
+              <div class="flow-step">Train on 4</div>
+              <div class="flow-step">Validate on 1 unseen fold</div>
+              <div class="flow-step">Rotate and average</div>
+            </div>
+            <p>The average CV score is:</p>
+            <div class="math-display"><math display="block"><mtext>CV score</mtext><mo>=</mo><mfrac><mrow><msub><mi>s</mi><mn>1</mn></msub><mo>+</mo><msub><mi>s</mi><mn>2</mn></msub><mo>+</mo><msub><mi>s</mi><mn>3</mn></msub><mo>+</mo><msub><mi>s</mi><mn>4</mn></msub><mo>+</mo><msub><mi>s</mi><mn>5</mn></msub></mrow><mn>5</mn></mfrac></math></div>
+            <p>The reason for using a held-out fold is to estimate generalization on data that the model did not train on.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>6. OOF = Out-of-Fold Predictions</h2>
+            <p>OOF stands for <strong>Out-of-Fold</strong>. It usually refers to the predictions made for the held-out validation fold in each CV round.</p>
+            <p>After all folds are processed, those validation predictions are <strong>stitched back</strong>: each prediction is placed back at the original training sample’s position, producing one full-length prediction vector for the training set.</p>
+            <div class="math-display"><math display="block"><mtext>OOF predictions</mtext><mo>=</mo><mtext>fold 1 validation predictions</mtext><mo>+</mo><mo>&#x22EF;</mo><mo>+</mo><mtext>fold 5 validation predictions</mtext></math></div>
+            <div class="callout key-idea"><strong>Key property:</strong> every sample’s OOF prediction comes from a model that did not train on that sample.</div>
+            <p>中文直觉：<strong>把每一折的验证预测按原训练集的样本位置拼回去</strong>，最终每个训练样本都有一个来自“没有见过它”的模型的预测。</p>
+          </section>
+
+          <section class="note-section">
+            <h2>7. Where We Stop</h2>
+            <p>Part 0’s core conceptual path is complete. In Part 1, the next unstudied point on page 18 is <strong>nested cross-validation</strong>; that is the next continuation point.</p>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
