@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Nested Cross-Validation: Inner Tuning and Outer Evaluation | Book Study | Medici House</title>
+  <meta name="description" content="A Socratic practice note from 深度学习比赛知识自查表 covering nested cross-validation, inner hyperparameter tuning, outer evaluation, and the worked 5 x 4 x 10 example.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-display math{font-size:1.06rem;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col,.five-col{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .five-col{grid-template-columns:repeat(5,minmax(0,1fr));}
+    .meta-tile,.panel,.fold-card{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .panel.blue{background:#f0f5ff;border-color:#cddcff;}
+    .panel.green{background:#edf8f5;border-color:#c8e8df;}
+    .panel.gold{background:#fff8e8;border-color:#ead6a6;}
+    .panel.rose{background:#fff2f4;border-color:#efc5cd;}
+    .fold-card{text-align:center;font-weight:700;}
+    .fold-card small{display:block;color:#777;font-weight:400;margin-top:6px;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .warning{border-left-color:#b27b19;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:20.5%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    @media (max-width:900px){.meta-grid,.two-col,.five-col{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col,.five-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+      .math-display math{font-size:1rem;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Nested Cross-Validation: Inner Tuning and Outer Evaluation</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-08-22T08:21:00+08:00">2026-08-22 08:21 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>This session clarified the nested-CV warning in Part 1 of <em>深度学习比赛知识自查表</em>: if the same CV is used both to choose hyperparameters and to report final performance, that performance estimate can be optimistic. The source states the clean separation as <strong>inner CV tunes; outer CV evaluates</strong>.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-08-22 08:21 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>Part 1 · page 18</strong><span>nested cross-validation</span></div>
+              <div class="meta-tile"><strong>5 × 4 × 10</strong><span>worked illustrative setup</span></div>
+              <div class="meta-tile"><strong>15 / 73</strong><span>20.5% overall coverage</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>15 / 73 pages, 20.5%.</strong> Page 18 is newly counted as covered. The numerical 5 × 4 × 10 example below is a worked illustration used in the practice session; the source itself states the nested-CV principle rather than this exact count.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. Why Ordinary CV Can Become an Optimistic Judge</h2>
+            <p>Suppose ordinary CV compares learning rates and reports:</p>
+            <div class="two-col">
+              <div class="panel blue"><h3>Learning rate 0.1</h3><p>CV score: 0.75</p></div>
+              <div class="panel green"><h3>Learning rate 0.01</h3><p>CV score: 0.82</p></div>
+            </div>
+            <p>The CV result has already influenced the choice: 0.01 is selected because it scored 0.82. Therefore, the same 0.82 is no longer a completely fresh evaluation of the selection decision.</p>
+            <div class="callout key-idea"><strong>Core source point:</strong> separate the data used to tune from the data used to judge the tuned procedure.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. Fixed Worked Example</h2>
+            <p>Keep the example consistent throughout:</p>
+            <div class="five-col" aria-label="Five outer folds">
+              <div class="fold-card">A</div><div class="fold-card">B</div><div class="fold-card">C</div><div class="fold-card">D</div><div class="fold-card">E</div>
+            </div>
+            <p>Use 5 outer splits. Inside each outer split, the remaining 4 folds form a 4-fold inner CV. Test exactly 10 candidate learning rates.</p>
+            <div class="math-display"><math display="block"><mn>5</mn><mo>×</mo><mn>4</mn><mo>×</mo><mn>10</mn><mo>=</mo><mn>200</mn></math></div>
+            <p>So this illustrative setup requires <strong>200 inner-CV model fits</strong>.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>3. What Happens Inside One Outer Split</h2>
+            <p>Take the split where <strong>E is kept aside</strong>. Only A, B, C, and D participate in the inner CV.</p>
+            <div class="math-display"><math display="block"><mrow><mi>A</mi><mo>+</mo><mi>B</mi><mo>+</mo><mi>C</mi><mo>+</mo><mi>D</mi></mrow><mspace width="1em"/><mo>|</mo><mspace width="1em"/><mi>E</mi></math></div>
+            <p>For each of the 10 candidate learning rates, run 4 inner-fold validations. Each candidate therefore produces 4 validation scores. Average those 4 scores to obtain one mean inner-CV score for that learning rate.</p>
+            <table aria-label="Inner CV score structure">
+              <thead><tr><th>Candidate</th><th>Raw inner-fold scores</th><th>After averaging</th></tr></thead>
+              <tbody>
+                <tr><td>Learning rate #1</td><td>4 validation scores</td><td>1 mean CV score</td></tr>
+                <tr><td>Learning rate #2</td><td>4 validation scores</td><td>1 mean CV score</td></tr>
+                <tr><td>…</td><td>…</td><td>…</td></tr>
+                <tr><td>Learning rate #10</td><td>4 validation scores</td><td>1 mean CV score</td></tr>
+              </tbody>
+            </table>
+            <p>Before averaging, this outer split has 40 raw inner-fold validation scores. After averaging, it has <strong>10 mean CV scores</strong>. The learning rate with the best mean score is selected for this outer split.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>4. The Outer Evaluation Step</h2>
+            <p>Suppose the inner CV for the E-aside split selects learning rate 0.01. Now train one fresh model on all of A + B + C + D using 0.01, then predict the untouched E fold.</p>
+            <div class="math-display"><math display="block"><mrow><mi>A</mi><mo>+</mo><mi>B</mi><mo>+</mo><mi>C</mi><mo>+</mo><mi>D</mi></mrow><mo>→</mo><mtext>train with selected learning rate</mtext><mo>→</mo><mi>E</mi><mo>→</mo><mtext>outer score</mtext></math></div>
+            <p>Repeat the same process with D, C, B, and A kept aside in turn. This produces <strong>5 outer evaluation scores</strong>.</p>
+            <div class="callout key-idea"><strong>Outer CV’s job:</strong> evaluate the result of the tuning procedure on data that did not participate in that split’s hyperparameter selection.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>5. How the Five Outer Scores Are Used</h2>
+            <p>Average the five outer scores:</p>
+            <div class="math-display"><math display="block"><mtext>nested CV score</mtext><mo>=</mo><mfrac><mrow><msub><mi>s</mi><mn>1</mn></msub><mo>+</mo><msub><mi>s</mi><mn>2</mn></msub><mo>+</mo><msub><mi>s</mi><mn>3</mn></msub><mo>+</mo><msub><mi>s</mi><mn>4</mn></msub><mo>+</mo><msub><mi>s</mi><mn>5</mn></msub></mrow><mn>5</mn></mfrac></math></div>
+            <p>This average estimates how well the whole procedure — tune hyperparameters with inner CV, then train — generalizes.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>6. Total Fits in the Worked Example</h2>
+            <p>The fixed illustrative setup contains:</p>
+            <div class="two-col">
+              <div class="panel blue"><h3>Inner tuning fits</h3><p>5 outer splits × 10 learning rates × 4 inner folds = <strong>200</strong>.</p></div>
+              <div class="panel green"><h3>Outer refits</h3><p>One fresh refit for each of the 5 outer splits = <strong>5</strong>.</p></div>
+            </div>
+            <div class="math-display"><math display="block"><mn>200</mn><mo>+</mo><mn>5</mn><mo>=</mo><mn>205</mn><mspace width="0.5em"/><mtext>model trainings</mtext></math></div>
+            <p>The number 205 belongs to this worked example, not to the source text as a universal nested-CV requirement.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>7. The Terminology That Caused Confusion</h2>
+            <div class="two-col">
+              <div class="panel gold"><h3>Local hyperparameter selection</h3><p>Inside each outer split, inner CV selects one learning rate for that split. Across five outer splits, these selected learning rates may differ.</p></div>
+              <div class="panel blue"><h3>Nested CV as a whole</h3><p>Its purpose here is to evaluate the tuning procedure. The five local winners are not automatically combined into one final production learning rate.</p></div>
+            </div>
+            <div class="callout warning"><strong>Source boundary:</strong> the checklist states “inner CV tunes, outer CV evaluates.” The later question of choosing one final production hyperparameter is not explained in this page of the source; any full-data-CV workflow for that final choice is additional standard practice, not a statement from the checklist itself.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>Final Mental Model</h2>
+            <div class="callout key-idea"><strong>Inner CV:</strong> for one outer split, compare candidate hyperparameters and select the best mean inner-validation score.</div>
+            <div class="callout key-idea"><strong>Outer CV:</strong> train with that selected setting on the whole outer-training portion and judge it on the untouched outer fold.</div>
+            <div class="callout key-idea"><strong>Nested-CV result:</strong> average the five outer scores to estimate the generalization of the whole tuning procedure.</div>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
