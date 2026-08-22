@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Public vs Private LB, Leakage, and Adversarial Validation | Book Study | Medici House</title>
+  <meta name="description" content="A Socratic practice note from 深度学习比赛知识自查表 covering Public vs Private LB, CV-vs-LB trust, leakage, adversarial validation, ROC/AUC, and competition-format limits.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-display math{font-size:1.06rem;}
+    .math-inline{white-space:nowrap;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col,.three-col,.flow{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .three-col{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .flow{grid-template-columns:repeat(4,minmax(0,1fr));margin:14px 0;}
+    .meta-tile,.panel,.flow-step{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .panel.blue{background:#f0f5ff;border-color:#cddcff;}
+    .panel.green{background:#edf8f5;border-color:#c8e8df;}
+    .panel.gold{background:#fff8e8;border-color:#ead6a6;}
+    .panel.rose{background:#fff2f4;border-color:#efc5cd;}
+    .flow-step{text-align:center;font-weight:700;display:flex;align-items:center;justify-content:center;min-height:68px;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .warning{border-left-color:#b27b19;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:21.9%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    .study-figure{margin:16px 0;border:1px solid #ddd;border-radius:10px;padding:10px;background:#fff;}
+    .study-figure svg{display:block;width:100%;height:auto;}
+    .study-figure figcaption{margin-top:8px;color:#777;font-size:.9rem;text-align:left;}
+    @media (max-width:900px){.meta-grid,.two-col,.three-col,.flow{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col,.three-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+      .math-display math{font-size:1rem;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Public vs Private LB, Leakage, and Adversarial Validation</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-08-23T07:52:00+08:00">2026-08-23 07:52 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>This session continued Part 1 of <em>深度学习比赛知识自查表</em>: Public vs Private leaderboard behavior, why CV should drive decisions, common reasons CV and LB disagree, data leakage, adversarial validation, ROC/AUC, and the limitation that adversarial validation only compares feature sets that are actually visible.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-08-23 07:52 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>Part 1 · page 19</strong><span>Public vs Private LB</span></div>
+              <div class="meta-tile"><strong>Page 20 selective</strong><span>drift / adversarial validation</span></div>
+              <div class="meta-tile"><strong>16 / 73</strong><span>21.9% overall coverage</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>16 / 73 pages, 21.9%.</strong> Page 19 is newly counted as fully covered. The adversarial-validation material from page 20 was studied in depth, but page 20 also contains submission/debugging material that remains unfinished, so page 20 is not yet counted as fully covered.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. Public LB vs Private LB</h2>
+            <div class="two-col">
+              <div class="panel blue"><h3>Public LB</h3><p>A visible score during the competition, based on only part of the hidden labels in the common leaderboard setup described by the source.</p></div>
+              <div class="panel gold"><h3>Private LB</h3><p>The hidden portion used for the final ranking. A solution tuned too aggressively to the Public subset can move sharply when the Private ranking is revealed.</p></div>
+            </div>
+            <div class="callout key-idea"><strong>Source principle:</strong> Public LB is a noisy sample, not the main optimization target. Use CV as the daily decision tool and LB mainly to check whether CV is broadly aligned.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. Why Leaderboards Shake</h2>
+            <p>The source explains Public LB as a sample-based estimate. If two solutions are extremely close, some of their rank difference can simply be sampling noise. Repeatedly choosing whatever looks best on Public LB risks adapting to that particular subset rather than to the underlying problem.</p>
+            <div class="flow" aria-label="Leaderboard overfitting flow"><div class="flow-step">Submit many variants</div><div class="flow-step">Observe Public LB</div><div class="flow-step">Prefer Public-noise winners</div><div class="flow-step">Private LB reshuffles</div></div>
+          </section>
+
+          <section class="note-section">
+            <h2>3. When CV and LB Disagree</h2>
+            <p>The checklist says to investigate the validation and submission pipeline before assuming the model itself is the only problem. High-value suspects include an inappropriate CV split, data leakage, train/test distribution drift, preprocessing mismatch, and submission-format or ID-order bugs.</p>
+            <div class="three-col">
+              <div class="panel rose"><h3>Leakage</h3><p>Training or CV uses information that should have been unavailable, making local validation too optimistic.</p></div>
+              <div class="panel gold"><h3>Distribution drift</h3><p>Train and test feature distributions differ, so a random local split may not simulate the real evaluation population.</p></div>
+              <div class="panel blue"><h3>Pipeline mismatch</h3><p>Training and inference use different preprocessing, class ordering, IDs, or other mechanics.</p></div>
+            </div>
+          </section>
+
+          <section class="note-section">
+            <h2>4. Adversarial Validation</h2>
+            <p>The source proposes a direct drift test: temporarily label official training rows as 0 and visible test rows as 1, then train a classifier whose only job is to distinguish where each row came from.</p>
+            <div class="math-display"><math display="block"><mtext>train row</mtext><mo>→</mo><mn>0</mn><mspace width="2em"/><mtext>test row</mtext><mo>→</mo><mn>1</mn></math></div>
+            <p>Use shared predictor features that exist in both sets. Do not use the true competition target, and do not include a trivial source-indicator feature.</p>
+            <div class="two-col">
+              <div class="panel green"><h3>AUC ≈ 0.5</h3><p>The classifier is close to random guessing, so train and test are difficult to distinguish from the supplied features.</p></div>
+              <div class="panel rose"><h3>High AUC</h3><p>The classifier separates train and test easily, which is evidence of distribution drift. Feature importance can help locate which columns drive the difference.</p></div>
+            </div>
+          </section>
+
+          <section class="note-section">
+            <h2>5. ROC Coordinates and AUC</h2>
+            <p>Each point on the ROC curve comes from one classification threshold. For that threshold, compute:</p>
+            <div class="math-display"><math display="block"><mtext>TPR</mtext><mo>=</mo><mfrac><mi>TP</mi><mrow><mi>TP</mi><mo>+</mo><mi>FN</mi></mrow></mfrac><mspace width="2em"/><mtext>FPR</mtext><mo>=</mo><mfrac><mi>FP</mi><mrow><mi>FP</mi><mo>+</mo><mi>TN</mi></mrow></mfrac></math></div>
+            <p>The ROC coordinate is <strong>(FPR, TPR)</strong>. Lowering the threshold usually catches more positives, which raises TPR, but it can also create more false positives, which raises FPR.</p>
+            <figure class="study-figure">
+              <svg viewBox="0 0 760 430" role="img" aria-label="Illustrative ROC curve with false positive rate on the x-axis and true positive rate on the y-axis">
+                <rect x="0" y="0" width="760" height="430" rx="16" fill="#fafafa"/>
+                <line x1="90" y1="350" x2="690" y2="350" stroke="#555" stroke-width="2"/>
+                <line x1="90" y1="350" x2="90" y2="55" stroke="#555" stroke-width="2"/>
+                <line x1="90" y1="350" x2="690" y2="55" stroke="#aaa" stroke-width="2" stroke-dasharray="8 8"/>
+                <path d="M90 350 C125 235 170 150 245 110 C355 52 500 62 690 55" fill="none" stroke="#222" stroke-width="5" stroke-linecap="round"/>
+                <circle cx="160" cy="175" r="7" fill="#222"/><circle cx="245" cy="110" r="7" fill="#222"/><circle cx="390" cy="75" r="7" fill="#222"/>
+                <text x="330" y="405" font-size="18" fill="#333">False Positive Rate (FPR)</text>
+                <text transform="translate(28 260) rotate(-90)" font-size="18" fill="#333">True Positive Rate (TPR)</text>
+                <text x="500" y="205" font-size="16" fill="#777">random ≈ diagonal</text>
+                <text x="118" y="92" font-size="16" fill="#333">better ROC bends toward top-left</text>
+              </svg>
+              <figcaption>ROC changes as the threshold changes; AUC summarizes the ranking/separation quality over all thresholds.</figcaption>
+            </figure>
+            <div class="callout key-idea"><strong>Useful intuition:</strong> AUC ≈ 0.5 means near-random ranking; AUC = 1 means perfect separability for the supplied features.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>6. Competition-Format Caveat</h2>
+            <p><strong>Supplemental clarification from the study discussion, not a claim made explicitly by the source:</strong> adversarial validation can only compare feature sets that participants can actually see.</p>
+            <div class="two-col">
+              <div class="panel green"><h3>Visible evaluation features</h3><p>If the competition exposes the real evaluation test features while hiding only labels, train-vs-test adversarial validation can directly probe drift against those evaluation rows.</p></div>
+              <div class="panel rose"><h3>Fully hidden evaluation data</h3><p>If the real scoring set hides both features and labels, you cannot directly test train-vs-final-evaluation drift. A visible dummy or local test set can only tell you about itself.</p></div>
+            </div>
+          </section>
+
+          <section class="note-section">
+            <h2>7. Session Takeaways</h2>
+            <ul>
+              <li>Use CV as the main modeling decision tool; Public LB is noisy and can be overfit.</li>
+              <li>When CV and LB diverge, inspect split design, leakage, drift, preprocessing, and submission mechanics.</li>
+              <li>Adversarial validation reframes “train or test?” as a temporary binary classification problem.</li>
+              <li>ROC points are built from threshold-specific FPR and TPR; AUC summarizes overall separability.</li>
+              <li>Adversarial validation only works against feature distributions you can actually observe.</li>
+            </ul>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
