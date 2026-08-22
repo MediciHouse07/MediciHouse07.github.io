@@ -35,7 +35,7 @@
     .book-meta{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;}
     .book-meta span{border:1px solid #ddd;border-radius:999px;padding:4px 10px;color:#666;background:#fafafa;font-size:.86rem;}
     .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
-    .progress-bar{display:block;width:19.2%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    .progress-bar{display:block;width:20.5%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
     .coverage-line{color:#666;margin:0 0 22px;}
     .note-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px;}
     .note-card{border:1px solid #ddd;border-radius:8px;padding:18px;background:#fff;}
@@ -69,11 +69,17 @@
         <div class="post-body" itemprop="articleBody">
           <p>Notes from <em>深度学习比赛知识自查表</em>, following its competition-oriented path from training and evaluation foundations into general methodology, tabular competitions, computer vision, LLM fine-tuning, efficiency, hardware, and post-competition review.</p>
           <div class="book-study-actions"><a href="/book-study/">Back to Book Study</a><a class="secondary" href="/">Home</a></div>
-          <div class="book-meta" aria-label="Deep learning competitions metadata"><span>4 notes</span><span>1 study source tracked</span><span>14 pages covered</span><span>73 pages total</span></div>
-          <div class="progress-track" aria-hidden="true"><span class="progress-bar" style="width:19.2%;"></span></div>
-          <p class="coverage-line"><strong>14 / 73 pages, 19.2%.</strong> Counted coverage includes pages 3–12 and 14–17: training mechanics and tuning foundations, bias/variance diagnosis, diagnostic curves, and the opening of Part 1 with 5-fold CV and OOF predictions. Page 13’s metric catalog was intentionally skimmed; page 18 is only partially covered because nested CV is next.</p>
+          <div class="book-meta" aria-label="Deep learning competitions metadata"><span>5 notes</span><span>1 study source tracked</span><span>15 pages covered</span><span>73 pages total</span></div>
+          <div class="progress-track" aria-hidden="true"><span class="progress-bar" style="width:20.5%;"></span></div>
+          <p class="coverage-line"><strong>15 / 73 pages, 20.5%.</strong> Counted coverage includes pages 3–12 and 14–18: training mechanics and tuning foundations, bias/variance diagnosis, diagnostic curves, 5-fold CV and OOF predictions, plus nested CV with inner tuning and outer evaluation. Page 13’s metric catalog was intentionally skimmed.</p>
 
           <div class="note-grid" aria-label="Deep learning competition notes">
+            <article class="note-card">
+              <div class="note-date">2026-08-22</div>
+              <h3>Nested Cross-Validation: Inner Tuning and Outer Evaluation</h3>
+              <p>A Socratic clarification of nested CV using one fixed example: 5 outer splits, 4 inner folds, 10 candidate learning rates, 200 inner fits, 5 outer refits, and the average of 5 outer scores as the final nested-CV estimate.</p>
+              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-22-nested-cross-validation-inner-outer-socratic-practice.html">Open note</a>
+            </article>
             <article class="note-card">
               <div class="note-date">2026-08-21</div>
               <h3>Bias, Variance, Diagnostic Curves, CV, and OOF: Socratic Practice</h3>
