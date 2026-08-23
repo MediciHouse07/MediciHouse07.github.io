@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Submission Debugging, Label Evidence, and TTA | Book Study | Medici House</title>
+  <meta name="description" content="A Socratic practice note from 深度学习比赛知识自查表 covering submission debugging, CV-vs-LB troubleshooting, label evidence, label-preserving augmentation, and test-time augmentation (TTA).">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-display math{font-size:1.06rem;}
+    .math-inline{white-space:nowrap;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col,.three-col,.flow{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .three-col{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .flow{grid-template-columns:repeat(4,minmax(0,1fr));margin:14px 0;}
+    .meta-tile,.panel,.flow-step{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .panel.blue{background:#f0f5ff;border-color:#cddcff;}
+    .panel.green{background:#edf8f5;border-color:#c8e8df;}
+    .panel.gold{background:#fff8e8;border-color:#ead6a6;}
+    .panel.rose{background:#fff2f4;border-color:#efc5cd;}
+    .flow-step{text-align:center;font-weight:700;display:flex;align-items:center;justify-content:center;min-height:68px;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .warning{border-left-color:#b27b19;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:21.9%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    @media (max-width:900px){.meta-grid,.two-col,.three-col,.flow{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col,.three-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+      .math-display math{font-size:1rem;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Submission Debugging, Label Evidence, and TTA</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-08-24T06:50:00+08:00">2026-08-24 06:50 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>This session continued Part 1 of <em>深度学习比赛知识自查表</em> with selective practice from pages 20–24: submission debugging, what to do when CV and LB disagree, why label-producing evidence matters more than premature model tuning, the label-preservation rule for augmentation, and a simple inference-only example of Test-Time Augmentation (TTA).</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-08-24 06:50 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>Part 1 · pp. 20–24</strong><span>selective reinforcement</span></div>
+              <div class="meta-tile"><strong>TTA clarified</strong><span>multiple valid views → average predictions</span></div>
+              <div class="meta-tile"><strong>16 / 73</strong><span>21.9% overall coverage</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>16 / 73 pages, 21.9%.</strong> No new page is counted as fully covered here. The session intentionally jumped through the high-value ideas on pages 20–24 rather than completing every checklist item and example on those pages.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. Submission Debugging: Correct Predictions Can Still Score Badly</h2>
+            <p>The practice started with the source's submission-debugging checklist. A model can be locally excellent and still receive a terrible leaderboard score if the submission file attaches the right predictions to the wrong rows or classes.</p>
+            <div class="three-col">
+              <div class="panel rose"><h3>ID order</h3><p>If submission IDs are shuffled relative to the required sample-submission order, predictions can be attached to the wrong samples and the score can collapse.</p></div>
+              <div class="panel gold"><h3>Missing / duplicate IDs</h3><p>Matching the row count is not enough. The submitted ID set must match the expected test ID set with no duplicates or omissions.</p></div>
+              <div class="panel blue"><h3>Class-column order</h3><p>For probability matrices, the class columns must match the required order. Swapping cat and dog columns changes the meaning of every prediction.</p></div>
+            </div>
+            <div class="two-col">
+              <div class="panel green"><h3>Probability format</h3><p>When the task expects multiclass probabilities, rows should be valid probability distributions and typically sum to 1.</p></div>
+              <div class="panel rose"><h3>Hard labels vs probabilities</h3><p>If the metric expects probabilities, submitting only 0/1 hard labels throws away confidence information and can badly hurt the score.</p></div>
+            </div>
+            <div class="callout key-idea"><strong>Another critical check:</strong> training and inference preprocessing must match—normalization, tokenizer, resize size, and class mapping are all part of the model pipeline.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. Strong CV, Weak LB: Debug Before Scaling the Model</h2>
+            <p>The practice then jumped into the competition workflow. If the baseline CV looks strong but the first leaderboard submission is much worse, the first response should not be “use a bigger model.”</p>
+            <div class="flow" aria-label="CV LB troubleshooting flow">
+              <div class="flow-step">CV looks strong</div>
+              <div class="flow-step">LB is unexpectedly weak</div>
+              <div class="flow-step">Check split / leak / preprocessing / submission</div>
+              <div class="flow-step">Only then change the model</div>
+            </div>
+            <div class="callout warning"><strong>Reason:</strong> a pipeline or validation problem can make model tuning completely irrelevant. More capacity does not repair a broken evaluation or submission path.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>3. Business Thinking: Preserve the Evidence That Creates the Label</h2>
+            <p>The source's “business thinking” section asks a more fundamental question before tuning: <strong>what information causes the label to be assigned?</strong></p>
+            <p>In the X-ray example, suppose a diagnosis depends on a tiny lesion. If aggressive downscaling makes that lesion disappear, the model no longer has access to the evidence that generated the label.</p>
+            <div class="two-col">
+              <div class="panel rose"><h3>Wrong first move</h3><p>Increase model size, change the backbone, or tune learning rate while the lesion is already gone from the input.</p></div>
+              <div class="panel green"><h3>Correct first move</h3><p>Preserve the relevant visual information—for example by keeping enough resolution or using an input strategy that leaves the lesion visible.</p></div>
+            </div>
+            <div class="callout key-idea"><strong>Priority rule:</strong> make sure the model can actually see the information the label depends on before optimizing how the model learns from it.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>4. Data Augmentation: One Rule Comes First</h2>
+            <p>The source gives one governing test for augmentation:</p>
+            <div class="math-display"><math display="block"><mtext>After the transformation, is the original label still valid?</mtext></math></div>
+            <div class="two-col">
+              <div class="panel green"><h3>Valid</h3><p>A cat flipped horizontally is still a cat, so the transformation can teach useful invariance.</p></div>
+              <div class="panel rose"><h3>Invalid</h3><p>If the label is the digit 6, rotating it 180° can turn it into 9. The transformation has changed the answer, so it should not be used as label-preserving augmentation.</p></div>
+            </div>
+          </section>
+
+          <section class="note-section">
+            <h2>5. TTA: The Simple Cat-vs-Dog Example</h2>
+            <p>TTA means <strong>Test-Time Augmentation</strong>. The model is already trained. At inference time, the same test sample is shown to the same model in several label-preserving views, and the predictions are combined.</p>
+            <div class="flow" aria-label="TTA inference flow">
+              <div class="flow-step">One test cat image</div>
+              <div class="flow-step">Original view → 0.70 cat</div>
+              <div class="flow-step">Horizontal flip → 0.62 cat</div>
+              <div class="flow-step">Average → 0.66 cat</div>
+            </div>
+            <p>With two predictions, the final TTA score is:</p>
+            <div class="math-display"><math display="block"><mfrac><mrow><mn>0.70</mn><mo>+</mo><mn>0.62</mn></mrow><mn>2</mn></mfrac><mo>=</mo><mn>0.66</mn></math></div>
+            <div class="callout key-idea"><strong>What finally resolved the confusion:</strong> TTA is not another training method. It is inference only: <strong>multiple valid views of one test sample → predict each view → average the predictions.</strong></div>
+            <p>The intuition is that the model may be slightly unstable to harmless changes of view. Averaging several valid views can smooth that variation. The source also warns that TTA multiplies inference cost, which matters in time-limited Code Competitions.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>6. What Was Intentionally Not Counted as Full Page Coverage</h2>
+            <p>Pages 20–24 contain more than the ideas practiced here: additional inference-pipeline checks, the fuller day-by-day competition workflow, broader label-generation examples, a larger augmentation suitability table, and more TTA caveats. Because the session repeatedly used “jump” to move past straightforward material, these pages remain selective reinforcement rather than fully counted page coverage.</p>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
