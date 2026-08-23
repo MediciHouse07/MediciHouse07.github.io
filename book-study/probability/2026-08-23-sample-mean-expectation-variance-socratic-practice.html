@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Sample Mean: Expectation, Variance, and the n=1 Confusion | Book Study | Medici House</title>
+  <meta name="description" content="A Socratic probability practice note clarifying why E[Y_n]=E[X] and Var(Y_n)=Var(X)/n do not mean one observed sample has the population expectation or variance, and why large n makes the sample mean useful.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-display math{font-size:1.06rem;}
+    .math-inline{white-space:nowrap;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-figure{margin:0 0 20px;border:1px solid #ddd;border-radius:10px;padding:10px;background:#fff;}
+    .study-figure img{display:block;width:100%;height:auto;border-radius:6px;}
+    .study-figure figcaption{margin-top:8px;color:#777;font-size:.9rem;text-align:left;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col,.three-col{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .three-col{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .meta-tile,.panel{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .panel.blue{background:#f0f5ff;border-color:#cddcff;}
+    .panel.green{background:#edf8f5;border-color:#c8e8df;}
+    .panel.gold{background:#fff8e8;border-color:#ead6a6;}
+    .panel.rose{background:#fff2f4;border-color:#efc5cd;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .warning{border-left-color:#b27b19;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:2.1%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    @media (max-width:900px){.meta-grid,.two-col,.three-col{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col,.three-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+      .math-display math{font-size:1rem;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Sample Mean: Expectation, Variance, and the n=1 Confusion</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Probability</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-08-23T17:39:00+08:00">2026-08-23 17:39 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/probability/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <figure class="study-figure">
+            <img src="/book-study/probability/assets/2026-08-23-sample-mean-expectation-variance-study-card.svg" alt="CLT slide deriving the expectation and variance of the sample mean" loading="eager">
+            <figcaption>The study started from this slide: the sample mean keeps the same expectation as the population variable, while its variance shrinks by a factor of n.</figcaption>
+          </figure>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>The main confusion was not algebra. It was a clash between two different meanings of “sample variance”: the variance of the <em>sample mean as a random variable</em> versus the variance calculated from observed sample values. The n=1 case exposed the distinction.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-08-23 17:39 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>Sample mean</strong><span>expectation, variance, realization</span></div>
+              <div class="meta-tile"><strong>LLN bridge</strong><span>large n shrinks spread, not the center</span></div>
+              <div class="meta-tile"><strong>12 / 577</strong><span>coverage unchanged; concept reinforcement</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>12 / 577 pages, 2.1%.</strong> This note records conceptual reinforcement from the supplied slide and discussion, so it does not add bounded page coverage to the tracked probability book.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. The Object in the Formula Is a Random Variable</h2>
+            <p>Define the sample mean</p>
+            <div class="math-display"><math display="block"><msub><mi>Y</mi><mi>n</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>&#x2211;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>X</mi><mi>i</mi></msub></math></div>
+            <p><span class="math-inline"><math><msub><mi>Y</mi><mi>n</mi></msub></math></span> is not one already-observed number. It is a random variable: repeat the experiment with fresh samples and the resulting sample mean changes from run to run.</p>
+            <div class="callout key-idea"><strong>The key distinction:</strong> uppercase <span class="math-inline"><math><msub><mi>Y</mi><mi>n</mi></msub></math></span> means the random variable; lowercase <span class="math-inline"><math><msub><mi>y</mi><mi>n</mi></msub></math></span> can denote one realized value.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. Why the Expectation Does Not Depend on n</h2>
+            <p>For identically distributed samples with population mean <span class="math-inline"><math><mi>&#x03BC;</mi></math></span>:</p>
+            <div class="math-display"><math display="block"><mrow><mi>E</mi><mo>[</mo><msub><mi>Y</mi><mi>n</mi></msub><mo>]</mo><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>&#x2211;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mi>E</mi><mo>[</mo><msub><mi>X</mi><mi>i</mi></msub><mo>]</mo><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mi>n</mi><mi>&#x03BC;</mi><mo>=</mo><mi>&#x03BC;</mi></mrow></math></div>
+            <p>The factor <span class="math-inline"><math><mfrac><mn>1</mn><mi>n</mi></mfrac></math></span> and the <span class="math-inline"><math><mi>n</mi></math></span> equal expectations cancel. Therefore the center stays fixed for every sample size.</p>
+            <div class="two-col">
+              <div class="panel blue"><h3>n = 1</h3><p><span class="math-inline"><math><msub><mi>Y</mi><mn>1</mn></msub><mo>=</mo><msub><mi>X</mi><mn>1</mn></msub></math></span>, so <span class="math-inline"><math><mi>E</mi><mo>[</mo><msub><mi>Y</mi><mn>1</mn></msub><mo>]</mo><mo>=</mo><mi>E</mi><mo>[</mo><mi>X</mi><mo>]</mo></math></span>.</p></div>
+              <div class="panel green"><h3>Large n</h3><p>The expectation is still the same population mean. Large n does not improve the center itself.</p></div>
+            </div>
+          </section>
+
+          <section class="note-section">
+            <h2>3. The n=1 Expectation Puzzle</h2>
+            <p>The statement</p>
+            <div class="math-display"><math display="block"><mi>E</mi><mo>[</mo><msub><mi>Y</mi><mn>1</mn></msub><mo>]</mo><mo>=</mo><mi>E</mi><mo>[</mo><mi>X</mi><mo>]</mo></math></div>
+            <p>does <strong>not</strong> mean one actual draw equals the population mean.</p>
+            <p>If a distribution takes 0 or 10 with equal probability, then</p>
+            <div class="math-display"><math display="block"><mi>E</mi><mo>[</mo><mi>X</mi><mo>]</mo><mo>=</mo><mn>5</mn></math></div>
+            <p>but one realized draw is either 0 or 10. The expectation describes the center of the distribution across repeated draws; it is not a claim about one realized observation.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>4. Why Variance Shrinks Differently</h2>
+            <p>For independent samples with population variance <span class="math-inline"><math><msup><mi>&#x03C3;</mi><mn>2</mn></msup></math></span>, variance scales with the <strong>square</strong> of a constant:</p>
+            <div class="math-display"><math display="block"><mi>Var</mi><mo>(</mo><mi>aX</mi><mo>)</mo><mo>=</mo><msup><mi>a</mi><mn>2</mn></msup><mi>Var</mi><mo>(</mo><mi>X</mi><mo>)</mo></math></div>
+            <p>Therefore:</p>
+            <div class="math-display"><math display="block"><mrow><mi>Var</mi><mo>[</mo><msub><mi>Y</mi><mi>n</mi></msub><mo>]</mo><mo>=</mo><mfrac><mn>1</mn><msup><mi>n</mi><mn>2</mn></msup></mfrac><munderover><mo>&#x2211;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mi>Var</mi><mo>(</mo><msub><mi>X</mi><mi>i</mi></msub><mo>)</mo><mo>=</mo><mfrac><mn>1</mn><msup><mi>n</mi><mn>2</mn></msup></mfrac><mi>n</mi><msup><mi>&#x03C3;</mi><mn>2</mn></msup><mo>=</mo><mfrac><msup><mi>&#x03C3;</mi><mn>2</mn></msup><mi>n</mi></mfrac></mrow></math></div>
+            <p>Expectation gets one factor of <span class="math-inline"><math><mfrac><mn>1</mn><mi>n</mi></mfrac></math></span>; variance gets <span class="math-inline"><math><mfrac><mn>1</mn><msup><mi>n</mi><mn>2</mn></msup></mfrac></math></span>. That is why one factor of <span class="math-inline"><math><mi>n</mi></math></span> remains in the denominator.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>5. The n=1 Variance Puzzle</h2>
+            <p>At <span class="math-inline"><math><mi>n</mi><mo>=</mo><mn>1</mn></math></span>:</p>
+            <div class="math-display"><math display="block"><mi>Var</mi><mo>[</mo><msub><mi>Y</mi><mn>1</mn></msub><mo>]</mo><mo>=</mo><mi>Var</mi><mo>(</mo><mi>X</mi><mo>)</mo></math></div>
+            <p>This does <strong>not</strong> mean one observed number has the population variance. It means the random variable produced by repeatedly taking one draw has exactly the same distribution as <span class="math-inline"><math><mi>X</mi></math></span>, so it has the same variance.</p>
+            <div class="callout warning"><strong>What caused the confusion:</strong> “variance of the sample mean” was being read as “variance inside one realized sample.” Those are different objects.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>6. Sample Variance Is a Different Quantity</h2>
+            <p>The usual sample variance computed from observed values is</p>
+            <div class="math-display"><math display="block"><msup><mi>s</mi><mn>2</mn></msup><mo>=</mo><mfrac><mn>1</mn><mrow><mi>n</mi><mo>&#x2212;</mo><mn>1</mn></mrow></mfrac><munderover><mo>&#x2211;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msup><mrow><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>&#x2212;</mo><mover><mi>x</mi><mo>&#x00AF;</mo></mover><mo>)</mo></mrow><mn>2</mn></msup></math></div>
+            <p>This is an estimator of the population variance. It is <strong>not</strong> the same thing as</p>
+            <div class="math-display"><math display="block"><mi>Var</mi><mo>(</mo><msub><mi>Y</mi><mi>n</mi></msub><mo>)</mo><mo>=</mo><mfrac><msup><mi>&#x03C3;</mi><mn>2</mn></msup><mi>n</mi></mfrac></math></div>
+            <div class="two-col">
+              <div class="panel rose"><h3>Sample variance s²</h3><p>Spread among observed sample values; estimates the population variance.</p></div>
+              <div class="panel green"><h3>Variance of sample mean</h3><p>Spread of the sample mean across repeated samples of size n.</p></div>
+            </div>
+          </section>
+
+          <section class="note-section">
+            <h2>7. Why Large n Becomes Useful</h2>
+            <p>The expectation remains fixed:</p>
+            <div class="math-display"><math display="block"><mi>E</mi><mo>[</mo><msub><mi>Y</mi><mi>n</mi></msub><mo>]</mo><mo>=</mo><mi>&#x03BC;</mi></math></div>
+            <p>but the variance and standard deviation shrink:</p>
+            <div class="math-display"><math display="block"><mi>Var</mi><mo>[</mo><msub><mi>Y</mi><mi>n</mi></msub><mo>]</mo><mo>=</mo><mfrac><msup><mi>&#x03C3;</mi><mn>2</mn></msup><mi>n</mi></mfrac><mspace width="2em"/><mi>SD</mi><mo>[</mo><msub><mi>Y</mi><mi>n</mi></msub><mo>]</mo><mo>=</mo><mfrac><mi>&#x03C3;</mi><msqrt><mi>n</mi></msqrt></mfrac></math></div>
+            <p>So larger n does not move the center. It makes the distribution of the sample mean tighter around that center. A realized sample mean is therefore increasingly likely to be close to <span class="math-inline"><math><mi>E</mi><mo>[</mo><mi>X</mi><mo>]</mo></math></span>.</p>
+            <div class="callout key-idea"><strong>Final mental model:</strong> large n does not make the expectation “more equal” to the population mean; it makes a random realized sample mean more reliable because the spread around that mean shrinks.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>8. LLN and CLT Placement</h2>
+            <p>The expectation and variance identities above hold for every n under the stated i.i.d./independence assumptions; they are not “large-n-only” formulas. Their large-n consequence explains the intuition behind the Law of Large Numbers: the sample mean concentrates around the population mean. The Central Limit Theorem goes further by describing the approximate shape of the standardized sample-mean distribution for large n.</p>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
