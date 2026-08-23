@@ -12,6 +12,9 @@
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
   <link rel="stylesheet" href="/book-study/book-study.css">
   <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
     .book-study-shell .post-body { font-size: 1rem; }
     .book-study-shell .brand,
     .book-study-shell .menu-item,
@@ -24,6 +27,12 @@
       top: auto !important;
       transform: none !important;
     }
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;}
     .book-study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 0; }
     .book-study-actions a,
     .note-link {
@@ -49,7 +58,15 @@
     .note-card h3 { margin: 0 0 10px; font-size: 1.08rem; }
     .note-card p { color: #666; margin: 0 0 14px; }
     .note-date { color: #888; font-size: .82rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 8px; }
-    @media (max-width: 760px) { .note-grid { grid-template-columns: 1fr; } }
+    @media (max-width:760px){.note-grid{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+    }
   </style>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -85,21 +102,27 @@
                 <div class="post-meta"><span class="post-meta-item"><i class="fa fa-book fa-fw"></i> Book Study subject shelf</span></div>
               </header>
               <div class="post-body" itemprop="articleBody">
-                <p>Notes from Blitzstein and Hwang's <em>Introduction to Probability</em>, connected to the Stat 110 study track. Current focus: moment generating functions, how moments are encoded and recovered, and Markov chain Monte Carlo intuition.</p>
+                <p>Notes from Blitzstein and Hwang's <em>Introduction to Probability</em>, connected to the Stat 110 study track. Current focus includes sample-mean expectation and variance, Law of Large Numbers intuition, moment generating functions, and Markov chain Monte Carlo.</p>
                 <div class="book-study-actions">
                   <a href="/book-study/">Back to Book Study</a>
                   <a class="secondary" href="/">Home</a>
                 </div>
                 <div class="book-meta" aria-label="Probability metadata">
-                  <span>2 notes</span>
+                  <span>3 notes</span>
                   <span>1 book tracked</span>
                   <span>12 pages covered</span>
                   <span>577 main pages total</span>
                 </div>
                 <div class="progress-track" aria-hidden="true"><span class="progress-bar" style="width: 2.1%;"></span></div>
-                <p class="coverage-line"><strong>12 / 577 pages, 2.1%</strong>. Coverage counts the MGF discussion on pp. 279-283 and the Chapter 12 MCMC range on pp. 535-541.</p>
+                <p class="coverage-line"><strong>12 / 577 pages, 2.1%</strong>. Coverage counts the MGF discussion on pp. 279-283 and the Chapter 12 MCMC range on pp. 535-541. The sample-mean note is concept reinforcement from a supplied CLT slide and does not add bounded book-page coverage.</p>
 
                 <div class="note-grid" aria-label="Probability notes">
+                  <article class="note-card">
+                    <div class="note-date">2026-08-23</div>
+                    <h3>Sample Mean: Expectation, Variance, and the n=1 Confusion</h3>
+                    <p>A Socratic clarification of the distinction between a random variable and one realized value: why E[Y_n]=E[X] for every n, why Var(Y_n)=Var(X)/n, why n=1 does not mean one observed number has population variance, and why large n makes the sample mean a reliable estimator.</p>
+                    <a class="note-link" href="/book-study/probability/2026-08-23-sample-mean-expectation-variance-socratic-practice.html">Open note</a>
+                  </article>
                   <article class="note-card">
                     <div class="note-date">2026-07-28</div>
                     <h3>Why the MGF Uses E(e<sup>tX</sup>): Socratic Practice</h3>
