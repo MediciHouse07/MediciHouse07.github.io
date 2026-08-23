@@ -69,11 +69,17 @@
         <div class="post-body" itemprop="articleBody">
           <p>Notes from <em>深度学习比赛知识自查表</em>, following its competition-oriented path from training and evaluation foundations into general methodology, tabular competitions, computer vision, LLM fine-tuning, efficiency, hardware, and post-competition review.</p>
           <div class="book-study-actions"><a href="/book-study/">Back to Book Study</a><a class="secondary" href="/">Home</a></div>
-          <div class="book-meta" aria-label="Deep learning competitions metadata"><span>6 notes</span><span>1 study source tracked</span><span>16 pages covered</span><span>73 pages total</span></div>
+          <div class="book-meta" aria-label="Deep learning competitions metadata"><span>7 notes</span><span>1 study source tracked</span><span>16 pages covered</span><span>73 pages total</span></div>
           <div class="progress-track" aria-hidden="true"><span class="progress-bar" style="width:21.9%;"></span></div>
-          <p class="coverage-line"><strong>16 / 73 pages, 21.9%.</strong> Counted coverage includes pages 3–12 and 14–19: training mechanics and tuning foundations, bias/variance diagnosis, diagnostic curves, CV/OOF, nested CV, and Public-vs-Private leaderboard behavior. Page 13’s metric catalog was intentionally skimmed; page 20’s drift/adversarial-validation material has been studied selectively but its submission-debugging content remains unfinished.</p>
+          <p class="coverage-line"><strong>16 / 73 pages, 21.9%.</strong> Counted coverage includes pages 3–12 and 14–19: training mechanics and tuning foundations, bias/variance diagnosis, diagnostic curves, CV/OOF, nested CV, and Public-vs-Private leaderboard behavior. Page 13’s metric catalog was intentionally skimmed. Pages 20–24 have now been studied selectively through submission debugging, CV/LB troubleshooting, label-evidence thinking, label-preserving augmentation, and TTA, but are not yet counted as fully covered.</p>
 
           <div class="note-grid" aria-label="Deep learning competition notes">
+            <article class="note-card">
+              <div class="note-date">2026-08-24</div>
+              <h3>Submission Debugging, Label Evidence, and TTA</h3>
+              <p>A Socratic selective pass through pages 20–24: ID/class-order and probability submission bugs, why strong CV plus weak LB calls for debugging before a bigger model, preserving the evidence that generates the label, the label-preservation rule for augmentation, and TTA as inference-only averaging across valid views.</p>
+              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-24-submission-debugging-label-evidence-tta-socratic-practice.html">Open note</a>
+            </article>
             <article class="note-card">
               <div class="note-date">2026-08-23</div>
               <h3>Public vs Private LB, Leakage, and Adversarial Validation</h3>
