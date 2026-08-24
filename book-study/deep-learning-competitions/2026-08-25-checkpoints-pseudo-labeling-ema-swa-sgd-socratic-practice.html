@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Checkpoints, Pseudo-Labeling, EMA, SWA, and SGD | Book Study | Medici House</title>
+  <meta name="description" content="A concise Socratic practice note from 深度学习比赛知识自查表 covering early stopping checkpoints, pseudo-labeling, EMA, SWA, and the distinction between stochastic, mini-batch, and full-batch gradient descent.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-display math{font-size:1.06rem;}
+    .math-inline{white-space:nowrap;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col,.three-col{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .three-col{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .meta-tile,.panel{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .panel.blue{background:#f0f5ff;border-color:#cddcff;}
+    .panel.green{background:#edf8f5;border-color:#c8e8df;}
+    .panel.gold{background:#fff8e8;border-color:#ead6a6;}
+    .panel.rose{background:#fff2f4;border-color:#efc5cd;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .warning{border-left-color:#b27b19;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:21.9%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    @media (max-width:900px){.meta-grid,.two-col,.three-col{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col,.three-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+      .math-display math{font-size:1rem;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Checkpoints, Pseudo-Labeling, EMA, SWA, and SGD</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-08-25T07:14:00+08:00">2026-08-25 07:14 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>This session continued Part 1's overfitting section: early stopping and checkpoints, pseudo-labeling, Exponential Moving Average (EMA), Stochastic Weight Averaging (SWA), and the meaning of Stochastic Gradient Descent (SGD) versus mini-batch and full-batch gradient descent.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-08-25 07:14 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>Part 1 · pp. 26–27</strong><span>selective overfitting practice</span></div>
+              <div class="meta-tile"><strong>EMA / SWA / SGD</strong><span>weight averaging and optimizer intuition</span></div>
+              <div class="meta-tile"><strong>16 / 73</strong><span>coverage unchanged; selective practice</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>16 / 73 pages, 21.9%.</strong> Pages 26–27 were studied selectively rather than exhaustively, so strict page coverage is unchanged.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. Checkpoint = a Saved Training State</h2>
+            <p>When validation performance reaches its best point and later gets worse, the useful model is often not the final epoch. A checkpoint is a saved snapshot of the model at a particular training moment.</p>
+            <div class="two-col">
+              <div class="panel green"><h3>Best validation point</h3><p>Keep the checkpoint whose validation metric is best or validation loss is lowest.</p></div>
+              <div class="panel rose"><h3>Later overfitting</h3><p>Training loss may keep falling while validation performance deteriorates; do not replace the best checkpoint just because training continued.</p></div>
+            </div>
+            <div class="callout key-idea"><strong>Mental model:</strong> a checkpoint is a save point in a game—one recoverable version of the model.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. Pseudo-Labeling</h2>
+            <p>Use the trained model to predict unlabeled data, keep only very confident predictions, treat those predictions as temporary labels, then retrain with the enlarged training set.</p>
+            <div class="math-display"><math display="block"><mtext>trained model</mtext><mo>→</mo><mtext>predict unlabeled data</mtext><mo>→</mo><mtext>keep high-confidence labels</mtext><mo>→</mo><mtext>retrain</mtext></math></div>
+            <p>For a binary cat classifier, confidence can work in both directions:</p>
+            <div class="math-display"><math display="block"><mi>P</mi><mo>(</mo><mtext>cat</mtext><mo>)</mo><mo>&gt;</mo><mn>0.98</mn><mo>⇒</mo><mtext>pseudo-label cat</mtext><mspace width="2em"/><mi>P</mi><mo>(</mo><mtext>cat</mtext><mo>)</mo><mo>&lt;</mo><mn>0.02</mn><mo>⇒</mo><mtext>pseudo-label not-cat</mtext></math></div>
+            <p>The principle is not “only keep high positive probability”; it is “keep predictions where the model is highly confident about whichever class it chooses.”</p>
+          </section>
+
+          <section class="note-section">
+            <h2>3. EMA — Exponential Moving Average</h2>
+            <p>EMA keeps a continuously smoothed version of the model weights. Recent states matter more; older states fade exponentially.</p>
+            <div class="math-display"><math display="block"><msub><mi>θ</mi><mtext>EMA,new</mtext></msub><mo>=</mo><mi>β</mi><msub><mi>θ</mi><mtext>EMA,old</mtext></msub><mo>+</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo>)</mo><msub><mi>θ</mi><mtext>current</mtext></msub></math></div>
+            <div class="callout"><strong>Effect:</strong> one noisy update moves the averaged model only partway, instead of making the final weights jump completely.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>4. SWA — Stochastic Weight Averaging</h2>
+            <p>SWA starts after a chosen point in training, then periodically averages model states along the later noisy optimization path. The selected states are normally taken by a fixed schedule and are weighted roughly equally.</p>
+            <div class="math-display"><math display="block"><msub><mi>θ</mi><mtext>SWA</mtext></msub><mo>=</mo><mfrac><mn>1</mn><mi>K</mi></mfrac><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><msub><mi>θ</mi><mi>k</mi></msub></math></div>
+            <div class="two-col">
+              <div class="panel blue"><h3>EMA</h3><p>Continuous averaging; recent weights count more.</p></div>
+              <div class="panel gold"><h3>SWA</h3><p>Periodic averaging after a chosen start point; selected late-training states count roughly equally.</p></div>
+            </div>
+            <p>“Stochastic” does not mean randomly choosing old checkpoints. It refers to the noisy stochastic optimization path that produces the weight states being averaged.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>5. What Stochastic Gradient Descent Means</h2>
+            <p><strong>SGD = Stochastic Gradient Descent.</strong> Strictly, it updates from one randomly chosen training example at a time.</p>
+            <div class="math-display"><math display="block"><msub><mi>θ</mi><mtext>new</mtext></msub><mo>=</mo><msub><mi>θ</mi><mtext>old</mtext></msub><mo>−</mo><mi>η</mi><mo>∇</mo><mi>L</mi></math></div>
+            <p>The gradient from one random example is noisy, so the path moves downhill with zigzags.</p>
+            <div class="three-col">
+              <div class="panel rose"><h3>Stochastic GD</h3><p>Batch size = 1. Useful for online or streaming settings, but very noisy and inefficient on modern GPUs.</p></div>
+              <div class="panel green"><h3>Mini-batch GD</h3><p>Use a small random batch such as 32 or 128. This is the practical deep-learning default.</p></div>
+              <div class="panel blue"><h3>Full-batch GD</h3><p>Use the entire training set for each update. Stable but usually too expensive for large deep-learning datasets.</p></div>
+            </div>
+            <div class="callout key-idea"><strong>Terminology warning:</strong> in modern deep learning, “SGD” is often used loosely for mini-batch SGD, even though strict stochastic gradient descent uses one sample per update.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>6. Final Mental Model</h2>
+            <div class="two-col">
+              <div class="panel green"><h3>EMA</h3><p>Smooth the recent trajectory, exponentially favoring newer weights.</p></div>
+              <div class="panel gold"><h3>SWA</h3><p>Average several scheduled late-training states to find a stable center of the region being explored.</p></div>
+            </div>
+            <div class="callout key-idea"><strong>Core distinction:</strong> EMA changes the weighting rule; SWA changes when and which later states are collected for an approximately equal-weight average.</div>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
