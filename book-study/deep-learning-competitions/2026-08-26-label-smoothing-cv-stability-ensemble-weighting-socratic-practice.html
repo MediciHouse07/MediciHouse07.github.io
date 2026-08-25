@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Label Smoothing, CV Stability, and Ensemble Weighting | Book Study | Medici House</title>
+  <meta name="description" content="A concise Socratic practice note from 深度学习比赛知识自查表 covering label smoothing, CV fold variance, ensemble diversity, weighted averaging, OOF weight tuning, variance reduction, and high-recall ensembling.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,
+    .book-study-shell .menu-item,
+    .book-study-shell .post-block,
+    .book-study-shell .post-header,
+    .book-study-shell .post-body,
+    .book-study-shell .site-title,
+    .book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-display math{font-size:1.06rem;}
+    .math-inline{white-space:nowrap;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col,.three-col{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .three-col{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .meta-tile,.panel{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .panel.blue{background:#f0f5ff;border-color:#cddcff;}
+    .panel.green{background:#edf8f5;border-color:#c8e8df;}
+    .panel.gold{background:#fff8e8;border-color:#ead6a6;}
+    .panel.rose{background:#fff2f4;border-color:#efc5cd;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .warning{border-left-color:#b27b19;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:21.9%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    @media (max-width:900px){.meta-grid,.two-col,.three-col{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col,.three-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+      .math-display math{font-size:1rem;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Label Smoothing, CV Stability, and Ensemble Weighting</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-08-26T05:55:00+08:00">2026-08-26 05:55 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>This session continued pages 27–28 of <em>深度学习比赛知识自查表</em>: label smoothing, CV-fold stability, model diversity, weighted averaging, OOF-based weight tuning, variance reduction, and the beginning of high-recall ensemble strategy.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-08-26 05:55 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>Part 1 · pages 27–28</strong><span>selective study</span></div>
+              <div class="meta-tile"><strong>Ensembling</strong><span>diversity + weighting</span></div>
+              <div class="meta-tile"><strong>16 / 73</strong><span>strict page coverage unchanged</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>16 / 73 pages, 21.9%.</strong> Pages 27–28 remain selective because stacking and the remainder of the high-recall threshold discussion are not yet fully covered.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. Label Smoothing</h2>
+            <p>Hard classification targets can be softened slightly so the model is not trained toward absolute confidence.</p>
+            <div class="math-display"><math display="block"><mrow><mn>1</mn><mo>→</mo><mn>0.95</mn><mspace width="2em"/><mn>0</mn><mo>→</mo><mn>0.05</mn></mrow></math></div>
+            <p>For a two-class target, <strong>[1, 0]</strong> may become <strong>[0.95, 0.05]</strong>. In common libraries this can be applied inside the loss function rather than by rewriting the stored dataset labels.</p>
+            <div class="callout key-idea"><strong>Purpose:</strong> reduce overconfidence and make the model less eager to fit noisy labels as if they were perfectly certain.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. CV Fold Variance and Seed Checks</h2>
+            <p>A mean CV score can hide instability. For example:</p>
+            <div class="math-display"><math display="block"><mrow><mn>0.91</mn><mo>,</mo><mn>0.90</mn><mo>,</mo><mn>0.76</mn><mo>,</mo><mn>0.92</mn><mo>,</mo><mn>0.89</mn></mrow></math></div>
+            <p>The unusually weak fold is a warning that the validation distribution or training process may be unstable. Small gains such as 0.001 should be rechecked with different random seeds before being trusted.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>3. Ensemble Diversity Comes First</h2>
+            <p>Ensembling works when models make different mistakes. Useful diversity can come from different architectures, feature/input views, folds, or random seeds.</p>
+            <div class="callout warning"><strong>High prediction correlation:</strong> if two models correlate above about 0.95, their mistakes are often too similar for the ensemble to add much.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>4. Simple and Weighted Averaging</h2>
+            <p>Simple averaging gives every model equal influence. Weighted averaging gives stronger or more complementary models more influence.</p>
+            <div class="math-display"><math display="block"><mrow><mi>p</mi><mo>=</mo><mn>0.5</mn><msub><mi>p</mi><mi>A</mi></msub><mo>+</mo><mn>0.3</mn><msub><mi>p</mi><mi>B</mi></msub><mo>+</mo><mn>0.2</mn><msub><mi>p</mi><mi>C</mi></msub></mrow></math></div>
+            <p>The key rule is that weights should be validated on OOF predictions rather than chosen by intuition alone.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>5. How to Tune Ensemble Weights on OOF</h2>
+            <p>For two models, write the ensemble as:</p>
+            <div class="math-display"><math display="block"><mrow><mi>p</mi><mo>=</mo><mi>w</mi><msub><mi>p</mi><mi>A</mi></msub><mo>+</mo><mo>(</mo><mn>1</mn><mo>-</mo><mi>w</mi><mo>)</mo><msub><mi>p</mi><mi>B</mi></msub></mrow></math></div>
+            <p>Then test candidate values such as <strong>w = 0, 0.1, 0.2, …, 1</strong> against the true training labels using the competition metric. If <strong>w = 0.7</strong> scores best on OOF, use <strong>0.7A + 0.3B</strong> on test predictions.</p>
+            <div class="callout key-idea"><strong>Implementation pattern:</strong> OOF predictions → search candidate weights → compute metric → keep the best validated weights.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>6. Averaging Mainly Reduces Variance</h2>
+            <p>If models make partly independent errors, averaging can cancel some of those errors. The goal is not to guarantee the single closest prediction every time; it is to make predictions less unstable and less likely to be wildly wrong.</p>
+            <div class="math-display"><math display="block"><mrow><mfrac><mrow><mn>100</mn><mo>+</mo><mn>110</mn><mo>+</mo><mn>95</mn></mrow><mn>3</mn></mfrac><mo>≈</mo><mn>101.7</mn></mrow></math></div>
+          </section>
+
+          <section class="note-section">
+            <h2>7. High-Recall Ensemble: Cast a Wide Net First</h2>
+            <p>For screening tasks where missing a true positive is especially costly, a permissive first-stage rule can treat a sample as positive when any model raises a strong enough concern. This increases recall but also increases false positives.</p>
+            <div class="callout key-idea"><strong>Current stopping point:</strong> permissive / high-recall first, then the next study step is how the final threshold is raised and tuned to filter weak positives.</div>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
