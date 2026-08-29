@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Log, Box-Cox, Binning, Aggregation, Interactions, and Rolling Features | Book Study | Medici House</title>
+  <meta name="description" content="A concise Socratic practice note from 深度学习比赛知识自查表 covering numerical feature transforms, time decomposition, aggregation features, interaction features, and rolling-window statistics.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,.book-study-shell .menu-item,.book-study-shell .post-block,.book-study-shell .post-header,.book-study-shell .post-body,.book-study-shell .site-title,.book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-display math{font-size:1.06rem;}
+    .math-inline{white-space:nowrap;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col,.three-col{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .three-col{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .meta-tile,.panel{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .panel.blue{background:#f0f5ff;border-color:#cddcff;}
+    .panel.green{background:#edf8f5;border-color:#c8e8df;}
+    .panel.gold{background:#fff8e8;border-color:#ead6a6;}
+    .panel.rose{background:#fff2f4;border-color:#efc5cd;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .warning{border-left-color:#b27b19;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:46.6%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    @media (max-width:900px){.meta-grid,.two-col,.three-col{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col,.three-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+      .math-display math{font-size:1rem;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Log, Box-Cox, Binning, Aggregation, Interactions, and Rolling Features</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-08-29T13:21:00+08:00">2026-08-29 13:21 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>This session continued Part 2 feature engineering on page 36: log and Box-Cox transforms, binning, time-column decomposition, grouped aggregation features, interaction features, and rolling-window statistics.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-08-29 13:21 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>Part 0</strong><span>13 / 13 pages, 100%</span></div>
+              <div class="meta-tile"><strong>Part 1</strong><span>19 / 19 pages, 100%</span></div>
+              <div class="meta-tile"><strong>34 / 73</strong><span>46.6% overall coverage</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>34 / 73 pages, 46.6%.</strong> No new physical page was added to the coverage count in this session because the study remained on page 36. Part 2 remains 2 / 5 pages touched (40%).</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. Log Transform: Preserve Ratios, Compress Scale</h2>
+            <p>The book recommends log transforms for strongly long-tailed numerical features. The useful intuition practiced here was that equal multiplicative changes become equal additive differences in log space.</p>
+            <div class="two-col">
+              <div class="panel blue"><h3>Raw scale</h3><p>100 → 200 gives a difference of 100.</p><p>1000 → 2000 gives a difference of 1000.</p></div>
+              <div class="panel green"><h3>Log10 scale</h3><p>2 → 2.301 gives a difference of about 0.301.</p><p>3 → 3.301 gives the same difference, about 0.301.</p></div>
+            </div>
+            <div class="math-display"><math display="block"><mrow><mi>log</mi><mo>(</mo><mn>2</mn><mi>x</mi><mo>)</mo><mo>−</mo><mi>log</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mi>log</mi><mo>(</mo><mn>2</mn><mo>)</mo></mrow></math></div>
+            <div class="callout key-idea"><strong>Meaning:</strong> doubling is represented as the same-sized change regardless of whether the original value was small or large.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. Box-Cox: A Family of Power Transforms</h2>
+            <p>The book lists Box-Cox alongside log transforms for skewed numerical features. In practice, Box-Cox can be viewed as a family of power transformations controlled by a parameter.</p>
+            <div class="math-display"><math display="block"><mrow><mi>y</mi><mo>=</mo><mrow><mo>{</mo><mtable><mtr><mtd><mfrac><mrow><msup><mi>x</mi><mi>λ</mi></msup><mo>−</mo><mn>1</mn></mrow><mi>λ</mi></mfrac></mtd><mtd><mtext>if λ ≠ 0</mtext></mtd></mtr><mtr><mtd><mi>log</mi><mo>(</mo><mi>x</mi><mo>)</mo></mtd><mtd><mtext>if λ = 0</mtext></mtd></mtr></mtable></mrow></mrow></math></div>
+            <p>A standard clarification used in the practice is that classical Box-Cox is applied to strictly positive values. This was why a positive skewed feature such as 1, 2, 3, 4, 1000 was the straightforward candidate in the tiny test.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>3. Binning: Represent Range Structure Directly</h2>
+            <p>Binning turns a numerical feature into intervals when the target relationship is more naturally expressed by ranges than by exact numerical distance.</p>
+            <div class="three-col">
+              <div class="panel rose"><strong>Income &lt; 30k</strong><p>high-risk bucket</p></div>
+              <div class="panel gold"><strong>30k–80k</strong><p>medium-risk bucket</p></div>
+              <div class="panel green"><strong>&gt; 80k</strong><p>low-risk bucket</p></div>
+            </div>
+            <div class="callout key-idea"><strong>Tiny-test conclusion:</strong> if risk itself is organized around ranges, explicit bins can represent that structure directly.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>4. Decomposing Time Columns</h2>
+            <p>The book suggests splitting timestamps into useful components such as year, month, day, day-of-week, hour, weekend indicators, and days-to-event.</p>
+            <p>A raw timestamp can hide recurring behavior. For example, an e-commerce pattern concentrated on Friday evenings becomes easier to expose with features such as:</p>
+            <div class="math-display"><math display="block"><mrow><mtext>day_of_week</mtext><mo>=</mo><mtext>Friday</mtext><mo>,</mo><mspace width="1em"/><mtext>hour</mtext><mo>=</mo><mn>19</mn></mrow></math></div>
+          </section>
+
+          <section class="note-section">
+            <h2>5. Aggregation Features: Compare a Row with Its Group</h2>
+            <p>The book highlights grouped statistics such as mean, count, maximum, and standard deviation by user, store, item, or another meaningful entity.</p>
+            <table aria-label="Example user transactions"><thead><tr><th>User</th><th>Amounts</th><th>User mean</th></tr></thead><tbody><tr><td>A</td><td>20, 30, 250</td><td>100</td></tr><tr><td>B</td><td>200, 220</td><td>210</td></tr></tbody></table>
+            <p>If the goal is to detect a transaction that is unusual <em>for that particular user</em>, a useful engineered feature is:</p>
+            <div class="math-display"><math display="block"><mrow><mtext>current amount</mtext><mo>−</mo><mtext>user historical mean</mtext></mrow></math></div>
+            <div class="callout key-idea"><strong>Language clarification from the practice:</strong> “unusual for that particular user, not merely large globally” means judging the transaction relative to that user's own normal behavior, rather than comparing only with the entire population.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>6. Cross / Interaction Features</h2>
+            <p>Two individually ordinary features can become highly informative when combined. The book gives interaction-style examples such as city × occupation.</p>
+            <p>The practice example was fraud risk that becomes high mainly when a transaction is both international and made at night:</p>
+            <div class="math-display"><math display="block"><mrow><mtext>international_AND_night</mtext><mo>=</mo><mtext>is_international</mtext><mo>×</mo><mtext>is_night</mtext></mrow></math></div>
+            <p>Tree models can learn some interactions internally; explicit crossed features can still make a useful relationship easier to expose, especially for models that do not discover it as naturally.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>7. Rolling-Window Statistics</h2>
+            <p>For time-series features, the book suggests rolling statistics such as 7-day or 30-day means. The key constraint is that prediction-time features must not use future observations.</p>
+            <p>For daily sales 10, 12, 11, 13, 50, a 3-day mean immediately before day 5 is:</p>
+            <div class="math-display"><math display="block"><mrow><mfrac><mrow><mn>12</mn><mo>+</mo><mn>11</mn><mo>+</mo><mn>13</mn></mrow><mn>3</mn></mfrac><mo>=</mo><mn>12</mn></mrow></math></div>
+            <div class="callout warning"><strong>Tiny-test conclusion:</strong> when predicting tomorrow, the mean of the previous 7 days is valid; any rolling feature that includes tomorrow or later days leaks future information.</div>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
