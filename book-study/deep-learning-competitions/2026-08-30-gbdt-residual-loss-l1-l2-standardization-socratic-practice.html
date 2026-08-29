@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>GBDT Residuals, Loss Functions, L1/L2, and Standardization | Book Study | Medici House</title>
+  <meta name="description" content="A concise Socratic practice note from 深度学习比赛知识自查表 covering feature selection, unseen categories, Gradient Boosting Decision Trees, residual corrections, loss choices, L1/L2 behavior, and feature standardization.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,.book-study-shell .menu-item,.book-study-shell .post-block,.book-study-shell .post-header,.book-study-shell .post-body,.book-study-shell .site-title,.book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-display math{font-size:1.06rem;}
+    .math-inline{white-space:nowrap;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col,.three-col{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .three-col{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .meta-tile,.panel{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .panel.blue{background:#f0f5ff;border-color:#cddcff;}
+    .panel.green{background:#edf8f5;border-color:#c8e8df;}
+    .panel.gold{background:#fff8e8;border-color:#ead6a6;}
+    .panel.rose{background:#fff2f4;border-color:#efc5cd;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .warning{border-left-color:#b27b19;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:47.9%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    @media (max-width:900px){.meta-grid,.two-col,.three-col{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col,.three-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+      .math-display math{font-size:1rem;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">GBDT Residuals, Loss Functions, L1/L2, and Standardization</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-08-30T08:20:00+08:00">2026-08-30 08:20 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>This session finished the remaining page-36 tabular feature-selection points and moved into page 37: Gradient Boosting Decision Trees, residual correction, the role of the loss function, L1 versus L2 behavior, and standardization for neural networks versus tree models.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-08-30 08:20 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>Part 0</strong><span>13 / 13 pages, 100%</span></div>
+              <div class="meta-tile"><strong>Part 1</strong><span>19 / 19 pages, 100%</span></div>
+              <div class="meta-tile"><strong>35 / 73</strong><span>47.9% overall coverage</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>35 / 73 pages, 47.9%.</strong> Page 37 is now covered under the rule that a page counts once at least one substantive item on that page has been studied. Part 2 is now 3 / 5 pages touched (60%).</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. Feature Selection and Unseen Categories</h2>
+            <p>Three practical checks were reinforced: drop features with persistently zero importance, investigate features with strong train/test distribution drift, and do not automatically discard ID-like columns because they may encode order or grouping.</p>
+            <div class="callout key-idea"><strong>Unseen category rule:</strong> if test contains a category never observed in training, map it to an explicit unknown category rather than forcing it into a known class.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. GBDT Means Gradient Boosting Decision Tree</h2>
+            <p>A Gradient Boosting Decision Tree (GBDT) builds an ensemble sequentially. Each new tree is trained to correct what the current ensemble still gets wrong.</p>
+            <div class="math-display"><math display="block"><mrow><mtext>Tree 1</mtext><mo>→</mo><mtext>correction Tree 2</mtext><mo>→</mo><mtext>correction Tree 3</mtext><mo>→</mo><mo>⋯</mo></mrow></math></div>
+            <p>“Boosting” means repeatedly adding weak models to strengthen the ensemble. “Gradient” refers to choosing each correction according to the loss-reducing direction.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>3. Squared-Error Regression: Residual Correction</h2>
+            <p>For squared-error regression, the residual view is especially clean. The same input features are used at each round, but the new tree learns the remaining correction rather than the original target directly.</p>
+            <div class="math-display"><math display="block"><mrow><msub><mi>r</mi><mn>1</mn></msub><mo>=</mo><mi>y</mi><mo>−</mo><msub><mover><mi>y</mi><mo>^</mo></mover><mn>1</mn></msub></mrow></math></div>
+            <div class="math-display"><math display="block"><mrow><msub><mi>r</mi><mn>2</mn></msub><mo>=</mo><mi>y</mi><mo>−</mo><mo>(</mo><msub><mover><mi>y</mi><mo>^</mo></mover><mn>1</mn></msub><mo>+</mo><msub><mover><mi>y</mi><mo>^</mo></mover><mn>2</mn></msub><mo>)</mo></mrow></math></div>
+            <div class="math-display"><math display="block"><mrow><mover><mi>y</mi><mo>^</mo></mover><msub><mo> </mo><mtext>final</mtext></msub><mo>=</mo><msub><mover><mi>y</mi><mo>^</mo></mover><mn>1</mn></msub><mo>+</mo><msub><mover><mi>y</mi><mo>^</mo></mover><mn>2</mn></msub><mo>+</mo><msub><mover><mi>y</mi><mo>^</mo></mover><mn>3</mn></msub><mo>+</mo><mo>⋯</mo></mrow></math></div>
+            <div class="callout key-idea"><strong>Terminology correction:</strong> the sum is the final prediction, not the label. The true label <em>y</em> stays fixed.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>4. Loss Function and the Meaning of “Gradient”</h2>
+            <p>The loss is chosen for the task and normally kept fixed throughout one boosting run. The next tree follows the negative gradient of that same loss. Under squared error, that direction is proportional to the ordinary residual.</p>
+            <div class="math-display"><math display="block"><mrow><mi>L</mi><mo>=</mo><msup><mrow><mo>(</mo><mi>y</mi><mo>−</mo><mover><mi>y</mi><mo>^</mo></mover><mo>)</mo></mrow><mn>2</mn></msup></mrow></math></div>
+            <div class="callout warning"><strong>Important:</strong> the next tree does not predict the squared error itself. Under squared-error loss, it predicts a correction proportional to <em>y − ŷ</em>.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>5. Which Regression Losses Fit Which Goal?</h2>
+            <table aria-label="Regression loss choices"><thead><tr><th>Loss</th><th>Appropriate use</th></tr></thead><tbody>
+              <tr><td>L2 / squared error</td><td>Standard continuous regression; a natural default when large errors should receive stronger penalties.</td></tr>
+              <tr><td>L1 / absolute error</td><td>Continuous regression when robustness to large outliers matters.</td></tr>
+              <tr><td>Huber</td><td>A compromise: L2-like near small errors and L1-like for large errors.</td></tr>
+              <tr><td>Quantile</td><td>When the target is a chosen percentile rather than the conditional mean.</td></tr>
+              <tr><td>Logistic / cross-entropy</td><td>Classification, not ordinary unrestricted continuous regression.</td></tr>
+              <tr><td>Poisson</td><td>Most natural for non-negative count-style targets, not arbitrary continuous values.</td></tr>
+            </tbody></table>
+          </section>
+
+          <section class="note-section">
+            <h2>6. L1 versus L2 Gradients</h2>
+            <div class="two-col">
+              <div class="panel blue"><h3>L1 / absolute error</h3><div class="math-display"><math display="block"><mrow><mi>L</mi><mo>=</mo><mo>|</mo><mi>y</mi><mo>−</mo><mover><mi>y</mi><mo>^</mo></mover><mo>|</mo></mrow></math></div><p>Its derivative with respect to the prediction is essentially ±1 away from zero and is not differentiable exactly at zero; optimization can use a subgradient.</p></div>
+              <div class="panel green"><h3>L2 / squared error</h3><div class="math-display"><math display="block"><mrow><mi>L</mi><mo>=</mo><msup><mrow><mo>(</mo><mi>y</mi><mo>−</mo><mover><mi>y</mi><mo>^</mo></mover><mo>)</mo></mrow><mn>2</mn></msup></mrow></math></div><p>The gradient magnitude grows with the size of the error and naturally shrinks as the prediction approaches the target.</p></div>
+            </div>
+            <div class="callout key-idea"><strong>Optimization intuition:</strong> L1 can be less smooth near the optimum, while L2 gives size-sensitive gradients. Huber is often useful when both smooth local convergence and outlier robustness matter.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>7. Standardization: Trees versus Neural Networks</h2>
+            <p>Tree models mainly split by ordering and thresholds, so changing a feature's unit usually does not fundamentally change the split logic. Neural networks combine feature values numerically, so very different feature scales can make optimization harder.</p>
+            <div class="math-display"><math display="block"><mrow><msup><mi>x</mi><mo>′</mo></msup><mo>=</mo><mfrac><mrow><mi>x</mi><mo>−</mo><mi>μ</mi></mrow><mi>σ</mi></mfrac></mrow></math></div>
+            <div class="callout key-idea"><strong>Practical rule:</strong> LightGBM-style tree models usually do not require standardization; a neural network such as an MLP (Multilayer Perceptron) usually benefits from it.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>8. Study-Format Rule Reinforced</h2>
+            <p>For future sessions, abbreviations should be expanded at first use—for example, GBDT (Gradient Boosting Decision Tree) and MLP (Multilayer Perceptron)—while keeping the Socratic explanation brief and using one meaningful tiny test at a time.</p>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
