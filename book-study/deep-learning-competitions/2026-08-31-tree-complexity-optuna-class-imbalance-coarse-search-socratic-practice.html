@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Tree Complexity, Optuna, Class Imbalance, and Coarse Search | Book Study | Medici House</title>
+  <meta name="description" content="A concise Socratic practice note from 深度学习比赛知识自查表 covering tree depth and leaves, Optuna-based hyperparameter search, scale_pos_weight for class imbalance, and coarse-versus-fine search terminology.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,.book-study-shell .menu-item,.book-study-shell .post-block,.book-study-shell .post-header,.book-study-shell .post-body,.book-study-shell .site-title,.book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-display math{font-size:1.06rem;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col,.three-col{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .three-col{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .meta-tile,.panel{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .panel.blue{background:#f0f5ff;border-color:#cddcff;}
+    .panel.green{background:#edf8f5;border-color:#c8e8df;}
+    .panel.gold{background:#fff8e8;border-color:#ead6a6;}
+    .panel.rose{background:#fff2f4;border-color:#efc5cd;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .warning{border-left-color:#b27b19;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:47.9%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    @media (max-width:900px){.meta-grid,.two-col,.three-col{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col,.three-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+      .math-display math{font-size:1rem;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Tree Complexity, Optuna, Class Imbalance, and Coarse Search</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-08-31T08:12:00+09:00">2026-08-31 08:12 JST</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>This session continued Part 2 on page 37: controlling tree complexity, coarse-to-fine hyperparameter tuning with Optuna, class-imbalance weighting with <code>scale_pos_weight</code>, and the English distinction between “coarse search” and “roughly search.”</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-08-31 08:12 JST</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>Part 0</strong><span>13 / 13 pages, 100%</span></div>
+              <div class="meta-tile"><strong>Part 1</strong><span>19 / 19 pages, 100%</span></div>
+              <div class="meta-tile"><strong>35 / 73</strong><span>47.9% overall coverage</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>35 / 73 pages, 47.9%.</strong> No new physical page was added in this session because the study remained on page 37. Part 2 remains 3 / 5 pages touched (60%).</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. Tree Depth and Leaf Count Control Complexity</h2>
+            <p>For a Gradient Boosting Decision Tree (GBDT), deeper trees or more leaves can represent more specific interactions. Too much complexity can overfit; too little can underfit.</p>
+            <div class="two-col">
+              <div class="panel blue"><strong>Shallower / fewer leaves</strong><p>Less capacity; may miss useful structure.</p></div>
+              <div class="panel rose"><strong>Deeper / more leaves</strong><p>More capacity; may fit noise and hurt Cross-Validation (CV).</p></div>
+            </div>
+            <div class="callout key-idea"><strong>Practice result:</strong> if training performance stays excellent while CV becomes worse as <code>max_depth</code> rises, overfitting is the leading diagnosis.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. Optuna After a Coarse Search</h2>
+            <p>The workflow practiced here was: first identify a promising region with a broad/coarse search, then let Optuna spend the limited trial budget on a narrower fine search.</p>
+            <div class="two-col">
+              <div class="panel gold"><strong>Coarse stage</strong><p>Find a useful neighborhood, for example learning rate 0.03–0.08 and depth 5–8.</p></div>
+              <div class="panel green"><strong>Fine stage</strong><p>Use Optuna to explore the promising neighborhood more efficiently.</p></div>
+            </div>
+            <div class="callout warning"><strong>Avoid:</strong> throwing away strong coarse-search evidence and reopening an unnecessarily huge search space when the trial budget is small.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>3. <code>scale_pos_weight</code> for Class Imbalance</h2>
+            <p><code>scale_pos_weight</code> increases the contribution of positive-class errors to the training objective. It does not create new positive samples.</p>
+            <p>A common count-based starting point is:</p>
+            <div class="math-display"><math display="block"><mrow><mtext>scale_pos_weight</mtext><mo>≈</mo><mfrac><msub><mi>N</mi><mtext>negative</mtext></msub><msub><mi>N</mi><mtext>positive</mtext></msub></mfrac></mrow></math></div>
+            <p>With 19,000 negative and 1,000 positive samples:</p>
+            <div class="math-display"><math display="block"><mrow><mfrac><mn>19000</mn><mn>1000</mn></mfrac><mo>=</mo><mn>19</mn></mrow></math></div>
+            <div class="callout key-idea"><strong>Tiny-test answer:</strong> 19.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>4. English: “Coarse Search” vs “Roughly Search”</h2>
+            <p><strong>Coarse search</strong> is a natural technical noun phrase for an initial low-resolution or broad search. <strong>Rough search</strong> is understandable but less technical. <strong>Roughly search</strong> is better treated as a verb phrase, such as “we roughly searched the range.”</p>
+            <div class="callout key-idea"><strong>Preferred tuning language:</strong> coarse search → fine search, or broad search → narrow/fine search.</div>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
