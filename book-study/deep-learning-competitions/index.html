@@ -16,13 +16,7 @@
     *,*::before,*::after{box-sizing:border-box;}
     .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
     .book-study-shell .post-body{font-size:1rem;}
-    .book-study-shell .brand,
-    .book-study-shell .menu-item,
-    .book-study-shell .post-block,
-    .book-study-shell .post-header,
-    .book-study-shell .post-body,
-    .book-study-shell .site-title,
-    .book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .book-study-shell .brand,.book-study-shell .menu-item,.book-study-shell .post-block,.book-study-shell .post-header,.book-study-shell .post-body,.book-study-shell .site-title,.book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
     .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
     .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
     img,svg,canvas,video,iframe{max-width:100%;height:auto;}
@@ -35,7 +29,7 @@
     .book-meta{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;}
     .book-meta span{border:1px solid #ddd;border-radius:999px;padding:4px 10px;color:#666;background:#fafafa;font-size:.86rem;}
     .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
-    .progress-bar{display:block;width:50.7%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    .progress-bar{display:block;width:53.4%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
     .coverage-line{color:#666;margin:0 0 22px;}
     .note-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px;}
     .note-card{border:1px solid #ddd;border-radius:8px;padding:18px;background:#fff;}
@@ -69,106 +63,31 @@
         <div class="post-body" itemprop="articleBody">
           <p>Notes from <em>深度学习比赛知识自查表</em>, following its competition-oriented path from training and evaluation foundations into general methodology, tabular competitions, computer vision, LLM fine-tuning, efficiency, hardware, and post-competition review.</p>
           <div class="book-study-actions"><a href="/book-study/">Back to Book Study</a><a class="secondary" href="/">Home</a></div>
-          <div class="book-meta" aria-label="Deep learning competitions metadata"><span>15 notes</span><span>1 study source tracked</span><span>37 pages covered</span><span>73 pages total</span></div>
-          <div class="progress-track" aria-hidden="true"><span class="progress-bar" style="width:50.7%;"></span></div>
-          <p class="coverage-line"><strong>37 / 73 pages, 50.7%.</strong> Coverage counts a page once at least one substantive item on that page has been studied. Part 0 is 13/13 (100%), Part 1 is 19/19 (100%), and Part 2 is now 5/5 (100%). The latest practice completed pages 38–39 through time-aware validation, future-leakage prevention, concept drift, recursive and direct multi-output forecasting, and uncertainty-aware forecasting.</p>
+          <div class="book-meta" aria-label="Deep learning competitions metadata"><span>16 notes</span><span>1 study source tracked</span><span>39 pages covered</span><span>73 pages total</span></div>
+          <div class="progress-track" aria-hidden="true"><span class="progress-bar" style="width:53.4%;"></span></div>
+          <p class="coverage-line"><strong>39 / 73 pages, 53.4%.</strong> Coverage counts a page once at least one substantive item on that page has been studied. Part 0, Part 1, and Part 2 are complete under this rule. Part 3 has started with pages 40–41: CNN motivation, convolution kernels, feature maps, and parameter sharing.</p>
 
           <div class="note-grid" aria-label="Deep learning competition notes">
-            <article class="note-card">
-              <div class="note-date">2026-09-16</div>
-              <h3>Time-Series Validation, Concept Drift, and Multi-Step Forecasting</h3>
-              <p>A Socratic continuation across pages 37–39: TimeSeriesSplit, GroupKFold, StratifiedKFold, OOF threshold tuning, future leakage, model selection, concept drift, recursive forecasting, direct multi-output forecasting, validation that mirrors inference, and the introduction of quantile-based uncertainty.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-09-16-time-series-validation-concept-drift-multistep-forecasting-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-31</div>
-              <h3>Tree Complexity, Optuna, Class Imbalance, and Coarse Search</h3>
-              <p>A concise Socratic continuation on page 37: tree depth and leaf count as complexity controls, coarse-to-fine hyperparameter search with Optuna, <code>scale_pos_weight</code> for imbalanced classes, and the technical-English distinction between coarse search, rough search, and roughly search.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-31-tree-complexity-optuna-class-imbalance-coarse-search-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-30</div>
-              <h3>GBDT Residuals, Loss Functions, L1/L2, and Standardization</h3>
-              <p>A Socratic continuation from feature selection into page 37: unseen categories, Gradient Boosting Decision Tree residual corrections, why the loss determines each boosting correction, appropriate regression loss choices, L1 versus L2 gradient behavior, and standardization for tree models versus neural networks.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-30-gbdt-residual-loss-l1-l2-standardization-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-29</div>
-              <h3>Log, Box-Cox, Binning, Aggregation, Interactions, and Rolling Features</h3>
-              <p>A Socratic continuation of page 36 feature engineering: log-space intuition for multiplicative changes, Box-Cox, binning, timestamp decomposition, group-level aggregation features, interaction features, and leakage-safe rolling statistics.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-29-log-box-cox-binning-aggregation-interactions-rolling-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-28</div>
-              <h3>Experiment Records, Target Encoding, and Frequency Encoding</h3>
-              <p>A concise Socratic transition from the end of Part 1 into Part 2: experiment logging and reproducibility, target encoding and leakage-safe fold construction, a non-time-series loan-default example, frequency encoding, and the start of numerical feature transforms.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-28-experiment-records-target-frequency-encoding-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-27</div>
-              <h3>High-Recall Thresholds and Error Analysis</h3>
-              <p>A concise Socratic continuation across pages 28–33: raising the final threshold after a permissive high-recall ensemble, Kaggle submission discipline, resolution/context tradeoffs, high-loss samples as diagnostic flags, wrong labels and label noise, shortcut learning from backgrounds/watermarks, truncation, class imbalance, and overfitting.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-27-high-recall-thresholds-error-analysis-bad-cases-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-26</div>
-              <h3>Label Smoothing, CV Stability, and Ensemble Weighting</h3>
-              <p>A concise Socratic continuation through pages 27–28: label smoothing, fold variance and seed checks, ensemble diversity, simple and weighted averaging, OOF-based weight tuning, variance reduction, and the first step of a high-recall screening ensemble.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-26-label-smoothing-cv-stability-ensemble-weighting-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-25</div>
-              <h3>Checkpoints, Pseudo-Labeling, EMA, SWA, and SGD</h3>
-              <p>A concise Socratic continuation through pages 26–27: early stopping checkpoints, confident positive and negative pseudo-labels, Exponential Moving Average versus Stochastic Weight Averaging, and the distinction between stochastic, mini-batch, and full-batch gradient descent.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-25-checkpoints-pseudo-labeling-ema-swa-sgd-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-24</div>
-              <h3>Submission Debugging, Label Evidence, and TTA</h3>
-              <p>A Socratic selective pass through pages 20–24: ID/class-order and probability submission bugs, why strong CV plus weak LB calls for debugging before a bigger model, preserving the evidence that generates the label, the label-preservation rule for augmentation, and TTA as inference-only averaging across valid views.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-24-submission-debugging-label-evidence-tta-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-23</div>
-              <h3>Public vs Private LB, Leakage, and Adversarial Validation</h3>
-              <p>A Socratic continuation on leaderboard sampling noise and shake-up, CV-vs-LB trust, leakage and drift diagnostics, adversarial validation, ROC/AUC, and the limitation that distribution drift can only be tested against feature sets that are actually visible.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-23-public-private-lb-adversarial-validation-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-22</div>
-              <h3>Nested Cross-Validation: Inner Tuning and Outer Evaluation</h3>
-              <p>A Socratic clarification of nested CV using one fixed example: 5 outer splits, 4 inner folds, 10 candidate learning rates, 200 inner fits, 5 outer refits, and the average of 5 outer scores as the final nested-CV estimate.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-22-nested-cross-validation-inner-outer-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-21</div>
-              <h3>Bias, Variance, Diagnostic Curves, CV, and OOF: Socratic Practice</h3>
-              <p>A Socratic bridge from Part 0 into Part 1: high bias versus high variance, learning versus validation curves, the two-layer view of parameter training versus model selection, 5-fold cross-validation, and out-of-fold predictions.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-21-bias-variance-curves-cv-oof-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-20</div>
-              <h3>Tuning Discipline, Loss vs Metric, and Imbalanced Classification: Socratic Practice</h3>
-              <p>A continuation covering label-preserving augmentation, reliable CV and one-variable-at-a-time tuning, multi-seed verification, loss versus metric, F1 thresholds, the confusion matrix, class imbalance, and the supplemental Type I/II error connection.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-20-tuning-loss-metric-imbalance-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-19</div>
-              <h3>Weight Decay, Dropout, Capacity, and Input Size: Socratic Practice</h3>
-              <p>A Socratic continuation on regularization and capacity: deriving the weight-decay shrink term, checking how it scales with weight magnitude, understanding dropout, diagnosing model capacity, and separating per-sample input size from batch size.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-19-weight-decay-dropout-capacity-input-size-socratic-practice.html">Open note</a>
-            </article>
-            <article class="note-card">
-              <div class="note-date">2026-08-18</div>
-              <h3>Training Loop, Learning Rate, and Momentum: Socratic Practice</h3>
-              <p>A step-by-step practice note connecting batch → forward → loss → backward → optimizer, then building intuition for step/epoch, gradient accumulation, learning-rate schedules, warmup, cosine decay, and momentum.</p>
-              <a class="note-link" href="/book-study/deep-learning-competitions/2026-08-18-training-loop-learning-rate-momentum-socratic-practice.html">Open note</a>
-            </article>
+            <article class="note-card"><div class="note-date">2026-09-17</div><h3>CNN Kernels, Feature Maps, and Parameter Sharing</h3><p>A Socratic start to Part 3: why plain fully connected networks are a poor fit for raw images, CNN locality, convolution kernels as pattern detectors, feature maps, and parameter sharing.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-09-17-cnn-kernels-feature-maps-parameter-sharing-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-09-16</div><h3>Time-Series Validation, Concept Drift, and Multi-Step Forecasting</h3><p>Time-aware splitting, GroupKFold, StratifiedKFold, OOF threshold tuning, future leakage, concept drift, recursive and direct multi-output forecasting, and uncertainty-aware forecasting.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-09-16-time-series-validation-concept-drift-multistep-forecasting-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-31</div><h3>Tree Complexity, Optuna, Class Imbalance, and Coarse Search</h3><p>Tree depth and leaf count, coarse-to-fine Optuna search, class-imbalance weighting, and technical-English tuning terminology.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-31-tree-complexity-optuna-class-imbalance-coarse-search-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-30</div><h3>GBDT Residuals, Loss Functions, L1/L2, and Standardization</h3><p>Gradient Boosting Decision Tree residual corrections, regression losses, L1 versus L2 behavior, unseen categories, and tree-vs-neural-network standardization.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-30-gbdt-residual-loss-l1-l2-standardization-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-29</div><h3>Log, Box-Cox, Binning, Aggregation, Interactions, and Rolling Features</h3><p>Numerical transforms, time decomposition, group aggregation, interaction features, and rolling-window statistics.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-29-log-box-cox-binning-aggregation-interactions-rolling-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-28</div><h3>Experiment Records, Target Encoding, and Frequency Encoding</h3><p>Experiment logging and reproducibility, target encoding and leakage-safe folds, frequency encoding, and the start of numerical transforms.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-28-experiment-records-target-frequency-encoding-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-27</div><h3>High-Recall Thresholds and Error Analysis</h3><p>High-recall thresholding, Kaggle submission discipline, input-size tradeoffs, high-loss flags, label noise, shortcut learning, truncation, imbalance, and overfitting.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-27-high-recall-thresholds-error-analysis-bad-cases-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-26</div><h3>Label Smoothing, CV Stability, and Ensemble Weighting</h3><p>Label smoothing, fold variance, seed checks, ensemble diversity, OOF-based weighting, and high-recall screening.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-26-label-smoothing-cv-stability-ensemble-weighting-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-25</div><h3>Checkpoints, Pseudo-Labeling, EMA, SWA, and SGD</h3><p>Early-stopping checkpoints, pseudo-labeling, Exponential Moving Average, Stochastic Weight Averaging, and gradient-descent variants.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-25-checkpoints-pseudo-labeling-ema-swa-sgd-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-24</div><h3>Submission Debugging, Label Evidence, and TTA</h3><p>Submission bugs, label-evidence thinking, augmentation validity, and Test-Time Augmentation as inference-only averaging.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-24-submission-debugging-label-evidence-tta-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-23</div><h3>Public vs Private LB, Leakage, and Adversarial Validation</h3><p>Leaderboard sampling noise, CV-vs-LB trust, leakage, distribution drift, and adversarial validation.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-23-public-private-lb-adversarial-validation-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-22</div><h3>Nested Cross-Validation: Inner Tuning and Outer Evaluation</h3><p>A fixed nested-CV example separating inner hyperparameter selection from outer evaluation.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-22-nested-cross-validation-inner-outer-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-21</div><h3>Bias, Variance, Diagnostic Curves, CV, and OOF</h3><p>Bias versus variance, diagnostic curves, cross-validation, and out-of-fold predictions.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-21-bias-variance-curves-cv-oof-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-20</div><h3>Tuning Discipline, Loss vs Metric, and Imbalanced Classification</h3><p>Tuning discipline, loss versus metric, F1 thresholds, confusion matrices, and class imbalance.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-20-tuning-loss-metric-imbalance-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-19</div><h3>Weight Decay, Dropout, Capacity, and Input Size</h3><p>Regularization, dropout, model capacity, and the distinction between input size and batch size.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-19-weight-decay-dropout-capacity-input-size-socratic-practice.html">Open note</a></article>
+            <article class="note-card"><div class="note-date">2026-08-18</div><h3>Training Loop, Learning Rate, and Momentum</h3><p>Batch → forward → loss → backward → optimizer, gradient accumulation, learning-rate schedules, warmup, cosine decay, and momentum.</p><a class="note-link" href="/book-study/deep-learning-competitions/2026-08-18-training-loop-learning-rate-momentum-socratic-practice.html">Open note</a></article>
           </div>
         </div>
       </article>
     </div></div></div></div></main>
-
     <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
   </div>
 </body>
