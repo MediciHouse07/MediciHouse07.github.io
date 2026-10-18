@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>CV Fine-Tuning and Classification Heads: Vector Walkthrough | Book Study | Medici House</title>
+  <meta name="description" content="A concise Socratic practice note from 深度学习比赛知识自查表 covering deterministic validation, CV fine-tuning, classification-head replacement, and a full vector example from image input to logits and probabilities.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,.book-study-shell .menu-item,.book-study-shell .post-block,.book-study-shell .post-header,.book-study-shell .post-body,.book-study-shell .site-title,.book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-inline{white-space:nowrap;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .meta-tile,.panel{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:58.9%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    @media (max-width:900px){.meta-grid,.two-col{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">CV Fine-Tuning and Classification Heads: Vector Walkthrough</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-10-18T08:54:00+08:00">2026-10-18 08:54 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>This session moved through pages 44–45 of the CV track: deterministic validation/TTA, fine-tuning pretrained image models, and exactly what it means to replace a classification head. The vector walkthrough expands the book's fine-tuning statement into explicit matrix arithmetic.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-10-18 08:54 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>Part 3</strong><span>6 / 13 pages touched</span></div>
+              <div class="meta-tile"><strong>43 / 73</strong><span>58.9% overall coverage</span></div>
+              <div class="meta-tile"><strong>Pages 44–45</strong><span>newly covered in this session</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>43 / 73 pages, 58.9%.</strong> Coverage counts a page once at least one substantive item on that page has been studied.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. Validation and TTA Use Deterministic Transforms</h2>
+            <p>Training augmentation can be random, but validation should be stable. The book recommends deterministic validation/TTA transforms such as resize and normalization rather than random crops or random color changes.</p>
+            <div class="callout key-idea"><strong>Reason:</strong> if validation preprocessing changes randomly between runs, the metric itself gains avoidable randomness.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. CV Fine-Tuning: Freeze, Partially Unfreeze, or Train All</h2>
+            <p>For a pretrained image backbone, there are three common transfer-learning choices:</p>
+            <table aria-label="CV fine-tuning strategies">
+              <thead><tr><th>Strategy</th><th>What trains</th></tr></thead>
+              <tbody>
+                <tr><td>Head only</td><td>Freeze the backbone; train only the new task-specific head.</td></tr>
+                <tr><td>Partial fine-tuning</td><td>Unfreeze the last few blocks plus the head.</td></tr>
+                <tr><td>Full fine-tuning</td><td>Train the new head and all backbone parameters.</td></tr>
+              </tbody>
+            </table>
+            <p>The book's recommendation is that replacing the classification head and fine-tuning all parameters usually performs better; freezing or layered learning rates are worth trying for large models with small datasets.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>3. What the Classification Head Is</h2>
+            <p>In the simplest classifier, the head maps the backbone's learned feature vector into class logits:</p>
+            <div class="math-display"><math display="block"><mrow><mi>h</mi><mo>→</mo><mi>W</mi><mi>h</mi><mo>+</mo><mi>b</mi><mo>→</mo><mtext>logits</mtext><mo>→</mo><mtext>softmax probabilities</mtext></mrow></math></div>
+            <p>The head can contain more than one layer, but its final layer has one output logit per class.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>4. Complete Toy Vector Example: Original Pretrained Model</h2>
+            <p>Represent a tiny input image as:</p>
+            <div class="math-display">
+              <math display="block">
+                <mi>x</mi><mo>=</mo>
+                <mfenced open="[" close="]"><mtable><mtr><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>2</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd></mtr></mtable></mfenced>
+              </math>
+            </div>
+            <p>Use a toy backbone matrix:</p>
+            <div class="math-display">
+              <math display="block">
+                <mi>B</mi><mo>=</mo>
+                <mfenced open="[" close="]"><mtable>
+                  <mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd></mtr>
+                  <mtr><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd></mtr>
+                </mtable></mfenced>
+              </math>
+            </div>
+            <p>The backbone produces the feature vector:</p>
+            <div class="math-display">
+              <math display="block">
+                <mi>h</mi><mo>=</mo><mi>B</mi><mi>x</mi><mo>=</mo>
+                <mfenced open="[" close="]"><mtable><mtr><mtd><mn>3</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd></mtr></mtable></mfenced>
+              </math>
+            </div>
+            <p>Suppose the original pretrained task had four classes. Its old head is therefore a matrix with four output rows:</p>
+            <div class="math-display">
+              <math display="block">
+                <msub><mi>W</mi><mtext>old</mtext></msub><mo>=</mo>
+                <mfenced open="[" close="]"><mtable>
+                  <mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd></mtr>
+                  <mtr><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd></mtr>
+                  <mtr><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr>
+                  <mtr><mtd><mo>−</mo><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr>
+                </mtable></mfenced>
+              </math>
+            </div>
+            <p>So the old model maps a 2-dimensional feature vector to 4 logits:</p>
+            <div class="math-display"><math display="block"><mrow><msub><mi>W</mi><mtext>old</mtext></msub><mo>:</mo><mn>2</mn><mo>→</mo><mn>4</mn></mrow></math></div>
+          </section>
+
+          <section class="note-section">
+            <h2>5. Replacing the Old Head for a New 3-Class Task</h2>
+            <p>For a new cat/dog/rabbit competition, keep the backbone output size at 2 but replace the old 4-output head with a new 3-output head:</p>
+            <div class="math-display">
+              <math display="block">
+                <msub><mi>W</mi><mtext>new</mtext></msub><mo>=</mo>
+                <mfenced open="[" close="]"><mtable>
+                  <mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd></mtr>
+                  <mtr><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd></mtr>
+                  <mtr><mtd><mo>−</mo><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr>
+                </mtable></mfenced>
+              </math>
+            </div>
+            <p>Apply it to the same feature vector:</p>
+            <div class="math-display">
+              <math display="block">
+                <msub><mi>z</mi><mtext>new</mtext></msub><mo>=</mo>
+                <msub><mi>W</mi><mtext>new</mtext></msub><mi>h</mi><mo>=</mo>
+                <mfenced open="[" close="]"><mtable><mtr><mtd><mn>3</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mo>−</mo><mn>2</mn></mtd></mtr></mtable></mfenced>
+              </math>
+            </div>
+            <p>Those are the three logits. Softmax then converts them into class probabilities.</p>
+            <div class="callout key-idea"><strong>Core distinction:</strong> the backbone matrix <em>B</em> creates the hidden/feature vector. The head matrix <em>W</em> maps that vector to the task's logits. The number of rows in the final head matrix equals the number of output classes.</div>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
