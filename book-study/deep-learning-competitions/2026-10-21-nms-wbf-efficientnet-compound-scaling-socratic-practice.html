@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>NMS, WBF, and EfficientNet Compound Scaling | Book Study | Medici House</title>
+  <meta name="description" content="A Socratic practice note from 深度学习比赛知识自查表 covering NMS, WBF, EfficientNet compound scaling, the distinction from ablation, and what increasing image resolution means.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,.book-study-shell .menu-item,.book-study-shell .post-block,.book-study-shell .post-header,.book-study-shell .post-body,.book-study-shell .site-title,.book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-inline{white-space:nowrap;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .meta-tile,.panel{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .source-boundary{border-left-color:#a36a00;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:58.9%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    @media (max-width:900px){.meta-grid,.two-col{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">NMS, WBF, and EfficientNet Compound Scaling</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-10-21T07:16:00+08:00">2026-10-21 07:16 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Socratic Practice Wrap-Up</h2>
+            <p>This session stayed on page 45 of the CV track and covered two competition ideas: detection post-processing with NMS/WBF, then EfficientNet's compound-scaling idea. The discussion also separated model scaling from ablation and clarified what "higher resolution" means in practice.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-10-21 07:16 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>Part 3</strong><span>6 / 13 pages touched</span></div>
+              <div class="meta-tile"><strong>43 / 73</strong><span>58.9% overall coverage</span></div>
+              <div class="meta-tile"><strong>Page 45</strong><span>continued, not a new physical page</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>43 / 73 pages, 58.9%.</strong> This note deepens an already-covered physical page, so the page count does not increase.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. NMS: Keep the Strongest Box, Suppress Redundant Overlap</h2>
+            <p>The book lists <strong>NMS = Non-Maximum Suppression</strong> as detection post-processing for removing overlapping redundant prediction boxes.</p>
+            <p>Suppose one dog produces three predictions:</p>
+            <table aria-label="NMS toy example">
+              <thead><tr><th>Box</th><th>Confidence</th><th>Relation</th></tr></thead>
+              <tbody>
+                <tr><td>A</td><td>0.95</td><td>Best box around the dog</td></tr>
+                <tr><td>B</td><td>0.90</td><td>Strongly overlaps A</td></tr>
+                <tr><td>C</td><td>0.60</td><td>Elsewhere</td></tr>
+              </tbody>
+            </table>
+            <p>If A and B overlap above the chosen IoU threshold, NMS keeps the higher-confidence A and suppresses B. C can remain if it does not strongly overlap A.</p>
+            <div class="math-display"><math display="block"><mrow><mtext>If </mtext><mi>IoU</mi><mo>(</mo><mi>A</mi><mo>,</mo><mi>B</mi><mo>)</mo><mo>&gt;</mo><mtext>threshold</mtext><mtext> and </mtext><mtext>score</mtext><mo>(</mo><mi>A</mi><mo>)</mo><mo>&gt;</mo><mtext>score</mtext><mo>(</mo><mi>B</mi><mo>)</mo><mo>,</mo><mtext> keep A and suppress B.</mtext></mrow></math></div>
+            <div class="callout key-idea"><strong>Practice checkpoint:</strong> with threshold 0.5, scores A=0.92 and B=0.87, and IoU(A,B)=0.72, the correct action is to keep A and suppress B.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. WBF: Fuse Overlapping Boxes Instead of Deleting One</h2>
+            <p>The book lists <strong>WBF = Weighted Boxes Fusion</strong> as a standard method for combining detection boxes, especially across multiple models.</p>
+            <div class="two-col">
+              <div class="panel"><strong>NMS</strong><p>A + B → keep the strongest box and suppress the redundant one.</p></div>
+              <div class="panel"><strong>WBF</strong><p>A + B → combine them into one fused box.</p></div>
+            </div>
+            <div class="callout source-boundary"><strong>Study expansion:</strong> the "weighted" part means higher-confidence boxes contribute more to the fused coordinates. So if A has confidence 0.9 and B has 0.6, the fused box tends toward A rather than lying exactly halfway between them.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>3. EfficientNet: Compound Scaling</h2>
+            <p>The book's representative EfficientNet idea is <strong>compound scaling</strong>: scale three dimensions together rather than enlarging only one.</p>
+            <div class="math-display"><math display="block"><mrow><mtext>compound scaling</mtext><mo>=</mo><mtext>depth</mtext><mo>↑</mo><mo>+</mo><mtext>width</mtext><mo>↑</mo><mo>+</mo><mtext>input resolution</mtext><mo>↑</mo></mrow></math></div>
+            <p>Therefore, increasing only image resolution is <strong>not</strong> compound scaling by itself.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>4. Compound Scaling Is Not an Ablation</h2>
+            <div class="callout source-boundary"><strong>Study clarification:</strong> this distinction came from the practice discussion rather than a separate claim in the book.</div>
+            <p>When you jointly increase depth, width, and resolution, you are evaluating a new <strong>scaled model configuration</strong>. You are asking whether the jointly scaled model works better.</p>
+            <p>An <strong>ablation</strong> asks a different question: which individual component caused the change?</p>
+            <table aria-label="Scaling versus ablation">
+              <thead><tr><th>Experiment</th><th>Question answered</th></tr></thead>
+              <tbody>
+                <tr><td>Depth + width + resolution together</td><td>Does this jointly scaled configuration work better?</td></tr>
+                <tr><td>Depth only</td><td>What happens if only depth changes?</td></tr>
+                <tr><td>Width only</td><td>What happens if only width changes?</td></tr>
+                <tr><td>Resolution only</td><td>What happens if only resolution changes?</td></tr>
+              </tbody>
+            </table>
+            <p>So compound scaling is a <strong>model-scaling strategy</strong>; ablation is an <strong>experiment-design strategy for isolating effects</strong>. A scaled EfficientNet variant is usually still part of the same architecture family, not automatically a completely new architecture.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>5. What "Increase Resolution" Means</h2>
+            <p>The book notes that larger input sizes can improve score but cost more GPU memory.</p>
+            <div class="callout source-boundary"><strong>Study clarification:</strong> increasing resolution normally means using a larger model input from the same source images; it does not, by itself, mean collecting a new dataset.</div>
+            <p>For example, if the original files are 1024×1024, a training pipeline might change from 224×224 inputs to 384×384 inputs. The larger input preserves more of the detail already present in the originals.</p>
+            <p>If the original image itself is only 224×224, resizing it upward to 384×384 does not manufacture genuine new visual detail.</p>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
