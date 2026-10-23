@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Fast Pass: Detection Classification, LLM Fine-Tuning, Efficiency, and Postmortem | Book Study | Medici House</title>
+  <meta name="description" content="A fast-pass Book Study note from 深度学习比赛知识自查表 covering detection-for-classification, CNN vs ViT, Transformer attention, LLM data construction and fine-tuning, decoding, efficiency, and post-competition review.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,.book-study-shell .menu-item,.book-study-shell .post-block,.book-study-shell .post-header,.book-study-shell .post-body,.book-study-shell .site-title,.book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-inline{white-space:nowrap;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;border-collapse:collapse;}
+    th,td{padding:10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col{display:grid;gap:14px;}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .meta-tile,.panel{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.05rem;}
+    .meta-tile span{color:#777;font-size:.9rem;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .source-boundary{border-left-color:#a36a00;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:74.0%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    .fast-list{display:grid;gap:12px;margin:14px 0;}
+    .fast-item{border:1px solid #ddd;border-radius:8px;padding:14px;background:#fcfcfc;}
+    .fast-item h3{margin:0 0 6px;font-size:1.03rem;}
+    .fast-item p{margin:0;color:#555;}
+    @media (max-width:900px){.meta-grid,.two-col{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Fast Pass: Detection Classification, LLM Fine-Tuning, Efficiency, and Postmortem</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-10-23T08:02:00+08:00">2026-10-23 08:02 UTC+8</time></span></div>
+        </header>
+
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+
+          <section class="study-hero">
+            <h2>Fast-Pass Wrap-Up</h2>
+            <p>The goal of this session was breadth, not deep derivation: one representative idea from each remaining major subsection, with follow-up only where clarification was needed. It covered the tail of computer vision, then the LLM competition section, efficiency/hardware, and post-competition review.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-10-23 08:02 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>54 / 73</strong><span>74.0% overall coverage</span></div>
+              <div class="meta-tile"><strong>Part 3: 9 / 13</strong><span>69.2% physical pages touched</span></div>
+              <div class="meta-tile"><strong>Fast pass complete</strong><span>all remaining major subsections sketched</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>54 / 73 pages, 74.0%.</strong> Under the Book Study rule, pages count only when at least one substantive item on that physical page was actually studied. Pages 46–49 and 54–55 were intentionally skipped in this fast pass, so they remain uncovered.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. Detection Used for Classification</h2>
+            <p>For some image-level classification tasks, especially medical imaging and industrial defects, the book recommends considering a detector when the decision depends on a localized region. The detector outputs both <strong>where</strong> a suspected lesion is and <strong>how confident</strong> it is that the region contains the target.</p>
+            <div class="math-display"><math display="block"><mrow><mtext>image-level score</mtext><mo>=</mo><mo>max</mo><mo>(</mo><mtext>box confidences</mtext><mo>)</mo></mrow></math></div>
+            <p>In the practice example, confidences 0.18, 0.76, and 0.41 produced an image-level disease score of 0.76.</p>
+            <div class="callout key-idea"><strong>Checkpoint selection:</strong> if the competition scores image-level AUC, select the checkpoint whose image-level probabilities achieve the better AUC, not the checkpoint with the lowest box loss.</div>
+            <div class="callout source-boundary"><strong>Study clarification:</strong> classification loss is not the probability itself; it measures class-prediction error against the label. Box regression loss is not the coordinates themselves; it measures error between predicted and target box locations.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. CNN vs ViT</h2>
+            <p>The fast-pass rule from the book: less data or limited compute tends to favor CNNs; large datasets, strong pretraining, or tasks needing stronger global relationships can favor ViT/Swin. CNNs come with stronger image-specific inductive biases, while Vision Transformers rely more heavily on data and pretraining.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>3. Transformer Attention</h2>
+            <p>Attention lets each token directly weight information from other relevant tokens instead of relying on strictly sequential processing. This is the central mechanism underlying the Transformer family used by modern LLMs.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>4. LLM Competition Fast Pass</h2>
+            <div class="fast-list">
+              <div class="fast-item"><h3>4.1 Data construction</h3><p>Use the correct chat template, keep training and inference formatting aligned, clean duplicate/garbled text, and protect target quality because the model imitates its training targets.</p></div>
+              <div class="fast-item"><h3>4.2 LoRA / QLoRA</h3><p>LoRA freezes the base model and trains small low-rank adaptation matrices. QLoRA combines a quantized base model, typically 4-bit, with LoRA to reduce memory further.</p></div>
+              <div class="fast-item"><h3>4.3 Training</h3><p>For multi-turn chat data, mask the prompt when appropriate and calculate loss on the assistant response so training focuses on how to answer rather than how to reproduce the prompt.</p></div>
+              <div class="fast-item"><h3>4.4 Inference and submission</h3><p>Estimate single-sample inference time × test-set size and make output parsing robust. A strong model can still fail a code competition through timeout or malformed submission output.</p></div>
+              <div class="fast-item"><h3>4.5 Metric mismatch</h3><p>Generation loss may not line up with BLEU, ROUGE, or another competition metric. Best-of-n generates multiple candidates and then selects among them under the task's evaluation logic.</p></div>
+              <div class="fast-item"><h3>4.6 Decoding</h3><p>Greedy decoding is stable and deterministic; sampling/top-p adds diversity and is useful when multiple candidates will later be compared or selected.</p></div>
+            </div>
+          </section>
+
+          <section class="note-section">
+            <h2>5. Efficiency and Hardware</h2>
+            <p>The representative idea was <strong>gradient checkpointing</strong>: save memory by not storing every intermediate activation, then recompute some activations during backpropagation. It trades extra computation for lower GPU memory use.</p>
+            <p>The book groups this with AMP/bf16, gradient accumulation, smaller batch/input sizes, and selective freezing as practical memory-saving tools.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>6. Post-Competition Review</h2>
+            <p>The book's postmortem centers on three questions: where the solution got stuck, which changes genuinely worked, and what the top solutions did that the current approach missed. It also recommends saving code, configs, weights, out-of-fold predictions, and submissions, then updating a personal trick list.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>Coverage Note</h2>
+            <table aria-label="Fast-pass coverage">
+              <thead><tr><th>Area</th><th>Status after this practice</th></tr></thead>
+              <tbody>
+                <tr><td>Part 3 — CV</td><td>9 / 13 physical pages touched (69.2%); representative topics through CNN vs ViT covered.</td></tr>
+                <tr><td>Part 4 — LLM competitions</td><td>5 / 7 physical pages touched in the fast pass; pages 54–55 were skipped.</td></tr>
+                <tr><td>Part 5 — efficiency/review</td><td>3 / 3 physical pages touched.</td></tr>
+                <tr><td>Overall</td><td>54 / 73 = 74.0%.</td></tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
