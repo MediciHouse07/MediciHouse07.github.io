@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+  <meta name="theme-color" content="#222">
+  <title>Chat Templates, LoRA, Assistant-Only Loss, and Transformer Architectures | Book Study | Medici House</title>
+  <meta name="description" content="A Socratic deep learning competition practice note on chat-template consistency, LoRA low-rank weight updates, assistant-only loss masking, and encoder-decoder versus decoder-only Transformer training.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/florence.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/florence.png">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/book-study/book-study.css">
+  <style>
+    html,body{max-width:100%;overflow-x:hidden;}
+    *,*::before,*::after{box-sizing:border-box;}
+    .book-study-shell,.main,.main-inner,.content-wrap,.content,.post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero,.study-frame,.math-display{max-width:100%;}
+    .book-study-shell .post-body{font-size:1rem;}
+    .book-study-shell .brand,.book-study-shell .menu-item,.book-study-shell .post-block,.book-study-shell .post-header,.book-study-shell .post-body,.book-study-shell .site-title,.book-study-shell .site-subtitle{opacity:1 !important;top:auto !important;transform:none !important;}
+    .post-body,.post-body h1,.post-body h2,.post-body h3,.post-body p,.post-body li,.post-body td,.post-body th{text-align:left;}
+    .post-body,.page,section,article,.card,.panel,.mini-panel{overflow-wrap:break-word;}
+    img,svg,canvas,video,iframe{max-width:100%;height:auto;}
+    .math-display{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:13px 14px;margin:14px 0;border:1px solid #ddd;border-radius:9px;background:#fafafa;}
+    .math-inline{white-space:nowrap;}
+    pre,code,.code-block{max-width:100%;overflow-x:auto;white-space:pre;}
+    pre{padding:13px 15px;border:1px solid #ddd;border-radius:8px;background:#fafafa;font-size:.92rem;line-height:1.6;}
+    table{width:100%;max-width:100%;display:block;overflow-x:auto;}
+    th,td{padding:9px 12px;border-bottom:1px solid #ddd;vertical-align:top;}
+    th{background:#f5f5f5;color:#555;font-size:.87rem;}
+    .book-study-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 20px;}
+    .book-study-actions a{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 13px;text-decoration:none;font-weight:700;background:#222;color:#fff;line-height:1.2;}
+    .book-study-actions a.secondary{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+    .study-hero,.note-section{border:1px solid #ddd;border-radius:10px;padding:20px;background:#fff;margin:18px 0;}
+    .study-hero{background:linear-gradient(135deg,#fff,#f7f7f7);}
+    .meta-grid,.two-col{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr));}
+    .meta-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px;}
+    .meta-tile,.panel{border:1px solid #ddd;border-radius:8px;padding:15px;background:#fcfcfc;min-width:0;}
+    .meta-tile strong{display:block;color:#222;font-size:1.04rem;}
+    .meta-tile span{color:#777;font-size:.88rem;}
+    .panel h3{margin:0 0 8px;font-size:1rem;}
+    .panel p{margin:0 0 10px;}
+    .callout{border-left:4px solid #222;padding:12px 14px;background:#f7f7f7;margin:14px 0;}
+    .key-idea{border-left-color:#277a60;background:#edf8f5;}
+    .source-boundary{border-left-color:#a36a00;background:#fff8e8;}
+    .progress-track{height:16px;border:1px solid #ddd;border-radius:999px;background:#eee;overflow:hidden;margin:10px 0 6px;}
+    .progress-bar{display:block;height:100%;width:74.0%;border-radius:inherit;background:linear-gradient(90deg,#555,#222);}
+    @media (max-width:900px){.meta-grid,.two-col{grid-template-columns:1fr;}}
+    @media (max-width:768px){
+      .main-inner,.content-wrap,.content,.post-block{width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important;}
+      .post-block,.post-body,.page,section,article,.card,.panel,.mini-panel,.hero{padding-left:16px !important;padding-right:16px !important;}
+      .study-hero,.note-section{padding:16px !important;}
+      .hero-grid,.visual-grid,.split,.cards,.flow,.note-grid,.subject-header,.coverage,.meta-grid,.two-col{grid-template-columns:1fr !important;}
+      h1{font-size:clamp(1.6rem,8vw,2.2rem) !important;line-height:1.15;}
+      h2{font-size:1.35rem !important;line-height:1.2;}
+      p,li,td,th{font-size:1rem;line-height:1.6;}
+      .math-display{padding:10px;}
+    }
+  </style>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container book-study-shell">
+    <div class="headband"></div>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container"><div class="site-meta">
+        <a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Medici House</h1><span class="logo-line-after"><i></i></span></a>
+        <p class="site-subtitle" itemprop="description">Knowledge matters, while people don't value it for real</p>
+      </div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item"><a href="/"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item"><a href="/archives/"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item"><a href="/book-study/"><i class="fa fa-book fa-fw"></i>Book Study</a></li></ul></nav></div>
+    </header>
+    <main class="main"><div class="main-inner"><div class="content-wrap"><div class="content">
+      <article class="post-block" itemscope itemtype="http://schema.org/Article">
+        <header class="post-header">
+          <h1 class="post-title" itemprop="name headline">Chat Templates, LoRA, Assistant-Only Loss, and Transformer Architectures</h1>
+          <div class="post-meta"><span class="post-meta-item"><i class="fa fa-folder-open fa-fw"></i> Deep Learning Competitions</span><span class="post-meta-item"><i class="far fa-calendar fa-fw"></i> <time datetime="2026-10-28T08:38:00+08:00">2026-10-28 08:38 UTC+8</time></span></div>
+        </header>
+        <div class="post-body" itemprop="articleBody">
+          <nav class="book-study-actions" aria-label="Book study note navigation"><a href="/book-study/deep-learning-competitions/">Subject shelf</a><a class="secondary" href="/book-study/">Book Study</a><a class="secondary" href="/">Home</a></nav>
+          <section class="study-hero">
+            <h2>Socratic Practice — LLM Fine-Tuning</h2>
+            <p>This practice revisited the book's Part 4 material: chat-template consistency (4.1), Low-Rank Adaptation (LoRA, 4.2), and assistant-only training loss (4.3). Follow-up questions compared the original encoder–decoder Transformer to a decoder-only LLM without conflating architectures and tasks.</p>
+            <div class="meta-grid">
+              <div class="meta-tile"><strong>2026-10-28 08:38 UTC+8</strong><span>study timestamp</span></div>
+              <div class="meta-tile"><strong>4.1–4.3</strong><span>book subsections</span></div>
+              <div class="meta-tile"><strong>Pages 56–57</strong><span>already counted previously</span></div>
+              <div class="meta-tile"><strong>54 / 73</strong><span>74.0% overall coverage</span></div>
+            </div>
+            <div class="progress-track" aria-hidden="true"><span class="progress-bar"></span></div>
+            <p><strong>54 / 73 pages, 74.0%.</strong> This discussion deepened previously studied pages, so the physical-page count does not increase.</p>
+          </section>
+
+          <section class="note-section">
+            <h2>1. Chat Template — Match Training and Inference</h2>
+            <p>The source stresses using the base model's expected conversation template and keeping the formatting consistent between fine-tuning and inference. A model that learned one prompt shape may perform worse when given a different one at inference time.</p>
+            <pre aria-label="Toy training conversation">&lt;system&gt;You are a judge.
+&lt;user&gt;Which answer is better?
+&lt;assistant&gt;Answer A.</pre>
+            <div class="callout key-idea"><strong>Practice answer:</strong> a format mismatch may reduce performance; the model can still tokenize the new text, but the pattern differs from what it was fine-tuned on.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>2. LoRA Does Not Split the Pretrained Matrix</h2>
+            <p><strong>LoRA = Low-Rank Adaptation.</strong> Keep the pretrained weights frozen and learn a low-rank <em>adjustment</em>, not a decomposition of the original weight matrix.</p>
+            <div class="math-display"><math display="block">
+              <msub><mi>W</mi><mtext>effective</mtext></msub><mo>=</mo>
+              <msub><mi>W</mi><mn>0</mn></msub><mo>+</mo><mi>&#x0394;W</mi>
+              <mo>,</mo><mspace width=".8em"/>
+              <mi>&#x0394;W</mi><mo>=</mo><mfrac><mi>&#x03B1;</mi><mi>r</mi></mfrac><mi>B</mi><mi>A</mi>
+            </math></div>
+            <p>Example: a full update for a 1000 × 1000 matrix would contain 1,000,000 numbers. With rank 8, train two matrices instead:</p>
+            <div class="math-display"><math display="block">
+              <mi>B</mi><mo>&#x2208;</mo><msup><mi>&#x211D;</mi><mrow><mn>1000</mn><mo>&#x00D7;</mo><mn>8</mn></mrow></msup>
+              <mo>,</mo><mspace width=".8em"/>
+              <mi>A</mi><mo>&#x2208;</mo><msup><mi>&#x211D;</mi><mrow><mn>8</mn><mo>&#x00D7;</mo><mn>1000</mn></mrow></msup>
+            </math></div>
+            <p>That is 8,000 + 8,000 = <strong>16,000 trainable numbers</strong> for the update, instead of 1,000,000. The original matrix remains in the computation, but does not receive parameter updates.</p>
+            <div class="callout key-idea"><strong>Key distinction:</strong> LoRA factorizes <em>the learned update</em> into two small matrices. It does not factorize the original pretrained matrix.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>3. Assistant-Only Loss — What Is Masked?</h2>
+            <p>The book recommends masking the prompt part of instruction data when training a model to produce assistant responses. The full prompt stays visible as context; only the loss contribution from the assistant's target tokens is included.</p>
+            <table aria-label="Assistant-only loss example">
+              <thead><tr><th>Sequence segment</th><th>Model sees it?</th><th>Its token-prediction loss?</th></tr></thead>
+              <tbody>
+                <tr><td>User: What is 2 + 2?</td><td>Yes</td><td>Ignored</td></tr>
+                <tr><td>Assistant: 4</td><td>Yes</td><td>Included for target answer</td></tr>
+              </tbody>
+            </table>
+            <p>In standard decoder-only supervised fine-tuning, the model can compute next-token logits along the full concatenated sequence. A loss mask (often implemented by ignoring labels set to <code>-100</code>) removes user-side target positions from the training objective.</p>
+            <div class="callout key-idea"><strong>Practice conclusion:</strong> the loss is calculated on assistant-token predictions only, but it can backpropagate through computations involving the user's query. The Transformer uses shared trainable weight matrices for the sequence, rather than separate "user matrices" and "assistant matrices".</div>
+          </section>
+
+          <section class="note-section">
+            <h2>4. Translation Analogy — Same Target-Only Objective, Different Architecture Paths</h2>
+            <p>In translation, the source sentence plays the role of the user question; the target sentence plays the role of the assistant answer. The target-only loss idea carries over. But the <strong>architecture</strong> determines how source and target are processed.</p>
+            <div class="two-col">
+              <div class="panel">
+                <h3>Encoder–decoder Transformer</h3>
+                <p>Source (e.g., English) enters an encoder. The decoder predicts target-language tokens (e.g., French) using encoder representations plus its target prefix.</p>
+                <p><strong>Loss:</strong> target predictions only. The encoder does not regenerate the source sentence.</p>
+              </div>
+              <div class="panel">
+                <h3>Decoder-only Transformer</h3>
+                <p>Source/prompt and target/response form one sequence during training. Next-token predictions at source-side positions may be computed, but source-side prediction losses are masked.</p>
+                <p><strong>Loss:</strong> target predictions only. At inference, the prompt is supplied as context and the model generates its continuation, not a fresh copy of the prompt.</p>
+              </div>
+            </div>
+            <table aria-label="Task versus Transformer architecture">
+              <thead><tr><th>Question</th><th>Precise answer</th></tr></thead>
+              <tbody>
+                <tr><td>Are translation and question-answering different tasks?</td><td>Yes.</td></tr>
+                <tr><td>Must they use different Transformer architectures?</td><td>No. Either task can use encoder–decoder or decoder-only models.</td></tr>
+                <tr><td>Is training loss on target tokens compatible with both?</td><td>Yes.</td></tr>
+                <tr><td>Does either architecture need to regenerate the source at inference?</td><td>No.</td></tr>
+              </tbody>
+            </table>
+            <div class="callout source-boundary"><strong>Source boundary:</strong> the book introduces assistant-only loss and summarizes Transformer variants. The comparison of token-level computation in encoder–decoder versus decoder-only training is a clarification developed in this practice.</div>
+          </section>
+
+          <section class="note-section">
+            <h2>5. Study Takeaways</h2>
+            <p><strong>LoRA:</strong> freeze original weights and train small update matrices. <strong>Loss masking:</strong> ignore user-token prediction errors while retaining user context. <strong>Translation analogy:</strong> target-only loss is the common principle; encoder–decoder and decoder-only Transformers implement it differently. <strong>Task versus architecture:</strong> distinguish what the model is doing from how it is built.</p>
+            <p>The next sequential study bullet after these clarifications is <strong>4.4 Inference and Submission</strong>.</p>
+          </section>
+        </div>
+      </article>
+    </div></div></div></div></main>
+    <footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2026</span> <span class="author" itemprop="copyrightHolder">Medici House</span></div><div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> &amp; <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a></div></div></footer>
+  </div>
+</body>
+</html>
